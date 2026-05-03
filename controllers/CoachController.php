@@ -86,6 +86,8 @@ class CoachController {
             $commentText = $scopeMarker . $_POST['text'];
             $stmt = $this->commentaireModel->getPdo()->prepare("INSERT INTO commentaire (id_pub, id_user, text, date) VALUES (?, ?, ?, NOW())");
             $stmt->execute([$_POST['id_pub'], $userId, $commentText]);
+            $stmtUpdateStatus = $this->publicationModel->getPdo()->prepare("UPDATE publication SET statut = 'Répondu' WHERE id_pub = ?");
+            $stmtUpdateStatus->execute([$_POST['id_pub']]);
             header("Location: " . $redirectPath);
             exit;
         }
@@ -141,7 +143,7 @@ class CoachController {
                 $params[] = $searchLike;
             }
 
-            $sql .= " ORDER BY p.date " . strtoupper($sort);
+            $sql .= " ORDER BY (COALESCE(p.priority_score, 30) + CASE WHEN TIMESTAMPDIFF(HOUR, p.date, NOW()) >= 48 THEN 10 ELSE 0 END) DESC, p.date " . strtoupper($sort);
             $stmt_pubs = $pdo->prepare($sql);
             $stmt_pubs->execute($params);
             $pubs = $stmt_pubs->fetchAll();
@@ -161,6 +163,15 @@ class CoachController {
                     $pubComment['text'] = $this->stripScopeMarker((string)($pubComment['text'] ?? ''));
                 }
                 unset($pubComment);
+                $baseScore = isset($p['priority_score']) ? (int)$p['priority_score'] : 30;
+                $ageBoost = 0;
+                if (!empty($p['date']) && strtotime((string)$p['date']) !== false) {
+                    $hoursElapsed = (int) floor((time() - strtotime((string)$p['date'])) / 3600);
+                    if ($hoursElapsed >= 48) {
+                        $ageBoost = 10;
+                    }
+                }
+                $p['effective_priority_score'] = $baseScore + $ageBoost;
                 $p['commentaires'] = $publicationComments;
                 $publications[] = $p;
             }

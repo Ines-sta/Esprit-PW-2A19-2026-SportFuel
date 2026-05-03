@@ -48,6 +48,21 @@ class Database {
                 ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
+        $stmtPublicationPriorite = $pdo->query("SHOW COLUMNS FROM `publication` LIKE 'priorite'");
+        if (!$stmtPublicationPriorite->fetch()) {
+            $pdo->exec("ALTER TABLE `publication` ADD COLUMN priorite VARCHAR(20) NOT NULL DEFAULT 'normal' AFTER text");
+        }
+
+        $stmtPublicationPriorityScore = $pdo->query("SHOW COLUMNS FROM `publication` LIKE 'priority_score'");
+        if (!$stmtPublicationPriorityScore->fetch()) {
+            $pdo->exec("ALTER TABLE `publication` ADD COLUMN priority_score INT NOT NULL DEFAULT 30 AFTER priorite");
+        }
+
+        $stmtPublicationStatut = $pdo->query("SHOW COLUMNS FROM `publication` LIKE 'statut'");
+        if (!$stmtPublicationStatut->fetch()) {
+            $pdo->exec("ALTER TABLE `publication` ADD COLUMN statut VARCHAR(20) NOT NULL DEFAULT 'En attente' AFTER priority_score");
+        }
+
         $pdo->exec("CREATE TABLE IF NOT EXISTS `commentaire` (
             id_cmmnt INT AUTO_INCREMENT PRIMARY KEY,
             id_pub INT,

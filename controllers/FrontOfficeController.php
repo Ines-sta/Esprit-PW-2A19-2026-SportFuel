@@ -32,15 +32,31 @@ class FrontOfficeController {
 
         // Add publication
         if ($action === 'add_pub') {
+            $demandeEntrainement = trim((string)($_POST['demande_entrainement'] ?? ''));
+            $demandeNutrition = trim((string)($_POST['demande_nutrition'] ?? ''));
+
+            if ($demandeEntrainement !== '' && $this->containsNutritionKeywords($demandeEntrainement)) {
+                $_SESSION['error'] = "Le champ entraînement contient des mots liés à la nutrition. Veuillez corriger le contenu.";
+                header("Location: " . $redirectPath);
+                exit;
+            }
+
+            if ($demandeNutrition !== '' && $this->containsTrainingKeywords($demandeNutrition)) {
+                $_SESSION['error'] = "Le champ nutrition contient des mots liés à l'entraînement. Veuillez corriger le contenu.";
+                header("Location: " . $redirectPath);
+                exit;
+            }
+
             $validation = $this->publicationModel->validateText($_POST['text']);
             if ($validation !== true) {
                 $_SESSION['error'] = $validation;
                 header("Location: " . $redirectPath);
                 exit;
             }
+            $priorityData = $this->computePriority((string)($_POST['text'] ?? ''));
             try {
-                $stmt = $this->publicationModel->getPdo()->prepare("INSERT INTO publication (id_user, text, date) VALUES (?, ?, NOW())");
-                $stmt->execute([$this->sportif_id, $_POST['text']]);
+                $stmt = $this->publicationModel->getPdo()->prepare("INSERT INTO publication (id_user, text, priorite, priority_score, statut, date) VALUES (?, ?, ?, ?, 'En attente', NOW())");
+                $stmt->execute([$this->sportif_id, $_POST['text'], $priorityData['priorite'], $priorityData['score']]);
             } catch (PDOException $e) {
                 $_SESSION['error'] = "Impossible d'ajouter la publication: utilisateur invalide.";
                 header("Location: " . $redirectPath);
@@ -166,6 +182,105 @@ class FrontOfficeController {
             return substr($text, strlen($focusMarker));
         }
         return $text;
+    }
+
+    private function containsTrainingKeywords($text) {
+        $keywords = [
+            'entrainement', 'entraînement', 'seance', 'séance', 'cardio', 'musculation',
+            'repetition', 'répétition', 'series', 'séries', 'squat', 'pompe', 'deadlift',
+            'running', 'course', 'echauffement', 'échauffement'
+        ];
+        return $this->containsAnyKeyword($text, $keywords);
+    }
+
+    private function containsNutritionKeywords($text) {
+        $keywords = [
+            'nutrition', 'calorie', 'calories', 'proteine', 'protéine', 'proteines', 'protéines',
+            'glucide', 'glucides', 'lipide', 'lipides', 'repas', 'aliment', 'aliments',
+            'hydration', 'eau', 'vitamine', 'supplement', 'supplément'
+        ];
+        return $this->containsAnyKeyword($text, $keywords);
+    }
+
+    private function containsAnyKeyword($text, $keywords) {
+        $normalized = mb_strtolower((string)$text, 'UTF-8');
+        foreach ($keywords as $keyword) {
+            if (mb_strpos($normalized, mb_strtolower($keyword, 'UTF-8')) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function computePriority($text) {
+        $normalized = mb_strtolower((string)$text, 'UTF-8');
+
+        $urgentPatterns = [
+            'blessure', 'douleur', 'je ne peux plus', 'probleme genou', 'problème genou',
+            'probleme dos', 'problème dos', 'mal au genou', 'mal au dos', 'douleur forte'
+        ];
+        $importantPatterns = [
+            'stagnation', 'je ne progresse plus', 'plateau', 'fatigue extreme', 'fatigue extrême'
+        ];
+
+        $priorite = 'normal';
+        $score = 30;
+
+        foreach ($urgentPatterns as $pattern) {
+            if (mb_strpos($normalized, $pattern) !== false) {
+                $priorite = 'urgent';
+                $score = 100;
+                break;
+            }
+        }
+
+        if ($priorite === 'normal') {
+            foreach ($importantPatterns as $pattern) {
+                if (mb_strpos($normalized, $pattern) !== false) {
+                    $priorite = 'important';
+                    $score = 70;
+                    break;
+                }
+            }
+        }
+
+        if ($this->isPremiumUser($this->sportif_id)) {
+            $score += 20;
+        }
+
+        return [
+            'priorite' => $priorite,
+            'score' => $score,
+        ];
+    }
+
+    private function isPremiumUser($userId) {
+        try {
+            $pdo = $this->publicationModel->getPdo();
+            $stmt = $pdo->prepare("SELECT * FROM `user` WHERE user_id = ? LIMIT 1");
+            $stmt->execute([(int)$userId]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$user) {
+                return false;
+            }
+
+            if (isset($user['is_premium']) && (int)$user['is_premium'] === 1) {
+                return true;
+            }
+            if (isset($user['premium']) && (int)$user['premium'] === 1) {
+                return true;
+            }
+            if (isset($user['plan']) && mb_strtolower((string)$user['plan'], 'UTF-8') === 'premium') {
+                return true;
+            }
+            if (isset($user['role']) && mb_strtolower((string)$user['role'], 'UTF-8') === 'premium') {
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return false;
     }
 
     private function resolveSportifId() {

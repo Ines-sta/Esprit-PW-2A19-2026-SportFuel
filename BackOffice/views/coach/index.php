@@ -42,6 +42,14 @@ $date_jour = date('l j F Y');
     <title>SportFuel Admin — Publications & Commentaires</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="stylesheet" href="../../assets/css/coach.css">
+    <style>
+        .priority-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 0.85em; font-weight: 700; }
+        .priority-urgent { background: #fee2e2; color: #991b1b; }
+        .priority-important { background: #ffedd5; color: #9a3412; }
+        .priority-normal { background: #dcfce7; color: #166534; }
+        .elapsed-time { color: #6b7280; font-size: 0.85em; margin-top: 4px; display: block; }
+        .urgent-alert { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; }
+    </style>
 </head>
 <body>
 
@@ -96,6 +104,19 @@ $date_jour = date('l j F Y');
             <div class="card-header">
                 <h3><?php echo htmlspecialchars($publication_heading); ?></h3>
             </div>
+        <?php
+            $pendingUrgentCount = 0;
+            foreach ($publications as $publicationItem) {
+                $prio = strtolower((string)($publicationItem['priorite'] ?? 'normal'));
+                $statut = (string)($publicationItem['statut'] ?? 'En attente');
+                if ($prio === 'urgent' && $statut !== 'Répondu') {
+                    $pendingUrgentCount++;
+                }
+            }
+        ?>
+        <?php if ($pendingUrgentCount > 0): ?>
+            <div class="urgent-alert">⚠️ <?php echo (int)$pendingUrgentCount; ?> demande(s) urgente(s) non traitée(s).</div>
+        <?php endif; ?>
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px;">
                 <form method="GET" action="<?php echo htmlspecialchars($current_page); ?>" style="display:flex; gap:8px; align-items:center;">
                     <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Rechercher nom ou prénom..." style="padding:8px 10px; border:1px solid #ddd; border-radius:8px;">
@@ -118,12 +139,15 @@ $date_jour = date('l j F Y');
                             <th>Nom d’utilisateur</th>
                             <th>Date</th>
                             <th>Type</th>
+                            <th>Priorité</th>
+                            <th>Score</th>
+                            <th>Statut</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (count($publications) === 0): ?>
-                        <tr><td colspan="4" style="text-align: center;">Aucune publication disponible.</td></tr>
+                        <tr><td colspan="7" style="text-align: center;">Aucune publication disponible.</td></tr>
                         <?php endif; ?>
                         
                         <?php foreach($publications as $p): ?>
@@ -141,6 +165,38 @@ $date_jour = date('l j F Y');
                                     echo htmlspecialchars($publicationType);
                                 ?>
                             </td>
+                            <td>
+                                <?php
+                                    $priorityRaw = strtolower((string)($p['priorite'] ?? 'normal'));
+                                    $priorityClass = 'priority-normal';
+                                    $priorityLabel = 'Normal';
+                                    $priorityIcon = '💬';
+                                    if ($priorityRaw === 'urgent') {
+                                        $priorityClass = 'priority-urgent';
+                                        $priorityLabel = 'Urgent';
+                                        $priorityIcon = '⚠️';
+                                    } elseif ($priorityRaw === 'important') {
+                                        $priorityClass = 'priority-important';
+                                        $priorityLabel = 'Important';
+                                        $priorityIcon = '📈';
+                                    }
+                                    $elapsedLabel = '-';
+                                    if (!empty($p['date']) && strtotime((string)$p['date']) !== false) {
+                                        $seconds = time() - strtotime((string)$p['date']);
+                                        if ($seconds < 3600) {
+                                            $elapsedLabel = floor($seconds / 60) . ' min';
+                                        } elseif ($seconds < 86400) {
+                                            $elapsedLabel = floor($seconds / 3600) . ' h';
+                                        } else {
+                                            $elapsedLabel = floor($seconds / 86400) . ' j';
+                                        }
+                                    }
+                                ?>
+                                <span class="priority-badge <?php echo $priorityClass; ?>"><?php echo $priorityIcon; ?> <?php echo htmlspecialchars($priorityLabel); ?></span>
+                                <span class="elapsed-time">Il y a <?php echo htmlspecialchars($elapsedLabel); ?></span>
+                            </td>
+                            <td><?php echo (int)($p['effective_priority_score'] ?? $p['priority_score'] ?? 30); ?></td>
+                            <td><?php echo htmlspecialchars((string)($p['statut'] ?? 'En attente')); ?></td>
                             <td>
                                 <div class="actions">
                                     <button class="btn btn-outline btn-sm" onclick="openTextModalById(<?php echo (int)$p['id_pub']; ?>)">Afficher le texte</button>
