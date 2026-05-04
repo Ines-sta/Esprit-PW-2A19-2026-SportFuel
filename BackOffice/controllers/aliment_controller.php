@@ -2,6 +2,7 @@
 // Controller: Aliment (BackOffice — CRUD + recherche + stats)
 
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/cloudinary.php';
 require_once __DIR__ . '/../models/Aliment.php';
 
 $alimentModel = new Aliment($pdo);
@@ -18,6 +19,7 @@ switch ($action) {
             $categorie = trim($_POST['categorie'] ?? '');
             $kcal_portion = floatval($_POST['kcal_portion'] ?? 0);
             $co2_impact = floatval($_POST['co2_impact'] ?? 0);
+            $prix_unitaire = floatval($_POST['prix_unitaire'] ?? 0);
             $est_bio = isset($_POST['est_bio']) ? 1 : 0;
             $est_local = isset($_POST['est_local']) ? 1 : 0;
 
@@ -27,10 +29,17 @@ switch ($action) {
             elseif (strlen($categorie) > 100)      $error = "La catégorie ne doit pas dépasser 100 caractères.";
             elseif ($kcal_portion <= 0)            $error = "Les calories doivent être un nombre positif.";
             elseif ($co2_impact < 0)               $error = "L'impact CO₂ doit être un nombre positif.";
+            elseif ($prix_unitaire <= 0)           $error = "Le prix unitaire doit être un nombre positif.";
             else {
-                $alimentModel->ajouter($nom, $categorie, $kcal_portion, $co2_impact, $est_bio, $est_local);
-                header('Location: aliment_controller.php?success=ajout');
-                exit;
+                $uploadErr = '';
+                $image_url = cloudinary_handle_upload($_FILES['image'] ?? null, CLOUDINARY_FOLDER . '/aliments', $uploadErr);
+                if ($uploadErr !== '') {
+                    $error = $uploadErr;
+                } else {
+                    $alimentModel->ajouter($nom, $categorie, $kcal_portion, $co2_impact, $prix_unitaire, $est_bio, $est_local, $image_url);
+                    header('Location: aliment_controller.php?success=ajout');
+                    exit;
+                }
             }
         }
         break;
@@ -42,6 +51,7 @@ switch ($action) {
             $categorie = trim($_POST['categorie'] ?? '');
             $kcal_portion = floatval($_POST['kcal_portion'] ?? 0);
             $co2_impact = floatval($_POST['co2_impact'] ?? 0);
+            $prix_unitaire = floatval($_POST['prix_unitaire'] ?? 0);
             $est_bio = isset($_POST['est_bio']) ? 1 : 0;
             $est_local = isset($_POST['est_local']) ? 1 : 0;
 
@@ -52,10 +62,18 @@ switch ($action) {
             elseif (strlen($categorie) > 100)      $error = "La catégorie ne doit pas dépasser 100 caractères.";
             elseif ($kcal_portion <= 0)            $error = "Les calories doivent être un nombre positif.";
             elseif ($co2_impact < 0)               $error = "L'impact CO₂ doit être un nombre positif.";
+            elseif ($prix_unitaire <= 0)           $error = "Le prix unitaire doit être un nombre positif.";
             else {
-                $alimentModel->modifier($id, $nom, $categorie, $kcal_portion, $co2_impact, $est_bio, $est_local);
-                header('Location: aliment_controller.php?success=modif');
-                exit;
+                $uploadErr = '';
+                $image_url = cloudinary_handle_upload($_FILES['image'] ?? null, CLOUDINARY_FOLDER . '/aliments', $uploadErr);
+                if ($uploadErr !== '') {
+                    $error = $uploadErr;
+                } else {
+                    // $image_url null → le modèle conserve l'image existante (COALESCE)
+                    $alimentModel->modifier($id, $nom, $categorie, $kcal_portion, $co2_impact, $prix_unitaire, $est_bio, $est_local, $image_url);
+                    header('Location: aliment_controller.php?success=modif');
+                    exit;
+                }
             }
         }
         break;

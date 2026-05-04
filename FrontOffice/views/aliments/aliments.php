@@ -129,7 +129,9 @@
             ?>
             <div class="food-card" data-categorie="<?php echo htmlspecialchars($a['categorie']); ?>" data-bio="<?php echo $a['est_bio']; ?>" data-local="<?php echo $a['est_local']; ?>">
                 <div class="food-card-img">
-                    <?php if ($img): ?>
+                    <?php if (!empty($a['image_url'])): ?>
+                        <img src="<?php echo htmlspecialchars(cloudinary_thumb($a['image_url'], 400, 400)); ?>" alt="<?php echo htmlspecialchars($a['nom']); ?>" style="width:100%;height:100%;object-fit:cover;">
+                    <?php elseif ($img): ?>
                         <img src="../assets/images/<?php echo $img['file']; ?>" alt="<?php echo htmlspecialchars($img['alt']); ?>" style="width:100%;height:100%;object-fit:contain;">
                     <?php else: ?>
                         <?php echo $emojis[$a['categorie']] ?? '🍽️'; ?>

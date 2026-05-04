@@ -2,6 +2,7 @@
 // Controller FO: Aliment (lecture seule + recherche + stats)
 
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/cloudinary.php';
 require_once __DIR__ . '/../models/Aliment.php';
 
 $alimentModel = new Aliment($pdo);

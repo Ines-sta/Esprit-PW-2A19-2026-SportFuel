@@ -10,18 +10,20 @@ class Aliment {
 
     // ===== CRUD =====
 
-    public function ajouter($nom, $categorie, $kcal_portion, $co2_impact, $est_bio, $est_local) {
+    public function ajouter($nom, $categorie, $kcal_portion, $co2_impact, $prix_unitaire, $est_bio, $est_local, $image_url = null) {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO aliment (nom, categorie, kcal_portion, co2_impact, est_bio, est_local)
-             VALUES (:nom, :categorie, :kcal_portion, :co2_impact, :est_bio, :est_local)"
+            "INSERT INTO aliment (nom, categorie, kcal_portion, co2_impact, prix_unitaire, est_bio, est_local, image_url)
+             VALUES (:nom, :categorie, :kcal_portion, :co2_impact, :prix_unitaire, :est_bio, :est_local, :image_url)"
         );
         $stmt->execute([
             ':nom' => $nom,
             ':categorie' => $categorie,
             ':kcal_portion' => $kcal_portion,
             ':co2_impact' => $co2_impact,
+            ':prix_unitaire' => $prix_unitaire,
             ':est_bio' => $est_bio,
-            ':est_local' => $est_local
+            ':est_local' => $est_local,
+            ':image_url' => $image_url
         ]);
         return $this->pdo->lastInsertId();
     }
@@ -37,10 +39,12 @@ class Aliment {
         return $stmt->fetch();
     }
 
-    public function modifier($id, $nom, $categorie, $kcal_portion, $co2_impact, $est_bio, $est_local) {
+    public function modifier($id, $nom, $categorie, $kcal_portion, $co2_impact, $prix_unitaire, $est_bio, $est_local, $image_url = null) {
+        // Si $image_url est null, on conserve la valeur existante (COALESCE).
         $stmt = $this->pdo->prepare(
             "UPDATE aliment SET nom = :nom, categorie = :categorie, kcal_portion = :kcal_portion,
-             co2_impact = :co2_impact, est_bio = :est_bio, est_local = :est_local
+             co2_impact = :co2_impact, prix_unitaire = :prix_unitaire, est_bio = :est_bio, est_local = :est_local,
+             image_url = COALESCE(:image_url, image_url)
              WHERE id_aliment = :id"
         );
         return $stmt->execute([
@@ -49,8 +53,10 @@ class Aliment {
             ':categorie' => $categorie,
             ':kcal_portion' => $kcal_portion,
             ':co2_impact' => $co2_impact,
+            ':prix_unitaire' => $prix_unitaire,
             ':est_bio' => $est_bio,
-            ':est_local' => $est_local
+            ':est_local' => $est_local,
+            ':image_url' => $image_url
         ]);
     }
 

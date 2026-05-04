@@ -13,16 +13,17 @@ class Course {
 
     // ===== CRUD Course =====
 
-    public function genererListeCourses($id_utilisateur, $nom, $date, $statut, $articles = []) {
+    public function genererListeCourses($id_utilisateur, $nom, $date, $statut, $articles = [], $image_url = null) {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO course (id_utilisateur, nom, date, statut)
-             VALUES (:id_utilisateur, :nom, :date, :statut)"
+            "INSERT INTO course (id_utilisateur, nom, date, statut, image_url)
+             VALUES (:id_utilisateur, :nom, :date, :statut, :image_url)"
         );
         $stmt->execute([
             ':id_utilisateur' => $id_utilisateur,
             ':nom' => $nom,
             ':date' => $date,
-            ':statut' => $statut
+            ':statut' => $statut,
+            ':image_url' => $image_url
         ]);
         $id_course = $this->pdo->lastInsertId();
 
@@ -61,10 +62,12 @@ class Course {
         return $course;
     }
 
-    public function modifier($id, $id_utilisateur, $nom, $date, $statut) {
+    public function modifier($id, $id_utilisateur, $nom, $date, $statut, $image_url = null) {
+        // Si $image_url est null, on conserve la valeur existante (COALESCE).
         $stmt = $this->pdo->prepare(
             "UPDATE course
-             SET id_utilisateur = :id_utilisateur, nom = :nom, date = :date, statut = :statut
+             SET id_utilisateur = :id_utilisateur, nom = :nom, date = :date, statut = :statut,
+                 image_url = COALESCE(:image_url, image_url)
              WHERE id_course = :id"
         );
         return $stmt->execute([
@@ -72,7 +75,8 @@ class Course {
             ':id_utilisateur' => $id_utilisateur,
             ':nom' => $nom,
             ':date' => $date,
-            ':statut' => $statut
+            ':statut' => $statut,
+            ':image_url' => $image_url
         ]);
     }
 
