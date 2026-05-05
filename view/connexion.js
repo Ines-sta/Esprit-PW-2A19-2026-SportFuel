@@ -27,6 +27,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const backToLogin1 = document.getElementById('backToLogin1');
     const backToStep1 = document.getElementById('backToStep1');
     const backToLogin3 = document.getElementById('backToLogin3');
+    
+    // Face ID Elements
+    const faceIdBadge = document.getElementById('faceIdBadge');
+    const faceIdBtn = document.getElementById('faceIdBtn');
+    const scanOverlay = document.getElementById('scanOverlay');
+    const scanMsg = document.getElementById('scanMsg');
+    const faceIdModal = document.getElementById('faceIdModal');
+    const activateFaceIdBtn = document.getElementById('activateFaceIdBtn');
+    const skipFaceIdBtn = document.getElementById('skipFaceIdBtn');
+    const webcam = document.getElementById('webcam');
+
+    const FACEID_KEY = 'sportfuel_face_descriptor';
+    const MODEL_URL = 'https://raw.githack.com/justadudewhohacks/face-api.js/master/weights';
+    let modelsLoaded = false;
 
     let otpEmail = '';
 
@@ -345,9 +359,171 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Géré dans HTML
     }
-    if (backToLogin3) {
-        // Géré dans HTML
+    // --- Face Recognition (Option B - AI) Implementation ---
+
+    async function loadModels() {
+        if (modelsLoaded) return true;
+        try {
+            scanMsg.textContent = "Chargement de l'IA (veuillez patienter)...";
+            await Promise.all([
+                faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+                faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+            ]);
+            modelsLoaded = true;
+            return true;
+        } catch (e) {
+            console.error("Erreur chargement modèles:", e);
+            scanMsg.textContent = "❌ Erreur de chargement de l'IA.";
+            return false;
+        }
     }
+
+    function checkFaceIDStatus() {
+        const descriptor = localStorage.getItem(FACEID_KEY);
+        if (descriptor) {
+            faceIdBadge.innerHTML = 'Reconnaissance Faciale active 🟢 <a id="reconfigureFaceId">Réinitialiser</a>';
+            faceIdBadge.className = 'faceid-badge active';
+            document.getElementById('reconfigureFaceId').onclick = (e) => {
+                e.preventDefault();
+                if (confirm("Voulez-vous supprimer votre empreinte faciale ?")) {
+                    localStorage.removeItem(FACEID_KEY);
+                    checkFaceIDStatus();
+                }
+            };
+        } else {
+            faceIdBadge.innerHTML = 'Face ID non configuré 🔴 <a id="configureFaceId">Configurer</a>';
+            faceIdBadge.className = 'faceid-badge inactive';
+            document.getElementById('configureFaceId').onclick = (e) => {
+                e.preventDefault();
+                window.location.href = 'inscription.html';
+            };
+        }
+    }
+
+    async function startWebcam() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+            webcam.srcObject = stream;
+            return true;
+        } catch (e) {
+            alert("❌ Impossible d'accéder à la caméra.");
+            return false;
+        }
+    }
+
+    function stopWebcam() {
+        if (webcam.srcObject) {
+            webcam.srcObject.getTracks().forEach(track => track.stop());
+        }
+    }
+
+    async function startFaceIDLogin() {
+        scanOverlay.style.display = 'flex';
+        const ok = await loadModels();
+        if (!ok) return;
+
+        scanMsg.textContent = "Récupération des profils autorisés...";
+        let dbDescriptors = [];
+        try {
+            const response = await fetch('../controller/api.php?action=get_face_descriptors', {
+                credentials: 'include'
+            });
+            const res = await response.json();
+            if (res.success) {
+                dbDescriptors = res.descriptors.map(d => ({
+                    id: d.id,
+                    nom: d.nom,
+                    descriptor: new Float32Array(JSON.parse(d.face_descriptor))
+                }));
+            }
+        } catch (e) {
+            console.error("Erreur chargement descriptors DB:", e);
+        }
+
+        if (dbDescriptors.length === 0) {
+            scanMsg.textContent = "❌ Aucun profil Face ID trouvé en base.";
+            setTimeout(() => scanOverlay.style.display = 'none', 2000);
+            return;
+        }
+
+        const cameraOk = await startWebcam();
+        if (!cameraOk) {
+            scanOverlay.style.display = 'none';
+            return;
+        }
+
+        scanMsg.textContent = "Analyse de votre visage...";
+
+        // Boucle de reconnaissance
+        const interval = setInterval(async () => {
+            const detection = await faceapi.detectSingleFace(webcam, new faceapi.TinyFaceDetectorOptions())
+                .withFaceLandmarks()
+                .withFaceDescriptor();
+
+            if (detection) {
+                let bestMatch = null;
+                let minDistance = 1.0;
+
+                // On compare avec tous les profils de la DB
+                for (const profile of dbDescriptors) {
+                    const distance = faceapi.euclideanDistance(detection.descriptor, profile.descriptor);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        bestMatch = profile;
+                    }
+                }
+
+                if (bestMatch && minDistance < 0.45) { // Seuil strict pour la DB
+                    clearInterval(interval);
+                    scanMsg.textContent = `✅ Bonjour ${bestMatch.nom} !`;
+                    
+                    // --- NOUVEAU : Connexion via le serveur ---
+                    try {
+                        const loginRes = await fetch('../controller/api.php?action=login_by_id', {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: bestMatch.id })
+                        });
+                        const loginData = await loginRes.json();
+                        
+                        if (loginData.success) {
+                            stopWebcam();
+                            setTimeout(() => {
+                                window.location.href = loginData.redirect;
+                            }, 1000);
+                        } else {
+                            scanMsg.textContent = "❌ Erreur de connexion : " + loginData.message;
+                            setTimeout(() => scanOverlay.style.display = 'none', 2000);
+                        }
+                    } catch (err) {
+                        console.error("Erreur login_by_id:", err);
+                    }
+                } else {
+                    scanMsg.textContent = "Visage détecté... (Vérification)";
+                }
+            } else {
+                scanMsg.textContent = "Cherche un visage...";
+            }
+        }, 800);
+
+        // Timeout après 15 secondes
+        setTimeout(() => {
+            if (scanOverlay.style.display !== 'none') {
+                clearInterval(interval);
+                stopWebcam();
+                scanMsg.textContent = "❌ Délai dépassé. Réessayez.";
+                setTimeout(() => scanOverlay.style.display = 'none', 2000);
+            }
+        }, 15000);
+    }
+
+    if (faceIdBtn) {
+        faceIdBtn.addEventListener('click', startFaceIDLogin);
+    }
+
+    checkFaceIDStatus();
 
     resetForgotFlow();
 });

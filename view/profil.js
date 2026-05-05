@@ -5,6 +5,22 @@ window.addEventListener('DOMContentLoaded', () => {
   const sportTags = document.querySelectorAll('.sport-tag');
   const sportInput = document.getElementById('sport');
 
+  const nomInput = document.getElementById('nom');
+  if (nomInput) {
+    nomInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+    });
+  }
+
+  // Contrôle numérique pour la fréquence et autres futurs champs
+  inputs.forEach(inp => {
+    if (inp.id === 'frequence' || inp.type === 'number' || inp.getAttribute('inputmode') === 'numeric') {
+        inp.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+  });
+
   sportTags.forEach(tag => {
     tag.addEventListener('click', function() {
       if (!editMode) return; // Only allow changing sport if in edit mode

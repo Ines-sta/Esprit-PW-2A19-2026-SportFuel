@@ -275,6 +275,53 @@ if ($action === 'reset_password' && $method === 'POST') {
 }
 
 /* ────────────────────────────────────────────
+   Routes Face ID (Publiques pour la connexion)
+──────────────────────────────────────────── */
+if ($action === 'get_face_descriptors' && $method === 'GET') {
+    // Retourne la liste des empreintes faciales pour la comparaison
+    $stmt = $pdo->prepare("SELECT id, nom, face_descriptor FROM utilisateurs WHERE face_descriptor IS NOT NULL");
+    $stmt->execute();
+    $descriptors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode(['success' => true, 'descriptors' => $descriptors]);
+    exit;
+}
+
+if ($action === 'login_by_id' && $method === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true) ?? [];
+    $userId = (int)($data['id'] ?? 0);
+
+    if ($userId <= 0) {
+        echo json_encode(['success' => false, 'message' => 'ID utilisateur invalide']);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("SELECT * FROM utilisateurs WHERE id = ?");
+    $stmt->execute([$userId]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        if ($user['statut'] === 'Banni') {
+            echo json_encode(['success' => false, 'message' => 'banned']);
+            exit;
+        }
+        
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_email'] = $user['email'];
+        $_SESSION['user_nom'] = $user['nom'];
+        $_SESSION['role'] = $user['role'];
+        
+        echo json_encode([
+            'success' => true, 
+            'message' => 'Connexion réussie',
+            'redirect' => (strcasecmp($user['role'], 'Admin') === 0) ? 'admin.php' : 'profil.php'
+        ]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Utilisateur introuvable']);
+    }
+    exit;
+}
+
+/* ────────────────────────────────────────────
    Toutes les autres routes nécessitent une session
 ──────────────────────────────────────────── */
 if (!isset($_SESSION['user_email'])) {
@@ -334,6 +381,27 @@ if ($action === 'save_profil' && $method === 'POST') {
         echo json_encode(['success' => true, 'message' => 'Profil enregistré avec succès']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Erreur lors de la sauvegarde']);
+    }
+    exit;
+}
+
+/* ── POST : sauvegarder empreinte faciale ── */
+if ($action === 'save_face_descriptor' && $method === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true) ?? [];
+    $descriptor = $data['descriptor'] ?? null;
+
+    if (!$descriptor) {
+        echo json_encode(['success' => false, 'message' => 'Empreinte manquante']);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("UPDATE utilisateurs SET face_descriptor = ? WHERE email = ?");
+    $result = $stmt->execute([json_encode($descriptor), $email]);
+
+    if ($result) {
+        echo json_encode(['success' => true, 'message' => 'Empreinte faciale enregistrée en base de données']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Erreur lors de l’enregistrement']);
     }
     exit;
 }

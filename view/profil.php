@@ -75,7 +75,8 @@ $imc = ($user->getTaille() > 0) ? round($user->getPoids() / (($user->getTaille()
               <div class="field-row">
                 <div class="field" style="flex: 1;">
                   <div class="field-label">Nom complet</div>
-                  <input class="field-input" type="text" value="<?= htmlspecialchars($user->getNom()) ?>" id="nom" disabled>
+                  <input class="field-input" type="text" value="<?= htmlspecialchars($user->getNom()) ?>" id="nom" disabled
+                         pattern="[A-Za-zÀ-ÿ\s]+" title="Lettres et espaces uniquement">
                 </div>
                 <div class="field" style="flex: 1;">
                   <div class="field-label">Email</div>
@@ -169,7 +170,8 @@ $imc = ($user->getTaille() > 0) ? round($user->getPoids() / (($user->getTaille()
                 </div>
                 <div class="field">
                   <div class="field-label">Séances/sem</div>
-                  <input class="field-input" type="number" id="frequence" value="<?= htmlspecialchars($user->getFrequence() > 0 ? $user->getFrequence() : 5) ?>" disabled>
+                  <input class="field-input" type="text" id="frequence" value="<?= htmlspecialchars($user->getFrequence() > 0 ? $user->getFrequence() : 5) ?>" disabled
+                         inputmode="numeric" pattern="[0-9]*">
                 </div>
               </div>
             </div>

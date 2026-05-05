@@ -4,15 +4,46 @@ document.addEventListener('DOMContentLoaded', function () {
   const submitBtn  = document.getElementById('submitBtn');
   const btnSportif = document.getElementById('btnSportif');
   const btnAdmin   = document.getElementById('btnAdmin');
+  const nomInput   = document.getElementById('nom');
+  const emailInput = document.getElementById('email');
   const ageInput   = document.getElementById('age');
   const poidsInput = document.getElementById('poids');
   const tailleInput = document.getElementById('taille');
+  
+  // Face ID Elements
+  const faceIdModal = document.getElementById('faceIdModal');
+  const activateFaceIdBtn = document.getElementById('activateFaceIdBtn');
+  const skipFaceIdBtn = document.getElementById('skipFaceIdBtn');
+  const manualFaceIdBtn = document.getElementById('manualFaceIdBtn');
+  const webcamReg = document.getElementById('webcamReg');
+  const FACEID_KEY = 'sportfuel_face_descriptor';
+  const MODEL_URL = 'https://raw.githack.com/justadudewhohacks/face-api.js/master/weights';
+  let modelsLoaded = false;
+  let pendingFaceDescriptor = null; // En mémoire avant l'inscription
+
 
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('role') === 'Admin') selectRole('Admin');
 
+  // Contrôle de saisie pour le nom (lettres et espaces uniquement)
+  if (nomInput) {
+    nomInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+    });
+  }
+
+  // Contrôle de saisie pour l'âge, le poids et la taille (chiffres uniquement)
+  const numericFields = [ageInput, poidsInput, tailleInput];
+  numericFields.forEach(field => {
+    if (field) {
+      field.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+    }
+  });
+
   function selectRole(role) {
-    roleInput.value = role;
+    if (roleInput) roleInput.value = role;
 
     if (role === 'Admin') {
       btnAdmin.classList.add('sel-admin');
@@ -23,9 +54,9 @@ document.addEventListener('DOMContentLoaded', function () {
       ageInput.style.display = 'none';
       poidsInput.style.display = 'none';
       tailleInput.style.display = 'none';
-      ageInput.value = '';
-      poidsInput.value = '';
-      tailleInput.value = '';
+      if (ageInput) ageInput.value = '';
+      if (poidsInput) poidsInput.value = '';
+      if (tailleInput) tailleInput.value = '';
     } else {
       btnSportif.classList.add('sel-sportif');
       btnSportif.classList.remove('sel-admin');
@@ -64,8 +95,134 @@ document.addEventListener('DOMContentLoaded', function () {
       if (isNaN(taille) || taille <= 0){ alert('❌ Taille invalide.'); return; }
     }
 
-    this.submit();
+    const formData = new FormData(this);
+    fetch(this.action, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include', // Assure le transfert de la session
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(r => r.text())
+    .then(text => {
+      if (text.includes('successfully') || text.includes('compte créé') || text.toLowerCase().includes('success')) {
+        if (pendingFaceDescriptor) {
+            // Si on avait déjà capturé le visage avant de cliquer sur s'inscrire
+            saveFaceToDatabase(pendingFaceDescriptor);
+        } else {
+            showFaceIdModal();
+        }
+      } else {
+        alert("✅ Compte créé !");
+        if (pendingFaceDescriptor) saveFaceToDatabase(pendingFaceDescriptor);
+        else showFaceIdModal();
+      }
+    })
+    .catch(() => {
+      alert("❌ Erreur serveur.");
+    });
   });
+
+  async function loadModels() {
+    if (modelsLoaded) return true;
+    try {
+        activateFaceIdBtn.textContent = "IA en chargement...";
+        activateFaceIdBtn.disabled = true;
+        await Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+            faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+            faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+        ]);
+        modelsLoaded = true;
+        activateFaceIdBtn.textContent = "Capturer mon visage";
+        activateFaceIdBtn.disabled = false;
+        return true;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+  }
+
+  async function showFaceIdModal() {
+    faceIdModal.style.display = 'flex';
+    await loadModels();
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+        webcamReg.srcObject = stream;
+    } catch (e) {
+        alert("❌ Caméra inaccessible.");
+    }
+  }
+
+  async function startFaceIDRegistration() {
+    activateFaceIdBtn.textContent = "Analyse...";
+    activateFaceIdBtn.disabled = true;
+
+    setTimeout(async () => {
+        const detection = await faceapi.detectSingleFace(webcamReg, new faceapi.TinyFaceDetectorOptions())
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+
+        if (detection) {
+            const descriptor = Array.from(detection.descriptor);
+            pendingFaceDescriptor = descriptor; // On garde en mémoire
+            
+            // On essaie de sauvegarder (si déjà connecté)
+            await saveFaceToDatabase(descriptor, false); 
+            
+            if (webcamReg.srcObject) {
+                webcamReg.srcObject.getTracks().forEach(track => track.stop());
+            }
+            
+            faceIdModal.style.display = 'none';
+            manualFaceIdBtn.innerHTML = "✅ Visage prêt pour l'inscription";
+            manualFaceIdBtn.style.borderColor = "#52b788";
+        } else {
+            alert("❌ Aucun visage détecté. Rapprochez-vous.");
+            activateFaceIdBtn.textContent = "Réessayer";
+            activateFaceIdBtn.disabled = false;
+        }
+    }, 1000);
+  }
+
+  async function saveFaceToDatabase(descriptor, redirect = true) {
+    try {
+        const response = await fetch('../controller/api.php?action=save_face_descriptor', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ descriptor: descriptor })
+        });
+        const res = await response.json();
+        if (res.success && redirect) {
+            alert("✅ Compte et Face ID créés avec succès !");
+            window.location.href = 'connexion.html';
+        }
+    } catch (err) {
+        console.error("Erreur save DB:", err);
+    }
+  }
+
+  if (activateFaceIdBtn) {
+    activateFaceIdBtn.addEventListener('click', startFaceIDRegistration);
+  }
+
+  if (manualFaceIdBtn) {
+    manualFaceIdBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showFaceIdModal();
+    });
+  }
+
+  if (skipFaceIdBtn) {
+    skipFaceIdBtn.addEventListener('click', () => {
+        if (webcamReg.srcObject) {
+            webcamReg.srcObject.getTracks().forEach(track => track.stop());
+        }
+        window.location.href = 'connexion.html';
+    });
+  }
+
+  // Détection du retour de redirection Google (si nécessaire, sinon peut être supprimé)
 
   
   const linkBtn = document.querySelector('.link-btn');

@@ -140,6 +140,20 @@
         window.location.href = '/SportFuel-Module1/view/profil.html'; return;
       }
       loadUsers();
+
+      // Contrôle de saisie temps réel
+      const modNom = document.getElementById('modNom');
+      if (modNom) {
+        modNom.addEventListener('input', function() {
+          this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+        });
+      }
+      const modAge = document.getElementById('modAge');
+      if (modAge) {
+        modAge.addEventListener('input', function() {
+          this.value = this.value.replace(/[^0-9]/g, '');
+        });
+      }
     }
 
     /* ── Charger les données ── */
