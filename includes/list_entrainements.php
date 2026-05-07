@@ -9,12 +9,21 @@ try {
 
     $programmesOnly = isset($_GET['programmes']) && $_GET['programmes'] === '1';
 
-    $sql = "SELECT id_entrainement, id_utilisateur, titre, date_entrainement, duree_totale, notes_globales, statut
-            FROM entrainements ";
+    $sql = "SELECT e.id_entrainement,
+                   e.id_utilisateur,
+                   e.titre,
+                   e.date_entrainement,
+                   e.duree_totale,
+                   e.notes_globales,
+                   e.statut,
+                   COUNT(es.id_exercice_seance) AS nb_exercices
+            FROM entrainements e
+            LEFT JOIN exercices_seance es ON es.id_entrainement = e.id_entrainement ";
     if ($programmesOnly) {
-        $sql .= "WHERE notes_globales LIKE '__PROGRAMME__|%' ";
+        $sql .= "WHERE e.notes_globales LIKE '__PROGRAMME__|%' ";
     }
-    $sql .= "ORDER BY date_entrainement DESC, id_entrainement DESC";
+    $sql .= "GROUP BY e.id_entrainement, e.id_utilisateur, e.titre, e.date_entrainement, e.duree_totale, e.notes_globales, e.statut
+             ORDER BY e.date_entrainement DESC, e.id_entrainement DESC";
     $stmt = $pdo->query($sql);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

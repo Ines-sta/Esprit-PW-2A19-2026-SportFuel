@@ -57,13 +57,24 @@ try {
         'notes_globales' => $data['notes'] ?? null
     ];
     
+    // Capture la réponse du contrôleur pour récupérer l'ID créé.
     ob_start();
     $controller->post($entrainement_data);
-    ob_end_clean();
-    
+    $controller_output = ob_get_clean();
+
+    $response_code = http_response_code();
+    if ($response_code >= 400) {
+        echo $controller_output;
+        exit;
+    }
+
+    $controller_data = json_decode($controller_output, true);
+    $created_id = $controller_data['id'] ?? null;
+
     http_response_code(201);
     echo json_encode([
         'success' => true,
+        'id_entrainement' => $created_id,
         'message' => 'Entraînement enregistré avec succès'
     ]);
     

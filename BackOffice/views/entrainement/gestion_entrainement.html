@@ -6,6 +6,88 @@
     <title>SportFuel Admin — Gestion des entraînements</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link rel="stylesheet" href="../../assets/css/entrainement.css">
+    <style>
+        .stats-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .stats-modal {
+            width: min(900px, 92vw);
+            max-height: 85vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+        .stats-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stats-circle-grid {
+            display: block;
+        }
+        .stats-circle-card {
+            border: 1px solid #eceff3;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: left;
+            background: #fbfcff;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+        .stats-circle {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111827;
+            font-size: 14px;
+            font-weight: 700;
+            background: conic-gradient(#4f46e5 0deg, #e5e7eb 360deg);
+        }
+        .stats-percent {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .stats-circle-label {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 600;
+        }
+        .stats-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px 14px;
+        }
+        .stats-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #374151;
+        }
+        .stats-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex: 0 0 auto;
+        }
+    </style>
 
 </head>
 <body>
@@ -78,50 +160,154 @@
                 <div class="form-group"><label>Fréquence (séances / semaine) *</label><input type="number" min="1" max="14" step="1" inputmode="numeric" placeholder="ex: 3" data-field="frequence" required></div>
                 <div class="form-group"><label>Durée totale (semaines) *</label><input type="number" min="1" max="104" step="1" inputmode="numeric" placeholder="ex: 8" data-field="duree_semaines" required></div>
                 <div class="form-group"><label>Coach responsable</label><input type="text" maxlength="80" placeholder="Nom du coach" data-field="coach" autocomplete="name"></div>
+                <div class="form-group"><label>Exercices max / programme *</label><input type="number" min="1" max="200" step="1" inputmode="numeric" placeholder="Ex: 10" data-field="max_exercices" required></div>
             </div>
             <button type="submit" class="btn btn-primary">📌 Créer le programme</button>
         </form>
     </div>
 
+
     <!-- Tableau des programmes -->
     <div class="table-wrapper">
         <table>
             <thead>
-                <tr><th>ID</th><th>Nom</th><th>Sport</th><th>Date début</th><th>Niveau</th><th>Fréquence</th><th>Coach</th><th>Statut</th><th>Actions</th></tr>
+                <tr><th>ID</th><th>Nom</th><th>Sport</th><th>Date début</th><th>Niveau</th><th>Fréquence</th><th>Planifiées</th><th>Progression</th><th>Coach</th><th>Statut</th><th>Actions</th></tr>
             </thead>
             <tbody id="programsTableBody">
-                <tr><td colspan="9" style="text-align:center; padding:16px;">Chargement...</td></tr>
+                <tr><td colspan="11" style="text-align:center; padding:16px;">Chargement...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
+<div id="statsModalBackdrop" class="stats-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="statsModalTitle">
+    <div class="stats-modal">
+        <div class="stats-modal-header">
+            <h3 id="statsModalTitle" style="margin:0;">📊 Statistiques des types d'exercices</h3>
+            <button type="button" class="btn btn-secondary" onclick="closeStatsModal()">Fermer</button>
+        </div>
+        <div id="statsCircleGrid" class="stats-circle-grid"></div>
+    </div>
+</div>
 <script>
-    function filterPrograms() {
-        const niveauFilter = document.querySelector('.filter-item:first-child select')?.value || 'Tous';
-        const statutFilter = document.querySelector('.filter-item:nth-child(2) select')?.value || 'Tous';
-        const rows = document.querySelectorAll('.table-wrapper tbody tr');
-        
-        rows.forEach(row => {
-            const niveau = row.cells[4]?.innerText || '';
-            const statutSpan = row.cells[7]?.querySelector('span');
-            const statut = statutSpan ? statutSpan.innerText : '';
-            
-            let matchNiveau = (niveauFilter === 'Tous' || niveau === niveauFilter);
-            let matchStatut = (statutFilter === 'Tous' || statut === statutFilter);
-            
-            row.style.display = (matchNiveau && matchStatut) ? '' : 'none';
+    let allPrograms = [];
+    let sortDateAsc = true;
+
+    function getControlValue(id, fallback) {
+        const el = document.getElementById(id);
+        return el ? el.value : fallback;
+    }
+
+    function getFilteredSortedPrograms() {
+        const niveauFilter = getControlValue('niveauFilter', 'Tous');
+        const statutFilter = getControlValue('statutFilter', 'Tous');
+        const searchTerm = getControlValue('programSearch', '').trim().toLowerCase();
+
+        const filtered = allPrograms.filter(function (row) {
+            const meta = parseProgrammeMeta(row.notes_globales || '');
+            const name = meta.libelle !== '—' ? meta.libelle : (row.notes_globales || ('Programme ' + row.titre));
+            const statusLabel = normalizeStatus(row.statut);
+            const matchNiveau = (niveauFilter === 'Tous' || meta.niveau === niveauFilter);
+            const matchStatut = (statutFilter === 'Tous' || statusLabel === statutFilter);
+            const matchSearch = (!searchTerm || name.toLowerCase().includes(searchTerm));
+            return matchNiveau && matchStatut && matchSearch;
         });
+
+        filtered.sort(function (a, b) {
+            const dateA = a.date_entrainement ? new Date(a.date_entrainement + 'T00:00:00').getTime() : 0;
+            const dateB = b.date_entrainement ? new Date(b.date_entrainement + 'T00:00:00').getTime() : 0;
+            return sortDateAsc ? dateA - dateB : dateB - dateA;
+        });
+
+        return filtered;
+    }
+
+    function applyProgramControls() {
+        renderPrograms(getFilteredSortedPrograms());
+    }
+
+    function filterPrograms() {
+        applyProgramControls();
     }
     
     function resetFilters() {
-        const niveauSelect = document.querySelector('.filter-item:first-child select');
-        const statutSelect = document.querySelector('.filter-item:nth-child(2) select');
-        
+        const niveauSelect = document.getElementById('niveauFilter');
+        const statutSelect = document.getElementById('statutFilter');
+        const searchInput = document.getElementById('programSearch');
         if (niveauSelect) niveauSelect.value = 'Tous';
         if (statutSelect) statutSelect.value = 'Tous';
-        
-        const rows = document.querySelectorAll('.table-wrapper tbody tr');
-        rows.forEach(row => row.style.display = '');
+        if (searchInput) searchInput.value = '';
+        sortDateAsc = true;
+        const sortBtn = document.getElementById('sortDateBtn');
+        if (sortBtn) sortBtn.textContent = '📅 Trier par date (croissant)';
+        applyProgramControls();
+    }
+
+    function toggleSortByDate() {
+        sortDateAsc = !sortDateAsc;
+        const sortBtn = document.getElementById('sortDateBtn');
+        if (sortBtn) {
+            sortBtn.textContent = sortDateAsc
+                ? '📅 Trier par date (croissant)'
+                : '📅 Trier par date (décroissant)';
+        }
+        applyProgramControls();
+    }
+
+    function closeStatsModal() {
+        const backdrop = document.getElementById('statsModalBackdrop');
+        if (backdrop) backdrop.style.display = 'none';
+    }
+
+    function showExerciseTypeStats() {
+        if (!allPrograms.length) {
+            alert('Aucune donnée disponible pour les statistiques.');
+            return;
+        }
+
+        const counts = {};
+        allPrograms.forEach(function (row) {
+            const type = (row.titre || 'Non défini').trim();
+            counts[type] = (counts[type] || 0) + 1;
+        });
+        const total = allPrograms.length;
+        const colors = ['#3b82f6', '#22c55e', '#f59e0b', '#ec4899', '#8b5cf6', '#14b8a6', '#ef4444'];
+        const grid = document.getElementById('statsCircleGrid');
+        const backdrop = document.getElementById('statsModalBackdrop');
+        if (!grid || !backdrop) return;
+
+        const sortedTypes = Object.keys(counts).sort();
+        let startDeg = 0;
+        const slices = [];
+        const legend = [];
+
+        sortedTypes.forEach(function (type, idx) {
+            const value = counts[type];
+            const percent = total > 0 ? Math.round((value / total) * 100) : 0;
+            const sweep = (value / total) * 360;
+            const endDeg = startDeg + sweep;
+            const color = colors[idx % colors.length];
+            slices.push(`${color} ${startDeg}deg ${endDeg}deg`);
+            legend.push(`
+                <div class="stats-legend-item">
+                    <span class="stats-dot" style="background:${color};"></span>
+                    <span><strong>${type}</strong> - ${percent}% (${value})</span>
+                </div>
+            `);
+            startDeg = endDeg;
+        });
+
+        const gradient = slices.length ? `conic-gradient(${slices.join(', ')})` : 'conic-gradient(#e5e7eb 360deg)';
+        const html = `
+            <div class="stats-circle-card">
+                <div class="stats-circle" style="background:${gradient};"></div>
+                <div class="stats-percent">100% des programmes</div>
+                <div class="stats-circle-label" style="margin-bottom:10px;">Répartition des types d'exercices</div>
+                <div class="stats-legend">${legend.join('')}</div>
+            </div>
+        `;
+
+        grid.innerHTML = html;
+        backdrop.style.display = 'flex';
     }
     
     const APP_BASE_URL = `${window.location.protocol}//localhost/Esprit-PW-2A19-2526-SportFuel`;
@@ -226,24 +412,37 @@
     }
 
     function parseProgrammeMeta(notes) {
-        const empty = { libelle: '—', niveau: '—', frequence: '—', coach: '—' };
+        const empty = { libelle: '—', niveau: '—', frequence: '—', dureeSemaines: '—', coach: '—', maxExercices: null };
         if (!notes || notes.indexOf('__PROGRAMME__|') !== 0) return empty;
         const rest = notes.slice('__PROGRAMME__|'.length);
         const parts = rest.split('|').map(function (s) { return s.trim(); });
         const libelle = parts[0] || '—';
-        let niveau = '—', frequence = '—', coach = '—';
+        let niveau = '—', frequence = '—', dureeSemaines = '—', coach = '—', maxExercices = null;
         for (let i = 1; i < parts.length; i++) {
             const p = parts[i];
             if (p.indexOf('Niveau:') === 0) niveau = p.replace(/^Niveau:\s*/i, '').trim() || '—';
             if (p.indexOf('Fréquence:') === 0) frequence = p.replace(/^Fréquence:\s*/i, '').trim() || '—';
+            if (p.indexOf('Durée:') === 0) dureeSemaines = p.replace(/^Durée:\s*/i, '').trim() || '—';
             if (p.indexOf('Coach:') === 0) coach = p.replace(/^Coach:\s*/i, '').trim() || '—';
+            if (p.indexOf('Exercices max:') === 0) {
+                const raw = p.replace(/^Exercices max:\s*/i, '').trim();
+                const parsed = parseInt(raw, 10);
+                maxExercices = Number.isNaN(parsed) ? null : parsed;
+            }
         }
-        return { libelle: libelle, niveau: niveau, frequence: frequence, coach: coach };
+        return { libelle: libelle, niveau: niveau, frequence: frequence, dureeSemaines: dureeSemaines, coach: coach, maxExercices: maxExercices };
+    }
+
+    function getPlannedSessions(meta) {
+        const freq = parseInt(meta.frequence, 10);
+        const weeks = parseInt(meta.dureeSemaines, 10);
+        if (Number.isNaN(freq) || Number.isNaN(weeks) || freq < 1 || weeks < 1) return null;
+        return freq * weeks;
     }
 
     function renderPrograms(rows) {
         if (!Array.isArray(rows) || rows.length === 0) {
-            programsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:16px;">Aucun programme en base.</td></tr>';
+            programsTableBody.innerHTML = '<tr><td colspan="11" style="text-align:center; padding:16px;">Aucun programme en base.</td></tr>';
             return;
         }
 
@@ -255,6 +454,12 @@
                 : '—';
             const statusLabel = normalizeStatus(row.statut);
             const badgeClass = statusLabel === 'Actif' ? 'badge-actif' : 'badge-inactif';
+            const plannedSessions = getPlannedSessions(meta);
+            const completedItems = Number(row.nb_exercices || 0);
+            const progressPercent = plannedSessions && plannedSessions > 0
+                ? Math.min(100, Math.round((completedItems / plannedSessions) * 100))
+                : 0;
+            const plannedDisplay = plannedSessions !== null ? plannedSessions : '—';
 
             return `
                 <tr>
@@ -264,6 +469,8 @@
                     <td>${dateDebut}</td>
                     <td>${meta.niveau}</td>
                     <td>${meta.frequence}</td>
+                    <td>${plannedDisplay}</td>
+                    <td title="Basée sur le nombre d'exercices saisis pour ce programme">${progressPercent}% (${completedItems}/${plannedDisplay === '—' ? 0 : plannedDisplay})</td>
                     <td>${meta.coach}</td>
                     <td><span class="${badgeClass}">${statusLabel}</span></td>
                     <td class="actions">
@@ -291,9 +498,10 @@
             if (!response.ok || !data.success) {
                 throw new Error(data.error || 'Chargement impossible');
             }
-            renderPrograms(data.data);
+            allPrograms = Array.isArray(data.data) ? data.data : [];
+            applyProgramControls();
         } catch (error) {
-            programsTableBody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:16px;">Erreur de chargement des programmes.</td></tr>';
+            programsTableBody.innerHTML = '<tr><td colspan="11" style="text-align:center; padding:16px;">Erreur de chargement des programmes.</td></tr>';
         }
     }
 
@@ -314,17 +522,18 @@
         const frequence = programForm.querySelector('[data-field="frequence"]').value.trim();
         const dureeSemaines = programForm.querySelector('[data-field="duree_semaines"]').value.trim();
         const coach = programForm.querySelector('[data-field="coach"]').value.trim();
-
-        const notesProgramme = '__PROGRAMME__|' + nomProgramme +
-            '|Niveau: ' + (niveau || '—') +
-            '|Fréquence: ' + frequence +
-            '|Durée: ' + dureeSemaines +
-            '|Coach: ' + (coach || '—');
+        const maxExercices = programForm.querySelector('[data-field="max_exercices"]').value.trim();
 
         const formData = new FormData();
         formData.append('id_utilisateur', '1');
         formData.append('titre', sportCible);
         formData.append('date_entrainement', dateProgramme);
+        const notesProgramme = '__PROGRAMME__|' + nomProgramme +
+            '|Niveau: ' + (niveau || '—') +
+            '|Fréquence: ' + frequence +
+            '|Durée: ' + dureeSemaines +
+            '|Coach: ' + (coach || '—') +
+            '|Exercices max: ' + maxExercices;
         formData.append('notes', notesProgramme);
 
         try {
@@ -398,15 +607,28 @@
     if (topbar && !document.querySelector('.filters-bar')) {
         const filtersHtml = `
             <div class="filters-bar" style="display: flex; gap: 16px; margin: 20px 0; align-items: flex-end;">
-                <div class="filter-item"><label>Niveau</label><select><option>Tous</option><option>Débutant</option><option>Intermédiaire</option><option>Avancé</option></select></div>
-                <div class="filter-item"><label>Statut</label><select><option>Tous</option><option>Actif</option><option>Inactif</option></select></div>
+                <div class="filter-item"><label>Niveau</label><select id="niveauFilter"><option>Tous</option><option>Débutant</option><option>Intermédiaire</option><option>Avancé</option></select></div>
+                <div class="filter-item"><label>Statut</label><select id="statutFilter"><option>Tous</option><option>Actif</option><option>Inactif</option></select></div>
+                <div class="filter-item"><label>Rechercher programme</label><input id="programSearch" type="text" placeholder="Nom du programme..." style="padding:8px 10px; border:1px solid #ced4da; border-radius:8px;"></div>
                 <div class="filter-item"><button class="btn btn-primary" onclick="filterPrograms()">🔍 Filtrer</button></div>
+                <div class="filter-item"><button id="sortDateBtn" class="btn btn-secondary" onclick="toggleSortByDate()">📅 Trier par date (croissant)</button></div>
+                <div class="filter-item"><button class="btn btn-secondary" onclick="showExerciseTypeStats()">📊 Statistiques</button></div>
                 <div class="filter-item"><button class="btn btn-secondary" onclick="resetFilters()">Reset</button></div>
             </div>
         `;
         topbar.insertAdjacentHTML('afterend', filtersHtml);
     }
-    
+
+    document.addEventListener('input', function (event) {
+        if (event.target && event.target.id === 'programSearch') {
+            applyProgramControls();
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (event.target && event.target.id === 'statsModalBackdrop') {
+            closeStatsModal();
+        }
+    });
     // Récupérer les messages depuis l'URL
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success')) {

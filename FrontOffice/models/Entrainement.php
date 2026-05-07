@@ -85,10 +85,26 @@ class Entrainement {
 
     // Supprimer un entraînement
     public function delete($id_entrainement) {
-        $sql = "DELETE FROM entrainements WHERE id_entrainement = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$id_entrainement]);
-        return $stmt->rowCount();
+        $this->db->beginTransaction();
+        try {
+            // Supprime d'abord les exercices liés pour garder les deux tables cohérentes
+            // même si la contrainte FK n'est pas en cascade.
+            $sqlEx = "DELETE FROM exercices_seance WHERE id_entrainement = ?";
+            $stmtEx = $this->db->prepare($sqlEx);
+            $stmtEx->execute([$id_entrainement]);
+
+            $sql = "DELETE FROM entrainements WHERE id_entrainement = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$id_entrainement]);
+
+            $this->db->commit();
+            return $stmt->rowCount();
+        } catch (Exception $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            throw $e;
+        }
     }
 
     // Vérifier si la date est valide
