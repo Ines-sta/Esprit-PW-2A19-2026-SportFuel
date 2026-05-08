@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportFuel Admin — Gestion des séances</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/entrainement.css">
+    <style>
+        .exercise-card {
+            margin-top: 22px;
+            padding: 18px;
+            border: 1px solid #eceff3;
+            border-radius: 12px;
+            background: #fbfcff;
+        }
+        .exercise-head {
+            display: flex;
+            gap: 10px;
+            align-items: end;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+        .exercise-head .form-group {
+            min-width: 220px;
+            flex: 1 1 260px;
+        }
+        .exercise-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .exercise-table th,
+        .exercise-table td {
+            border-bottom: 1px solid #eceff3;
+            padding: 9px 8px;
+            text-align: left;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <a href="#" class="sidebar-brand">
+        <div class="sidebar-logo">SF</div>
+        <span>Sport<em>Fuel</em></span>
+    </a>
+    <div class="sidebar-role">ADMIN</div>
+
+    <ul class="sidebar-menu">
+        <li><a href="#"><span class="icon">📊</span> Dashboard</a></li>
+    </ul>
+    <div class="sidebar-section">Modules</div>
+    <ul class="sidebar-menu">
+        <li><a href="#"><span class="icon">👥</span> Utilisateurs</a></li>
+        <li><a href="#"><span class="icon">🍽️</span> Plans alimentaires</a></li>
+        <li><a href="#" class="active"><span class="icon">🏋️</span> Entraînements</a></li>
+        <li><a href="../aliments/aliments.html"><span class="icon">🥗</span> Aliments & courses</a></li>
+        <li><a href="../categories/categories.html"><span class="icon">📁</span> Catégories</a></li>
+        <li><a href="../courses/courses.html"><span class="icon">🛒</span> Listes de courses</a></li>
+        <li><a href="#"><span class="icon">🤝</span> Espace coach</a></li>
+    </ul>
+    <div class="sidebar-section">Général</div>
+    <ul class="sidebar-menu">
+        <li><a href="#"><span class="icon">📈</span> Statistiques</a></li>
+        <li><a href="#"><span class="icon">⚙️</span> Paramètres</a></li>
+    </ul>
+</aside>
+
+<!-- MAIN AREA -->
+<div class="main-area">
+    <div class="topbar">
+        <h1>⚙️ Gestion des séances</h1>
+        <span class="date">Mardi 7 avril 2026</span>
+    </div>
+
+    <!-- Cartes stats -->
+    <div class="stat-cards section-spacing">
+        <div class="stat-card"><div class="stat-value" id="stat-total">—</div><div class="stat-label">Séances totales</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-attente">—</div><div class="stat-label">En attente</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-validee">—</div><div class="stat-label">Validées</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-types">—</div><div class="stat-label">Types distincts</div></div>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="navigation-buttons section-spacing">
+        <a href="gestion_entrainement.html" class="btn btn-primary">🏋️ Gérer les programmes</a>
+    </div>
+
+    <!-- Filtres -->
+    <div class="filters-bar">
+        <div class="filter-item"><label>Type</label><select id="filter-type"><option>Tous</option></select></div>
+        <div class="filter-item"><label>Statut</label><select id="filter-statut"><option>Tous</option><option>Actif</option><option>Inactif</option></select></div>
+        <div class="filter-item"><button class="btn btn-primary btn-filter">🔍 Appliquer</button></div>
+        <div class="filter-item"><button class="btn btn-secondary btn-reset">Reset</button></div>
+    </div>
+
+    <!-- Tableau des séances -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr><th>Nom</th><th>Sport</th><th>Date début</th><th>Niveau</th><th>Fréquence</th><th>Planifiées</th><th>Progression</th><th>Coach</th><th>Statut</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="seances-tbody">
+                <tr><td colspan="10" style="text-align:center;">Chargement...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="exercise-card">
+        <h2 class="section-title">🏋️ Exercices de la séance</h2>
+        <div class="exercise-head">
+            <div class="form-group">
+                <label>Séance / programme cible</label>
+                <select id="exerciseProgramSelect">
+                    <option value="">Sélectionnez un programme</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-secondary" id="refreshExercisesBtn">🔄 Rafraîchir</button>
+        </div>
+
+        <form id="exerciseForm" novalidate>
+            <div id="exerciseFormErrors" role="alert" style="display:none; margin-bottom:16px; padding:12px 16px; background:#fde8e8; border:1px solid #f5c2c7; border-radius:8px; color:#842029; font-size:14px;"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Nom exercice *</label><input type="text" id="ex_nom" maxlength="120" required placeholder="Ex: Squat"></div>
+                <div class="form-group"><label>Durée (secondes) *</label><input type="number" id="ex_duree" min="1" required placeholder="Ex: 60"></div>
+                <div class="form-group"><label>Séries</label><input type="number" id="ex_series" min="1" placeholder="Ex: 4"></div>
+                <div class="form-group"><label>Répétitions</label><input type="number" id="ex_repetitions" min="1" placeholder="Ex: 12"></div>
+                <div class="form-group"><label>Charge (kg)</label><input type="number" id="ex_charge" min="0" step="0.1" placeholder="Ex: 40"></div>
+                <div class="form-group"><label>Distance (km)</label><input type="number" id="ex_distance" min="0" step="0.1" placeholder="Ex: 5"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">➕ Ajouter exercice</button>
+        </form>
+
+        <table class="exercise-table">
+            <thead>
+                <tr><th>ID</th><th>Nom</th><th>Durée</th><th>Séries</th><th>Répétitions</th><th>Charge</th><th>Distance</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="exerciseTableBody">
+                <tr><td colspan="8" style="text-align:center;">Sélectionnez une séance.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Barre d'exportation -->
+    <div class="export-bar">
+        <button class="btn-outline">📤 Exporter CSV</button>
+        <button class="btn-outline">🖨️ Imprimer</button>
+        <button class="btn btn-primary">➕ Nouvelle séance</button>
+    </div>
+</div>
+<script>
+    const APP_BASE_URL = `${window.location.protocol}//localhost/Esprit-PW-2A19-2526-SportFuel`;
+    const HANDLER_BASE_URL = `${APP_BASE_URL}/includes`;
+    let allSeances = []; // store fetched data for filtering
+    let selectedProgramId = '';
+    let selectedProgramMaxExercises = null;
+    let currentExercises = [];
+
+    // ============ LOAD DATA FROM DATABASE ============
+    async function parseJsonSafe(response) {
+        const text = await response.text();
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            throw new Error('Reponse serveur invalide.');
+        }
+    }
+
+    function normalizeStatus(dbStatus) {
+        return dbStatus === 'Validée' ? 'Actif' : 'Inactif';
+    }
+
+    function getPlannedSessions(meta) {
+        const freq = parseInt(meta.frequence, 10);
+        const weeks = parseInt(meta.dureeSemaines, 10);
+        if (Number.isNaN(freq) || Number.isNaN(weeks) || freq < 1 || weeks < 1) return null;
+        return freq * weeks;
+    }
+
+    function loadSeances() {
+        fetch(`${HANDLER_BASE_URL}/list_entrainements.php?programmes=1`)
+            .then(parseJsonSafe)
+            .then(data => {
+                if (data.success && data.data) {
+                    allSeances = data.data;
+                    renderTable(allSeances);
+                    updateStats(allSeances);
+                    populateTypeFilter(allSeances);
+                    populateSessionSelect(allSeances);
+                } else {
+                    document.getElementById('seances-tbody').innerHTML =
+                        '<tr><td colspan="10" style="text-align:center;">Erreur lors du chargement des donnees.</td></tr>';
+                }
+            })
+            .catch(() => {
+                document.getElementById('seances-tbody').innerHTML =
+                    '<tr><td colspan="10" style="text-align:center;">Erreur de connexion au serveur.</td></tr>';
+            });
+    }
+
+    // ============ RENDER TABLE ============
+    function renderTable(seances) {
+        const tbody = document.getElementById('seances-tbody');
+        if (seances.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">Aucun programme trouve.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = seances.map(s => {
+            const id = s.id_entrainement;
+            const meta = parseProgrammeMeta(s.notes_globales || '');
+            const nom = meta.libelle !== '—' ? meta.libelle : (s.notes_globales || ('Programme ' + (s.titre || '—')));
+            const sport = s.titre || '—';
+            const date = formatDate(s.date_entrainement);
+            const plannedSessions = getPlannedSessions(meta);
+            const nbExercices = Number.isFinite(Number(s.nb_exercices)) ? Number(s.nb_exercices) : 0;
+            const progressPercent = plannedSessions && plannedSessions > 0
+                ? Math.min(100, Math.round((nbExercices / plannedSessions) * 100))
+                : 0;
+            const plannedDisplay = plannedSessions !== null ? plannedSessions : '—';
+            const statusLabel = normalizeStatus(s.statut || 'En attente');
+            const badgeClass = statusLabel === 'Actif' ? 'badge-actif' : 'badge-inactif';
+
+            return `<tr>
+                <td>${nom}</td>
+                <td>${sport}</td>
+                <td>${date}</td>
+                <td>${meta.niveau}</td>
+                <td>${meta.frequence}</td>
+                <td>${plannedDisplay}</td>
+                <td title="Basee sur le nombre d'exercices saisis pour ce programme">${progressPercent}% (${nbExercices}/${plannedDisplay === '—' ? 0 : plannedDisplay})</td>
+                <td>${meta.coach}</td>
+                <td><span class="${badgeClass}">${statusLabel}</span></td>
+                <td class="actions">
+                    <button type="button" class="btn-icon" onclick="editSeance(${id})">✏️</button>
+                    <button type="button" class="btn-icon" onclick="confirmDelete(${id})">🗑️</button>
+                    <button type="button" class="btn-icon" onclick="validateSeance(${id})">✓</button>
+                    <button type="button" class="btn-icon" onclick="manageExercises(${id})">🏋️</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    function parseProgrammeMeta(notes) {
+        const empty = { libelle: '—', niveau: '—', frequence: '—', dureeSemaines: '—', coach: '—', maxExercices: null };
+        if (!notes || notes.indexOf('__PROGRAMME__|') !== 0) return empty;
+        const rest = notes.slice('__PROGRAMME__|'.length);
+        const parts = rest.split('|').map(function (s) { return s.trim(); });
+        const libelle = parts[0] || '—';
+        let niveau = '—';
+        let frequence = '—';
+        let dureeSemaines = '—';
+        let coach = '—';
+        let maxExercices = null;
+        for (let i = 1; i < parts.length; i++) {
+            const p = parts[i];
+            if (p.indexOf('Niveau:') === 0) niveau = p.replace(/^Niveau:\s*/i, '').trim() || '—';
+            if (p.indexOf('Fréquence:') === 0) frequence = p.replace(/^Fréquence:\s*/i, '').trim() || '—';
+            if (p.indexOf('Durée:') === 0) dureeSemaines = p.replace(/^Durée:\s*/i, '').trim() || '—';
+            if (p.indexOf('Coach:') === 0) coach = p.replace(/^Coach:\s*/i, '').trim() || '—';
+            if (p.indexOf('Exercices max:') === 0) {
+                const raw = p.replace(/^Exercices max:\s*/i, '').trim();
+                const parsed = parseInt(raw, 10);
+                maxExercices = Number.isNaN(parsed) ? null : parsed;
+            }
+        }
+        return {
+            libelle: libelle,
+            niveau: niveau,
+            frequence: frequence,
+            dureeSemaines: dureeSemaines,
+            coach: coach,
+            maxExercices: maxExercices
+        };
+    }
+
+    function populateSessionSelect(rows) {
+        const select = document.getElementById('exerciseProgramSelect');
+        if (!select) return;
+        const current = selectedProgramId || select.value || '';
+        select.innerHTML = '<option value="">Sélectionnez un programme</option>';
+        rows.forEach(function (row) {
+            const meta = parseProgrammeMeta(row.notes_globales || '');
+            const programName = meta.libelle !== '—' ? meta.libelle : (row.titre || 'Programme');
+            const opt = document.createElement('option');
+            opt.value = String(row.id_entrainement);
+            opt.textContent = '#P' + row.id_entrainement + ' - ' + programName;
+            select.appendChild(opt);
+        });
+        if (current && rows.some(function (r) { return String(r.id_entrainement) === String(current); })) {
+            select.value = String(current);
+            selectedProgramId = String(current);
+        } else {
+            selectedProgramId = '';
+        }
+    }
+
+    function clearExerciseFormErrors() {
+        const box = document.getElementById('exerciseFormErrors');
+        box.style.display = 'none';
+        box.innerHTML = '';
+    }
+
+    function showExerciseFormErrors(messages) {
+        const box = document.getElementById('exerciseFormErrors');
+        if (!messages.length) {
+            clearExerciseFormErrors();
+            return;
+        }
+        box.innerHTML = '<strong>Veuillez corriger :</strong><ul style="margin:8px 0 0 18px;">' +
+            messages.map(function (m) { return '<li>' + m + '</li>'; }).join('') + '</ul>';
+        box.style.display = 'block';
+    }
+
+    function validateExerciseForm(programId) {
+        const errors = [];
+        const nom = document.getElementById('ex_nom').value.trim();
+        const duree = document.getElementById('ex_duree').value.trim();
+        const series = document.getElementById('ex_series').value.trim();
+        const repetitions = document.getElementById('ex_repetitions').value.trim();
+        const charge = document.getElementById('ex_charge').value.trim();
+        const distance = document.getElementById('ex_distance').value.trim();
+
+        if (!programId) errors.push('Sélectionnez une séance avant d\'ajouter un exercice.');
+        if (nom.length < 2) errors.push('Le nom de l\'exercice doit contenir au moins 2 caractères.');
+        if (nom.length > 120) errors.push('Le nom de l\'exercice ne doit pas dépasser 120 caractères.');
+
+        const dureeNum = Number(duree);
+        if (duree === '' || Number.isNaN(dureeNum) || !Number.isInteger(dureeNum) || dureeNum < 1) {
+            errors.push('La durée doit être un nombre entier positif (en secondes).');
+        }
+        if (series !== '') {
+            const val = Number(series);
+            if (Number.isNaN(val) || !Number.isInteger(val) || val < 1) errors.push('Les séries doivent être un entier positif.');
+        }
+        if (repetitions !== '') {
+            const val = Number(repetitions);
+            if (Number.isNaN(val) || !Number.isInteger(val) || val < 1) errors.push('Les répétitions doivent être un entier positif.');
+        }
+        if (charge !== '') {
+            const val = Number(charge);
+            if (Number.isNaN(val) || val < 0) errors.push('La charge (kg) doit être un nombre positif ou nul.');
+        }
+        if (distance !== '') {
+            const val = Number(distance);
+            if (Number.isNaN(val) || val < 0) errors.push('La distance (km) doit être un nombre positif ou nul.');
+        }
+        if (selectedProgramMaxExercises && currentExercises.length >= selectedProgramMaxExercises) {
+            errors.push('Impossible d\'ajouter plus d\'exercices: limite du programme = ' + selectedProgramMaxExercises + '.');
+        }
+        return errors;
+    }
+
+    function renderExercises(rows) {
+        const tbody = document.getElementById('exerciseTableBody');
+        currentExercises = Array.isArray(rows) ? rows : [];
+        if (!Array.isArray(rows) || rows.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Aucun exercice pour cette séance.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = rows.map(function (row) {
+            return `
+                <tr>
+                    <td>#E${row.id_exercice_seance}</td>
+                    <td>${row.nom_exercice || '—'}</td>
+                    <td>${row.duree_secondes ? row.duree_secondes + ' s' : '—'}</td>
+                    <td>${row.series || '—'}</td>
+                    <td>${row.repetitions || '—'}</td>
+                    <td>${row.charge_kg ? row.charge_kg + ' kg' : '—'}</td>
+                    <td>${row.distance_km ? row.distance_km + ' km' : '—'}</td>
+                    <td>
+                        <button type="button" class="btn-icon" title="Éditer" onclick="editExercise(${row.id_exercice_seance})">✏️</button>
+                        <button type="button" class="btn-icon" title="Dupliquer" onclick="duplicateExercise(${row.id_exercice_seance})">📄</button>
+                        <button type="button" class="btn-icon" title="Supprimer" onclick="deleteExercise(${row.id_exercice_seance})">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    async function loadExercises(programId) {
+        const tbody = document.getElementById('exerciseTableBody');
+        if (!programId) {
+            currentExercises = [];
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Sélectionnez une séance.</td></tr>';
+            return;
+        }
+        try {
+            const response = await fetch(`${HANDLER_BASE_URL}/list_exercices_seance.php?id_entrainement=${encodeURIComponent(programId)}`);
+            const data = await response.json();
+            if (!response.ok || !data.success) throw new Error(data.error || 'Chargement exercices impossible');
+            renderExercises(Array.isArray(data.data) ? data.data : []);
+            const selected = allSeances.find(function (s) { return String(s.id_entrainement) === String(programId); });
+            const meta = selected ? parseProgrammeMeta(selected.notes_globales || '') : { maxExercices: null };
+            selectedProgramMaxExercises = meta.maxExercices;
+        } catch (error) {
+            currentExercises = [];
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Erreur de chargement des exercices.</td></tr>';
+        }
+    }
+
+    async function createExercise(event) {
+        event.preventDefault();
+        clearExerciseFormErrors();
+        const programId = selectedProgramId || document.getElementById('exerciseProgramSelect').value;
+        const validationErrors = validateExerciseForm(programId);
+        if (validationErrors.length) {
+            showExerciseFormErrors(validationErrors);
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('id_entrainement', String(programId));
+        formData.append('nom_exercice', document.getElementById('ex_nom').value.trim());
+        formData.append('duree_secondes', document.getElementById('ex_duree').value.trim());
+        const series = document.getElementById('ex_series').value.trim();
+        const repetitions = document.getElementById('ex_repetitions').value.trim();
+        const charge = document.getElementById('ex_charge').value.trim();
+        const distance = document.getElementById('ex_distance').value.trim();
+        if (series) formData.append('series', series);
+        if (repetitions) formData.append('repetitions', repetitions);
+        if (charge) formData.append('charge_kg', charge);
+        if (distance) formData.append('distance_km', distance);
+
+        try {
+            const response = await fetch(`${HANDLER_BASE_URL}/add_exercice_seance.php`, { method: 'POST', body: formData });
+            const result = await response.json();
+            if (!response.ok || !result.success) throw new Error(result.error || 'Création exercice impossible');
+            document.getElementById('exerciseForm').reset();
+            clearExerciseFormErrors();
+            await loadExercises(programId);
+            loadSeances();
+        } catch (error) {
+            alert('Erreur: ' + error.message);
+        }
+    }
+
+    async function deleteExercise(idExercice) {
+        if (!confirm('Supprimer cet exercice ?')) return;
+        const formData = new FormData();
+        formData.append('id_exercice_seance', String(idExercice));
+        try {
+            const response = await fetch(`${HANDLER_BASE_URL}/delete_exercice_seance.php`, { method: 'POST', body: formData });
+            const result = await response.json();
+            if (!response.ok || !result.success) throw new Error(result.error || 'Suppression exercice impossible');
+            await loadExercises(selectedProgramId || document.getElementById('exerciseProgramSelect').value);
+            loadSeances();
+        } catch (error) {
+            alert('Erreur: ' + error.message);
+        }
+    }
+
+    function findExerciseById(idExercice) {
+        return currentExercises.find(function (row) { return String(row.id_exercice_seance) === String(idExercice); }) || null;
+    }
+
+    async function editExercise(idExercice) {
+        const ex = findExerciseById(idExercice);
+        if (!ex) return alert('Exercice introuvable.');
+        const nom = prompt('Nom de l\'exercice :', ex.nom_exercice || '');
+        if (nom === null || !nom.trim()) return;
+        const duree = prompt('Durée (secondes) :', ex.duree_secondes != null ? String(ex.duree_secondes) : '');
+        if (duree === null || !duree.trim() || Number.isNaN(Number(duree)) || Number(duree) <= 0) return;
+        const series = prompt('Séries :', ex.series != null ? String(ex.series) : ''); if (series === null) return;
+        const repetitions = prompt('Répétitions :', ex.repetitions != null ? String(ex.repetitions) : ''); if (repetitions === null) return;
+        const charge = prompt('Charge kg :', ex.charge_kg != null ? String(ex.charge_kg) : ''); if (charge === null) return;
+        const distance = prompt('Distance km :', ex.distance_km != null ? String(ex.distance_km) : ''); if (distance === null) return;
+
+        const formData = new FormData();
+        formData.append('id_exercice_seance', String(idExercice));
+        formData.append('nom_exercice', nom.trim());
+        formData.append('duree_secondes', String(Math.floor(Number(duree))));
+        formData.append('series', series.trim());
+        formData.append('repetitions', repetitions.trim());
+        formData.append('charge_kg', charge.trim());
+        formData.append('distance_km', distance.trim());
+
+        try {
+            const response = await fetch(`${HANDLER_BASE_URL}/update_exercice_seance.php`, { method: 'POST', body: formData });
+            const result = await response.json();
+            if (!response.ok || !result.success) throw new Error(result.error || 'Mise à jour exercice impossible');
+            await loadExercises(selectedProgramId || document.getElementById('exerciseProgramSelect').value);
+        } catch (error) {
+            alert('Erreur: ' + error.message);
+        }
+    }
+
+    async function duplicateExercise(idExercice) {
+        const ex = findExerciseById(idExercice);
+        if (!ex) return alert('Exercice introuvable.');
+        if (selectedProgramMaxExercises && currentExercises.length >= selectedProgramMaxExercises) {
+            return alert('Impossible de dupliquer: limite du programme = ' + selectedProgramMaxExercises + '.');
+        }
+        const formData = new FormData();
+        formData.append('id_entrainement', String(selectedProgramId || document.getElementById('exerciseProgramSelect').value));
+        formData.append('nom_exercice', (ex.nom_exercice || 'Exercice') + ' (copie)');
+        formData.append('duree_secondes', ex.duree_secondes != null ? String(ex.duree_secondes) : '60');
+        if (ex.series != null) formData.append('series', String(ex.series));
+        if (ex.repetitions != null) formData.append('repetitions', String(ex.repetitions));
+        if (ex.charge_kg != null) formData.append('charge_kg', String(ex.charge_kg));
+        if (ex.distance_km != null) formData.append('distance_km', String(ex.distance_km));
+        try {
+            const response = await fetch(`${HANDLER_BASE_URL}/add_exercice_seance.php`, { method: 'POST', body: formData });
+            const result = await response.json();
+            if (!response.ok || !result.success) throw new Error(result.error || 'Duplication impossible');
+            await loadExercises(selectedProgramId || document.getElementById('exerciseProgramSelect').value);
+            loadSeances();
+        } catch (error) {
+            alert('Erreur: ' + error.message);
+        }
+    }
+
+    function manageExercises(id) {
+        const select = document.getElementById('exerciseProgramSelect');
+        selectedProgramId = String(id);
+        select.value = String(id);
+        loadExercises(selectedProgramId);
+        document.querySelector('.exercise-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ============ UPDATE STATS ============
+    function updateStats(seances) {
+        document.getElementById('stat-total').textContent = seances.length;
+        document.getElementById('stat-attente').textContent = seances.filter(s => s.statut === 'En attente').length;
+        document.getElementById('stat-validee').textContent = seances.filter(s => s.statut === 'Validée').length;
+        const types = new Set(seances.map(s => s.titre));
+        document.getElementById('stat-types').textContent = types.size;
+    }
+
+    // ============ POPULATE TYPE FILTER ============
+    function populateTypeFilter(seances) {
+        const typeSelect = document.getElementById('filter-type');
+        typeSelect.innerHTML = '<option>Tous</option>';
+        const types = [...new Set(seances.map(s => s.titre))].sort();
+        types.forEach(t => {
+            const opt = document.createElement('option');
+            opt.textContent = t;
+            typeSelect.appendChild(opt);
+        });
+    }
+
+    // ============ FORMAT DATE ============
+    function formatDate(dateStr) {
+        if (!dateStr) return '—';
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        return dateStr;
+    }
+
+    // ============ FILTERS ============
+    function filterTable() {
+        const typeFilter = document.getElementById('filter-type').value;
+        const statutFilter = document.getElementById('filter-statut').value;
+
+        const filtered = allSeances.filter(s => {
+            const statusLabel = normalizeStatus(s.statut || 'En attente');
+            const matchType = (typeFilter === 'Tous' || s.titre === typeFilter);
+            const matchStatut = (statutFilter === 'Tous' || statusLabel === statutFilter);
+            return matchType && matchStatut;
+        });
+        renderTable(filtered);
+    }
+
+    function resetFilters() {
+        document.getElementById('filter-type').value = 'Tous';
+        document.getElementById('filter-statut').value = 'Tous';
+        renderTable(allSeances);
+    }
+
+    // ============ ACTION HANDLERS ============
+    function confirmDelete(id) {
+        if (!id) return;
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette séance ?')) {
+            const formData = new FormData();
+            formData.append('id_entrainement', id);
+
+            fetch(`${HANDLER_BASE_URL}/delete_entrainement.php`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Séance supprimée avec succès.');
+                    loadSeances(); // reload data instead of full page reload
+                } else {
+                    alert('Erreur : ' + (data.error || 'Impossible de supprimer la séance'));
+                }
+            })
+            .catch(() => alert('Erreur de connexion au serveur.'));
+        }
+    }
+
+    function editSeance(id) {
+        if (!id) return;
+        manageExercises(id);
+    }
+
+    function validateSeance(id) {
+        if (!id) return;
+        if (confirm('Valider cette séance ?')) {
+            const formData = new FormData();
+            formData.append('id_entrainement', id);
+            formData.append('statut', 'Validée');
+
+            fetch(`${HANDLER_BASE_URL}/update_entrainement.php`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Séance validée avec succès.');
+                    loadSeances(); // reload data instead of full page reload
+                } else {
+                    alert('Erreur : ' + (data.error || 'Impossible de valider la séance'));
+                }
+            })
+            .catch(() => alert('Erreur de connexion au serveur.'));
+        }
+    }
+
+    // ============ EVENT LISTENERS ============
+    document.querySelector('.btn-filter').onclick = filterTable;
+    document.querySelector('.btn-reset').onclick = resetFilters;
+    document.getElementById('exerciseProgramSelect').addEventListener('change', function () {
+        selectedProgramId = this.value || '';
+        selectedProgramMaxExercises = null;
+        loadExercises(selectedProgramId);
+    });
+    document.getElementById('refreshExercisesBtn').addEventListener('click', function () {
+        loadExercises(selectedProgramId || document.getElementById('exerciseProgramSelect').value);
+    });
+    document.getElementById('exerciseForm').addEventListener('submit', createExercise);
+    window.deleteExercise = deleteExercise;
+    window.editExercise = editExercise;
+    window.duplicateExercise = duplicateExercise;
+    window.manageExercises = manageExercises;
+
+    // ============ INIT ============
+    loadSeances();
+
+    // URL messages
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success')) {
+        alert('✅ ' + decodeURIComponent(urlParams.get('success')));
+    }
+    if (urlParams.get('error')) {
+        alert('❌ ' + decodeURIComponent(urlParams.get('error')));
+    }
+</script>
+</body>
+</html>
