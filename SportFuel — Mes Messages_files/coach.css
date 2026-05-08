@@ -1,0 +1,190 @@
+/* FrontOffice / assets / css / coach.css */
+
+.coach-header {
+    margin-bottom: 30px;
+}
+
+.coach-header h1 {
+    font-size: 2.2rem;
+    color: var(--vert-foret);
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+
+.coach-header p {
+    color: var(--gris);
+    font-size: 1.1rem;
+}
+
+/* Layout Dashboard */
+.coach-dashboard {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+}
+
+/* Animation de carte */
+.animated-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: linear-gradient(145deg, #ffffff, #f9f9f9);
+}
+
+.animated-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(45, 106, 79, 0.15);
+}
+
+/* Coach Profile */
+.coach-profile {
+    text-align: center;
+    padding: 30px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.coach-avatar {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--vert-vif), var(--vert-foret));
+    color: var(--blanc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(82, 183, 136, 0.4);
+    border: 4px solid var(--vert-bg);
+}
+
+.coach-profile h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--noir);
+}
+
+.specialite-badge {
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.coach-stats {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--gris-clair);
+    border-bottom: 1px solid var(--gris-clair);
+}
+
+.coach-stats .stat strong {
+    display: block;
+    font-size: 1.4rem;
+    color: var(--vert-vif);
+}
+
+.coach-stats .stat span {
+    font-size: 0.85rem;
+    color: var(--gris);
+    text-transform: uppercase;
+}
+
+.coach-bio {
+    font-style: italic;
+    color: var(--gris-fonce);
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.msg-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    padding-left: 24px;
+    margin-top: 20px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--vert-clair);
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--vert-vif);
+    border: 3px solid var(--blanc);
+    box-shadow: 0 0 0 2px var(--vert-clair);
+}
+
+.timeline-date {
+    font-weight: bold;
+    color: var(--vert-foret);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.timeline-content {
+    background: var(--gris-clair);
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+}
+
+.timeline-content:hover {
+    background: var(--blanc);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.timeline-header h4 {
+    margin: 0;
+    color: var(--noir);
+}
+
+.card-inner p {
+    color: var(--gris-fonce);
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .coach-dashboard {
+        grid-template-columns: 1fr;
+    }
+}

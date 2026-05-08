@@ -1,25 +1,26 @@
 <?php
-/**
- * Configuration de la base de données
- * Gère la connexion PDO à MySQL
- */
+$host = '127.0.0.1';
+$dbname = 'sportfueldb';
+$username = 'root';
+$password = '';
+$port = '3306';
+
 class Config {
-    /**
-     * Retourne une instance PDO pour la connexion à la base de données
-     * @return PDO
-     */
     public static function getConnexion() {
+        global $host, $dbname, $username, $password, $port;
+
         try {
-            $pdo = new PDO(
-                'mysql:host=localhost;dbname=SportFuel;charset=utf8',
-                'root',
-                '',
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            return new PDO(
+                "mysql:host=$host;dbname=$dbname;port=$port;charset=utf8mb4",
+                $username,
+                $password,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                ]
             );
-            return $pdo;
         } catch (PDOException $e) {
-            die("Erreur de connexion à la base de données : " . $e->getMessage());
+            die('Erreur de connexion a la base de donnees : ' . $e->getMessage());
         }
     }
 }
-?>
