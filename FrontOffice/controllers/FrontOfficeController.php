@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../models/User.php';
-require_once __DIR__ . '/../models/Publication.php';
-require_once __DIR__ . '/../models/Commentaire.php';
+require_once __DIR__ . '/../../BackOffice/models/User.php';
+require_once __DIR__ . '/../../BackOffice/models/Publication.php';
+require_once __DIR__ . '/../../BackOffice/models/Commentaire.php';
 
 class FrontOfficeController {
     private $userModel;

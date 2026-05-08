@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../../config.php';
-require_once __DIR__ . '/../../../controllers/CoachController.php';
+require_once __DIR__ . '/../../controllers/CoachController.php';
 
 $controller = new CoachController();
 $controller->handlePost();
