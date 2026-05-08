@@ -1,0 +1,233 @@
+
+<!-- saved from url=(0059)http://localhost:8000/FrontOffice/views/coach/dashboard.php -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>}
+?&gt;
+
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportFuel — Mes Messages</title>
+    <link rel="stylesheet" href="./SportFuel — Mes Messages_files/style.css">
+    <link rel="stylesheet" href="./SportFuel — Mes Messages_files/coach.css">
+    <style>
+        /* Styles spécifiques au chat/message board */
+        .pub-card { background: white; margin-bottom: 20px; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .pub-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .pub-date { color: #888; font-size: 0.9em; }
+        .pub-body { font-size: 1.1em; line-height: 1.6; color: #333; margin-bottom: 15px; }
+        .comment-section { margin-top: 15px; padding-top: 15px; border-top: 2px dashed #eee; }
+        .comment-item { background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--vert-foret); }
+        .comment-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold; color: var(--vert-foret); font-size: 0.9em;}
+        .form-message { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 1em; margin-bottom: 15px;}
+        .message-actions { display: flex; gap: 10px; margin-top: 10px; }
+        
+        /* Modals (simplifiés pour FrontOffice) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;}
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; }
+    </style>
+
+
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="http://localhost:8000/FrontOffice/views/coach/dashboard.php#" class="navbar-brand">
+        <div class="navbar-logo">SF</div>
+        <span>Sport<em>Fuel</em></span>
+    </a>
+    <ul class="navbar-links">
+        <li><a href="http://localhost:8000/FrontOffice/views/coach/dashboard.php#">Dashboard</a></li>
+        <li><a href="http://localhost:8000/FrontOffice/views/coach/dashboard.php#">Mon plan</a></li>
+        <li><a href="http://localhost:8000/FrontOffice/views/coach/dashboard.php#">Entraînements</a></li>
+        <li><a href="http://localhost:8000/FrontOffice/views/courses/courses.html">Courses</a></li>
+        <li><a href="http://localhost:8000/FrontOffice/views/aliments/aliments.html">Aliments</a></li>
+        <li><a href="http://localhost:8000/FrontOffice/views/coach/dashboard.php" class="active">Mes Messages</a></li>
+    </ul>
+    <div class="navbar-user">MD</div>
+</nav>
+
+<!-- CONTENU -->
+<div class="main-content">
+    <div class="coach-header">
+        <h1>Mes Demandes &amp; Suivis</h1>
+        <p>Laissez vos messages, remarques ou notes. Les administrateurs / coachs vous répondront directement ici.</p>
+    </div>
+
+    
+    
+    <!-- Espace pour ajouter une publication -->
+    <div class="pub-card" style="background:#f1fdf4; border: 1px solid #dcf5e3;">
+        <h3>📮 Nouvelle Demande</h3>
+        <form action="http://localhost:8000/FrontOffice/views/coach/dashboard.php" method="POST">
+            <input type="hidden" name="action" value="add_pub">
+            <textarea name="text" class="form-message" rows="3" placeholder="Écrivez votre message ici..."></textarea>
+            <button type="submit" class="btn btn-success">Publier</button>
+        </form>
+    </div>
+
+    <!-- Historique des Publications -->
+    <div class="suivi-history">
+        <h2>Mon Historique</h2>
+
+        
+                        <div class="pub-card">
+                <div class="pub-header">
+                    <strong>Message #10</strong>
+                    <span class="pub-date">13/04/2026 à 22:58</span>
+                </div>
+                <div class="pub-body">
+                    fffffffffffff                </div>
+                
+                <!-- Actions Utilisateur sur sa publi -->
+                <div class="message-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openEditModal(10, &#39;fffffffffffff&#39;)">Modifier</button>
+                    <form action="http://localhost:8000/FrontOffice/views/coach/dashboard.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="action" value="delete_pub">
+                        <input type="hidden" name="id_pub" value="10">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Êtes-vous sûr de vouloir supprimer cette demande ?&#39;);">Supprimer</button>
+                    </form>
+                </div>
+
+                <!-- Section Réponses Administrateurs -->
+                            </div>
+                        <div class="pub-card">
+                <div class="pub-header">
+                    <strong>Message #8</strong>
+                    <span class="pub-date">13/04/2026 à 22:50</span>
+                </div>
+                <div class="pub-body">
+                    xxX                </div>
+                
+                <!-- Actions Utilisateur sur sa publi -->
+                <div class="message-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openEditModal(8, &#39;xxX&#39;)">Modifier</button>
+                    <form action="http://localhost:8000/FrontOffice/views/coach/dashboard.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="action" value="delete_pub">
+                        <input type="hidden" name="id_pub" value="8">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Êtes-vous sûr de vouloir supprimer cette demande ?&#39;);">Supprimer</button>
+                    </form>
+                </div>
+
+                <!-- Section Réponses Administrateurs -->
+                            </div>
+                        <div class="pub-card">
+                <div class="pub-header">
+                    <strong>Message #7</strong>
+                    <span class="pub-date">13/04/2026 à 22:50</span>
+                </div>
+                <div class="pub-body">
+                    wxw                </div>
+                
+                <!-- Actions Utilisateur sur sa publi -->
+                <div class="message-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openEditModal(7, &#39;wxw&#39;)">Modifier</button>
+                    <form action="http://localhost:8000/FrontOffice/views/coach/dashboard.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="action" value="delete_pub">
+                        <input type="hidden" name="id_pub" value="7">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Êtes-vous sûr de vouloir supprimer cette demande ?&#39;);">Supprimer</button>
+                    </form>
+                </div>
+
+                <!-- Section Réponses Administrateurs -->
+                            </div>
+                        <div class="pub-card">
+                <div class="pub-header">
+                    <strong>Message #6</strong>
+                    <span class="pub-date">13/04/2026 à 22:21</span>
+                </div>
+                <div class="pub-body">
+                    aaaaa                </div>
+                
+                <!-- Actions Utilisateur sur sa publi -->
+                <div class="message-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openEditModal(6, &#39;aaaaa&#39;)">Modifier</button>
+                    <form action="http://localhost:8000/FrontOffice/views/coach/dashboard.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="action" value="delete_pub">
+                        <input type="hidden" name="id_pub" value="6">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Êtes-vous sûr de vouloir supprimer cette demande ?&#39;);">Supprimer</button>
+                    </form>
+                </div>
+
+                <!-- Section Réponses Administrateurs -->
+                                <div class="comment-section">
+                    <h4 style="margin-bottom:10px; color:#555;">Réponses reçeus :</h4>
+                                        <div class="comment-item">
+                        <div class="comment-header">
+                            <span>Admin/Coach</span>
+                            <span>13/04 à 22:22</span>
+                        </div>
+                        <div>ccccd</div>
+                    </div>
+                                    </div>
+                            </div>
+            
+            </div>
+</div>
+
+<!-- Modal Editer Publication -->
+<div class="modal-overlay" id="modal-edit-pub">
+    <div class="modal">
+        <h3 style="margin-bottom: 15px;">Modifier ma demande</h3>
+        <form action="http://localhost:8000/FrontOffice/views/coach/dashboard.php" method="POST">
+            <input type="hidden" name="action" value="edit_pub">
+            <input type="hidden" name="id_pub" id="edit-pub-id" value="">
+            
+            <textarea name="text" id="edit-pub-text" class="form-message" rows="4"></textarea>
+            
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+                <button type="button" class="btn btn-outline" onclick="closeModal(&#39;modal-edit-pub&#39;)">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openEditModal(id_pub, text) {
+        document.getElementById('edit-pub-id').value = id_pub;
+        document.getElementById('edit-pub-text').value = text;
+        document.getElementById('modal-edit-pub').classList.add('active');
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    // Validation
+    document.addEventListener('DOMContentLoaded', function() {
+        const addForm = document.querySelector('form[action="dashboard.php"]');
+        if (addForm) {
+            addForm.addEventListener('submit', function(e) {
+                const text = addForm.querySelector('textarea[name="text"]').value;
+                if (!text.trim()) {
+                    alert("Le message ne peut pas être vide.");
+                    e.preventDefault();
+                } else if (text.length > 500) {
+                    alert("Le message ne peut pas dépasser 500 caractères.");
+                    e.preventDefault();
+                }
+            });
+        }
+
+        const editForm = document.querySelector('#modal-edit-pub form');
+        if (editForm) {
+            editForm.addEventListener('submit', function(e) {
+                const text = document.getElementById('edit-pub-text').value;
+                if (!text.trim()) {
+                    alert("Le message ne peut pas être vide.");
+                    e.preventDefault();
+                } else if (text.length > 500) {
+                    alert("Le message ne peut pas dépasser 500 caractères.");
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+</script>
+
+<div class="footer">
+    © 2026 SportFuel — Nutrition intelligente pour sportifs
+</div>
+
+
+
+</body></html>

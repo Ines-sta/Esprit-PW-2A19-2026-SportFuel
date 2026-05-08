@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Profil — SportFuel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="profil.css">
+  <script>
+    if (window.location.protocol === 'file:') {
+      window.location.replace('http://localhost/SportFuel-Module1/view/profil.html');
+    }
+  </script>
+</head>
+<body>
+  <div class="main">
+    <div class="content">
+      <div class="page-actions">
+        <a class="btn btn-outline" href="/SportFuel-Module1/controller/AuthController.php?action=logout"
+           style="text-decoration:none;color:#dc2626;border-color:#fee2e2;background:#fef2f2;margin-right:15px;">🚪 Déconnexion</a>
+        <button class="btn btn-outline" onclick="toggleEdit()">✏️ Modifier</button>
+        <button class="btn btn-primary"  onclick="saveProfile()">💾 Enregistrer</button>
+      </div>
+
+      <!-- Hero -->
+      <div class="profile-hero">
+        <div class="avatar-wrap">
+          <div class="avatar" id="avatarInitial">?</div>
+          <div class="avatar-edit">📷</div>
+        </div>
+        <div class="hero-info">
+          <div class="hero-name"  id="heroName">Chargement...</div>
+          <div class="hero-email" id="heroEmail"></div>
+          <div class="hero-tags">
+            <div class="hero-tag"        id="heroSport">🏃 —</div>
+            <div class="hero-tag orange" id="heroObjectif">🎯 —</div>
+            <div class="hero-tag"        id="heroNiveau">⭐ —</div>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="hero-stat-val" id="heroPoids">—</div><div class="hero-stat-label">kg</div></div>
+          <div class="hero-stat"><div class="hero-stat-val" id="heroTaille">—</div><div class="hero-stat-label">cm</div></div>
+          <div class="hero-stat"><div class="hero-stat-val" id="heroAge">—</div><div class="hero-stat-label">ans</div></div>
+        </div>
+      </div>
+
+      <div class="profile-grid">
+        <!-- Informations personnelles -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">👤 Informations personnelles</div>
+            <a class="edit-link" onclick="toggleEdit()">Modifier</a>
+          </div>
+          <div class="card-body">
+            <div class="field-group">
+              <div class="field-row">
+                <div class="field" style="flex:1">
+                  <div class="field-label">Nom complet</div>
+                  <input class="field-input" type="text" id="nom" disabled>
+                </div>
+                <div class="field" style="flex:1">
+                  <div class="field-label">Email</div>
+                  <input class="field-input" type="email" id="email" disabled>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚖️ Données physiques</div></div>
+          <div class="card-body">
+            <div class="stat-pills">
+              <div class="stat-pill">
+                <div class="pill-val" id="pillAge">—</div>
+                <div class="pill-unit">ans</div><div class="pill-label">Âge</div>
+              </div>
+              <div class="stat-pill">
+                <div class="pill-val" id="pillPoids">—</div>
+                <div class="pill-unit">kg</div><div class="pill-label">Poids</div>
+              </div>
+              <div class="stat-pill">
+                <div class="pill-val" id="pillTaille">—</div>
+                <div class="pill-unit">cm</div><div class="pill-label">Taille</div>
+              </div>
+              <div class="stat-pill">
+                <div class="pill-val" id="pillImc">—</div>
+                <div class="pill-unit">IMC</div><div class="pill-label">Indicatif</div>
+              </div>
+            </div>
+            <div style="margin-top:20px;">
+              <div class="progress-wrap">
+                <div class="progress-label"><span>IMC</span><span id="imcLabel">—</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="imcBar" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🏅 Profil sportif</div>
+            <a class="edit-link" onclick="toggleEdit()">Modifier</a>
+          </div>
+          <div class="card-body">
+            <div class="field-group">
+              <div class="field">
+                <div class="field-label">Sport pratiqué</div>
+                <div class="sport-tags" id="sportContainer">
+                  <div class="sport-tag" data-value="Marathon">🏃 Marathon</div>
+                  <div class="sport-tag" data-value="Musculation">💪 Musculation</div>
+                  <div class="sport-tag" data-value="Yoga">🧘 Yoga</div>
+                  <div class="sport-tag" data-value="Natation">🏊 Natation</div>
+                  <div class="sport-tag" data-value="Cyclisme">🚴 Cyclisme</div>
+                </div>
+                <input type="hidden" id="sport" value="Marathon">
+              </div>
+              <div class="field">
+                <div class="field-label">Objectif</div>
+                <select class="field-select" id="objectif" disabled>
+                  <option>Performance</option>
+                  <option>Prise de masse</option>
+                  <option>Perte de poids</option>
+                  <option>Endurance</option>
+                  <option>Légèreté</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <div class="field-label">Niveau</div>
+                  <select class="field-select" id="niveau" disabled>
+                    <option>Avancé</option>
+                    <option>Intermédiaire</option>
+                    <option>Débutant</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <div class="field-label">Séances/sem</div>
+                  <input class="field-input" type="number" id="frequence" disabled>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="card">
+          <div class="card-header"><div class="card-title">📈 Activité récente</div></div>
+          <div class="card-body">
+            <div class="field-group">
+              <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--cream);border-radius:12px;">
+                <div style="font-size:28px;">🥗</div>
+                <div>
+                  <div style="font-size:14px;font-weight:600;">Plan alimentaire généré</div>
+                  <div style="font-size:12px;color:var(--muted);">Semaine 3 · Marathon · 1 840 kcal</div>
+                </div>
+                <div style="margin-left:auto;font-size:12px;color:var(--muted);">Aujourd'hui</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--cream);border-radius:12px;">
+                <div style="font-size:28px;">🏃</div>
+                <div>
+                  <div style="font-size:14px;font-weight:600;">Séance enregistrée</div>
+                  <div style="font-size:12px;color:var(--muted);">Course · 12 km · 580 kcal brûlées</div>
+                </div>
+                <div style="margin-left:auto;font-size:12px;color:var(--muted);">Hier</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="danger-zone">
+        <div class="danger-text">
+          <h4>⚠️ Supprimer mon compte</h4>
+          <p>Cette action est irréversible. Toutes vos données seront définitivement supprimées.</p>
+        </div>
+        <button class="btn btn-danger" onclick="deleteAccount()">Supprimer mon compte</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="save-bar" id="saveBar">
+    <span>✏️ Modifications non sauvegardées</span>
+    <button class="btn-save" onclick="saveProfile()">Enregistrer</button>
+  </div>
+
+  <script>
+    const API = '/SportFuel-Module1/controller/api.php';
+    let editMode = false;
+    let currentUser = null;
+
+   
+    async function init() {
+      const res  = await fetch(`${API}?action=check_session`);
+      const sess = await res.json();
+      if (!sess.authenticated) {
+        window.location.href = '/SportFuel-Module1/view/connexion.html';
+        return;
+      }
+      if (sess.role === 'Admin') {
+        window.location.href = '/SportFuel-Module1/view/admin.html';
+        return;
+      }
+      loadProfile();
+    }
+
+    async function loadProfile() {
+      const res  = await fetch(`${API}?action=me`);
+      const data = await res.json();
+      if (!data.success) { alert('Erreur chargement profil'); return; }
+      currentUser = data.user;
+      renderProfile(data.user);
+    }
+
+    function renderProfile(u) {
+      const init = (u.nom || '?')[0].toUpperCase();
+      document.getElementById('avatarInitial').textContent = init;
+      document.getElementById('heroName').textContent    = u.nom;
+      document.getElementById('heroEmail').textContent   = u.email;
+      document.getElementById('heroSport').textContent   = '🏃 ' + (u.sport || '—');
+      document.getElementById('heroObjectif').textContent= '🎯 ' + (u.objectif || '—');
+      document.getElementById('heroNiveau').textContent  = '⭐ ' + (u.niveau || '—');
+      document.getElementById('heroPoids').textContent   = u.poids;
+      document.getElementById('heroTaille').textContent  = u.taille;
+      document.getElementById('heroAge').textContent     = u.age;
+
+      document.getElementById('nom').value    = u.nom;
+      document.getElementById('email').value  = u.email;
+
+      document.getElementById('pillAge').textContent    = u.age;
+      document.getElementById('pillPoids').textContent  = u.poids;
+      document.getElementById('pillTaille').textContent = u.taille;
+      document.getElementById('pillImc').textContent    = u.imc;
+      document.getElementById('imcLabel').textContent   = u.imc + ' / 30';
+
+      const pct = Math.min(100, Math.round((u.imc / 30) * 100));
+      document.getElementById('imcBar').style.width = pct + '%';
+
+      document.getElementById('sport').value = u.sport || 'Marathon';
+      document.querySelectorAll('.sport-tag').forEach(t => {
+        t.classList.toggle('active', t.dataset.value === u.sport);
+      });
+
+      document.getElementById('objectif').value  = u.objectif || 'Performance';
+      document.getElementById('niveau').value    = u.niveau   || 'Débutant';
+      document.getElementById('frequence').value = u.frequence || 5;
+
+      document.getElementById('saveBar').style.display = 'none';
+    }
+
+    window.toggleEdit = function () {
+      editMode = !editMode;
+      const fields = document.querySelectorAll('.field-input, .field-select');
+      fields.forEach(f => {
+        if (f.id === 'email') return;
+        f.disabled = !editMode;
+        f.style.background   = editMode ? 'white' : 'var(--cream)';
+        f.style.borderColor  = editMode ? 'var(--green-mid)' : 'var(--border)';
+      });
+      document.getElementById('saveBar').style.display = editMode ? 'flex' : 'none';
+    };
+
+    document.querySelectorAll('.sport-tag').forEach(tag => {
+      tag.addEventListener('click', function () {
+        if (!editMode) return;
+        document.querySelectorAll('.sport-tag').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('sport').value = this.dataset.value;
+      });
+    });
+
+    window.saveProfile = async function () {
+      const nom = document.getElementById('nom').value.trim();
+      if (nom.length < 3) { alert('❌ Nom trop court.'); return; }
+      const freq = parseInt(document.getElementById('frequence').value);
+      if (isNaN(freq) || freq < 0 || freq > 21) { alert('❌ Fréquence invalide (0-21).'); return; }
+
+      const data = {
+        nom,
+        sport:     document.getElementById('sport').value,
+        objectif:  document.getElementById('objectif').value,
+        niveau:    document.getElementById('niveau').value,
+        frequence: freq
+      };
+
+      const res  = await fetch(`${API}?action=save_profil`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      if (result.success) {
+        alert('✅ ' + result.message);
+        editMode = false;
+        window.location.reload();
+      } else {
+        alert('❌ ' + result.message);
+      }
+    };
+
+    window.deleteAccount = async function () {
+      if (!confirm('Supprimer définitivement votre compte ? Irréversible.')) return;
+      const res = await fetch(`${API}?action=delete_account`, { method: 'POST' });
+      const r   = await res.json();
+      if (r.success) {
+        alert('Compte supprimé.');
+        window.location.href = '/SportFuel-Module1/controller/AuthController.php?action=logout';
+      } else {
+        alert('Erreur : ' + (r.message || 'inconnue'));
+      }
+    };
+
+    init();
+  </script>
+</body>
+</html>

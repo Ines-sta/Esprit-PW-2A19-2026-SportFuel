@@ -1,0 +1,353 @@
+
+<!-- saved from url=(0054)http://localhost:8000/BackOffice/views/coach/index.php -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body>}
+?&gt;
+
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportFuel Admin — Publications &amp; Commentaires</title>
+    <link rel="stylesheet" href="./SportFuel Admin — Publications &amp; Commentaires_files/style.css">
+    <link rel="stylesheet" href="./SportFuel Admin — Publications &amp; Commentaires_files/coach.css">
+
+
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <a href="http://localhost:8000/BackOffice/views/coach/index.php#" class="sidebar-brand">
+        <div class="sidebar-logo">SF</div>
+        <span>Sport<em>Fuel</em></span>
+    </a>
+    <div class="sidebar-role">ADMIN</div>
+
+    <ul class="sidebar-menu">
+        <li><a href="http://localhost:8000/BackOffice/views/coach/index.php#"><span class="icon">📊</span> Dashboard</a></li>
+    </ul>
+    <div class="sidebar-section">Modules</div>
+    <ul class="sidebar-menu">
+        <li><a href="http://localhost:8000/BackOffice/views/coach/index.php#"><span class="icon">👥</span> Utilisateurs</a></li>
+        <li><a href="http://localhost:8000/BackOffice/views/coach/index.php#"><span class="icon">🍽️</span> Plans alimentaires</a></li>
+        <li><a href="http://localhost:8000/BackOffice/views/coach/index.php#"><span class="icon">🏋️</span> Entraînements</a></li>
+        <li><a href="http://localhost:8000/BackOffice/views/aliments/aliments.html"><span class="icon">🥗</span> Aliments &amp; courses</a></li>
+        <li><a href="http://localhost:8000/BackOffice/views/categories/categories.html"><span class="icon">📁</span> Catégories</a></li>
+        <li><a href="http://localhost:8000/BackOffice/views/courses/courses.html"><span class="icon">🛒</span> Listes de courses</a></li>
+        <li><a href="http://localhost:8000/BackOffice/views/coach/index.php" class="active"><span class="icon">📝</span> Publications &amp; Suivi</a></li>
+    </ul>
+</aside>
+
+<!-- CONTENU -->
+<div class="main-area">
+    <div class="topbar">
+        <h1>Gestion Publications &amp; Commentaires</h1>
+        <span class="date">Tuesday 14 April 2026</span>
+    </div>
+
+            <div style="background: #fee2e2; color: #dc2626; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <strong>Erreur :</strong> Le commentaire doit contenir au moins 5 caractères.        </div>
+    
+    
+    <div class="dashboard-grid">
+        <!-- Table Publications -->
+        <div class="card">
+            <div class="card-header">
+                <h3>📝 Liste des Publications</h3>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Utilisateur</th>
+                            <th>Message</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                                                
+                                                <tr>
+                            <td>13/04/2026 22:58</td>
+                            <td>
+                                <strong>Marie Dupont</strong>
+                            </td>
+                            <td>fffffffffffff</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-primary btn-sm" onclick="openReplyModal(10)">Répondre</button>
+                                    <button class="btn btn-outline btn-sm" onclick="openEditPubModal(10, &#39;fffffffffffff&#39;)">Editer</button>
+                                    <form action="http://localhost:8000/BackOffice/views/coach/index.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete_pub">
+                                        <input type="hidden" name="id_pub" value="10">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Supprimer cette publication ?&#39;);">Suppr</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                                                <tr>
+                            <td>13/04/2026 22:50</td>
+                            <td>
+                                <strong>Marie Dupont</strong>
+                            </td>
+                            <td>xxX</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-primary btn-sm" onclick="openReplyModal(8)">Répondre</button>
+                                    <button class="btn btn-outline btn-sm" onclick="openEditPubModal(8, &#39;xxX&#39;)">Editer</button>
+                                    <form action="http://localhost:8000/BackOffice/views/coach/index.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete_pub">
+                                        <input type="hidden" name="id_pub" value="8">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Supprimer cette publication ?&#39;);">Suppr</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                                                <tr>
+                            <td>13/04/2026 22:50</td>
+                            <td>
+                                <strong>Marie Dupont</strong>
+                            </td>
+                            <td>wxw</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-primary btn-sm" onclick="openReplyModal(7)">Répondre</button>
+                                    <button class="btn btn-outline btn-sm" onclick="openEditPubModal(7, &#39;wxw&#39;)">Editer</button>
+                                    <form action="http://localhost:8000/BackOffice/views/coach/index.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete_pub">
+                                        <input type="hidden" name="id_pub" value="7">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Supprimer cette publication ?&#39;);">Suppr</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                                                <tr>
+                            <td>13/04/2026 22:21</td>
+                            <td>
+                                <strong>Marie Dupont</strong>
+                            </td>
+                            <td>aaaaa</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-primary btn-sm" onclick="openReplyModal(6)">Répondre</button>
+                                    <button class="btn btn-outline btn-sm" onclick="openEditPubModal(6, &#39;aaaaa&#39;)">Editer</button>
+                                    <form action="http://localhost:8000/BackOffice/views/coach/index.php" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete_pub">
+                                        <input type="hidden" name="id_pub" value="6">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(&#39;Supprimer cette publication ?&#39;);">Suppr</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                                            </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Table Commentaires -->
+        <div class="card">
+            <div class="card-header">
+                <h3>💬 Vos Réponses (Commentaires)</h3>
+                <button class="btn btn-success btn-sm" onclick="openModal(&#39;modal-add-comment-manual&#39;)">+ Ajouter Commentaire</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Réf. Publication</th>
+                            <th>Votre Réponse</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                                                <tr><td colspan="4" style="text-align: center;">Aucun commentaire disponible.</td></tr>
+                        
+                                            </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODALS PUBLICATION ================= -->
+
+<!-- Modal Editer Publication -->
+<div class="modal-overlay" id="modal-edit-pub">
+    <div class="modal">
+        <h3>Editer la Publication</h3>
+        <form action="http://localhost:8000/BackOffice/views/coach/index.php" method="POST">
+            <input type="hidden" name="action" value="edit_pub">
+            <input type="hidden" name="id_pub" id="edit-pub-id" value="">
+            <div class="form-group">
+                <label>Nouveau Message</label>
+                <textarea name="text" id="edit-pub-text" rows="4"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeModal(&#39;modal-edit-pub&#39;)">Annuler</button>
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ================= MODALS COMMENTAIRE ================= -->
+
+<!-- Modal Ajouter Commentaire Manuellement -->
+<div class="modal-overlay" id="modal-add-comment-manual">
+    <div class="modal">
+        <h3>Lier un nouveau Commentaire</h3>
+        <form action="http://localhost:8000/BackOffice/views/coach/index.php" method="POST">
+            <input type="hidden" name="action" value="add_comment_manual">
+            <div class="form-group">
+                <label>Publication Réf.</label>
+                <select name="id_pub">
+                    <option value="">-- Sélectionner une publication --</option>
+                                            <option value="10">Pub #10 - fffffffffffff...</option>
+                                            <option value="8">Pub #8 - xxX...</option>
+                                            <option value="7">Pub #7 - wxw...</option>
+                                            <option value="6">Pub #6 - aaaaa...</option>
+                                    </select>
+            </div>
+            <div class="form-group">
+                <label>Votre Réponse</label>
+                <textarea name="text" rows="4"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeModal(&#39;modal-add-comment-manual&#39;)">Annuler</button>
+                <button type="submit" class="btn btn-success">Créer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Répondre Publication (= Add Comment) -->
+<div class="modal-overlay" id="modal-reply">
+    <div class="modal">
+        <h3>Répondre à la Publication</h3>
+        <form action="http://localhost:8000/BackOffice/views/coach/index.php" method="POST">
+            <input type="hidden" name="action" value="add_comment">
+            <input type="hidden" name="id_pub" id="reply-id-pub" value="">
+            <div class="form-group">
+                <label>Votre Réponse</label>
+                <textarea name="text" rows="4" placeholder="Écrivez votre réponse ici..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeModal(&#39;modal-reply&#39;)">Annuler</button>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Editer Commentaire -->
+<div class="modal-overlay" id="modal-edit">
+    <div class="modal">
+        <h3>Editer le Commentaire</h3>
+        <form action="http://localhost:8000/BackOffice/views/coach/index.php" method="POST">
+            <input type="hidden" name="action" value="edit_comment">
+            <input type="hidden" name="id_cmmnt" id="edit-id-cmmnt" value="">
+            <div class="form-group">
+                <label>Modifier votre Réponse</label>
+                <textarea name="text" id="edit-text" rows="4"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeModal(&#39;modal-edit&#39;)">Annuler</button>
+                <button type="submit" class="btn btn-success">Mettre à jour</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    // Validation functions
+    function validateText(text, maxLength) {
+        if (!text.trim()) {
+            return "Le champ ne peut pas être vide.";
+        }
+        if (text.length > maxLength) {
+            return "Le texte ne peut pas dépasser " + maxLength + " caractères.";
+        }
+        return null;
+    }
+
+    // Attach validation to forms
+    document.addEventListener('DOMContentLoaded', function() {
+        // Edit pub form
+        const editPubForm = document.querySelector('#modal-edit-pub form');
+        if (editPubForm) {
+            editPubForm.addEventListener('submit', function(e) {
+                const text = document.getElementById('edit-pub-text').value;
+                const error = validateText(text, 500);
+                if (error) {
+                    alert(error);
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Add comment manual form
+        const addCommentForm = document.querySelector('#modal-add-comment-manual form');
+        if (addCommentForm) {
+            addCommentForm.addEventListener('submit', function(e) {
+                const text = addCommentForm.querySelector('textarea[name="text"]').value;
+                const error = validateText(text, 200);
+                if (error) {
+                    alert(error);
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Reply form
+        const replyForm = document.querySelector('#modal-reply form');
+        if (replyForm) {
+            replyForm.addEventListener('submit', function(e) {
+                const text = replyForm.querySelector('textarea[name="text"]').value;
+                const error = validateText(text, 200);
+                if (error) {
+                    alert(error);
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Edit comment form
+        const editCommentForm = document.querySelector('#modal-edit form');
+        if (editCommentForm) {
+            editCommentForm.addEventListener('submit', function(e) {
+                const text = document.getElementById('edit-text').value;
+                const error = validateText(text, 200);
+                if (error) {
+                    alert(error);
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+
+    // Handlers Publication
+    function openEditPubModal(id_pub, text) {
+        document.getElementById('edit-pub-id').value = id_pub;
+        document.getElementById('edit-pub-text').value = text;
+        openModal('modal-edit-pub');
+    }
+
+    // Handlers Commentaire
+    function openReplyModal(id_pub) {
+        document.getElementById('reply-id-pub').value = id_pub;
+        openModal('modal-reply');
+    }
+    function openEditModal(id_cmmnt, text) {
+        document.getElementById('edit-id-cmmnt').value = id_cmmnt;
+        document.getElementById('edit-text').value = text;
+        openModal('modal-edit');
+    }
+</script>
+
+
+</body></html>

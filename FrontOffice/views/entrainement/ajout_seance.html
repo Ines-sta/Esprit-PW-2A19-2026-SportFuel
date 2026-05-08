@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportFuel — Choix des séances</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/entrainement.css">
+    <link rel="stylesheet" href="../../assets/css/copilote.css">
+</head>
+
+<body class="fo-with-sidebar">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <a href="#" class="sidebar-brand">
+            <div class="sidebar-logo">SF</div>
+            <span>Sport<em>Fuel</em></span>
+        </a>
+        <div class="sidebar-role">UTILISATEUR</div>
+
+        <ul class="sidebar-menu">
+            <li><a href="#"><span class="icon">📊</span> Tableau de bord</a></li>
+        </ul>
+        <div class="sidebar-section">Modules</div>
+        <ul class="sidebar-menu">
+            <li><a href="#"><span class="icon">🍽️</span> Mon plan</a></li>
+            <li><a href="#" class="active"><span class="icon">🏋️</span> Entraînements</a></li>
+            <li><a href="../courses/courses.html"><span class="icon">🛒</span> Courses</a></li>
+            <li><a href="../aliments/aliments.html"><span class="icon">🥗</span> Aliments</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-area">
+        <div class="topbar">
+            <h1>🏋️ Planifier mes séances</h1>
+            <span class="date">Mardi 7 avril 2026</span>
+        </div>
+
+        <div class="main-content">
+            <div class="page-header">
+                <p class="page-description">Découvrez les programmes proposés par l'administration. Cliquez sur une
+                    carte pour afficher tous les détails et confirmer votre participation.</p>
+            </div>
+
+            <div id="messageContainer"></div>
+
+            <!-- ========== COPILOTE SÉANCE ========== -->
+            <div class="copilot-section" id="copilotSection">
+                <div class="copilot-panel-wrapper">
+                    <div class="copilot-header">
+                        <div class="copilot-header-icon">🤖</div>
+                        <div class="copilot-header-text">
+                            <h2>Copilote Séance</h2>
+                            <p>Générez votre entraînement intelligent — aucune API externe, 100% navigateur</p>
+                        </div>
+                    </div>
+
+                    <div class="copilot-tabs">
+                        <button class="copilot-tab active" data-tab="generator" onclick="_copilotTab('generator')">
+                            🎯 Générer une séance
+                        </button>
+                        <button class="copilot-tab" data-tab="nlp" onclick="_copilotTab('nlp')">
+                            💬 Décrivez votre séance
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: Generator -->
+                    <div class="copilot-panel active" id="copilotPanel_generator">
+                        <div class="copilot-form-grid">
+                            <div class="copilot-field">
+                                <label for="copilotObjectif">Objectif</label>
+                                <select id="copilotObjectif">
+                                    <option value="hypertrophie">🏗️ Hypertrophie (volume)</option>
+                                    <option value="force">💪 Force (puissance)</option>
+                                    <option value="endurance">🏃 Endurance (cardio)</option>
+                                    <option value="perte_poids">🔥 Perte de poids</option>
+                                    <option value="souplesse">🧘 Souplesse (yoga)</option>
+                                </select>
+                            </div>
+                            <div class="copilot-field">
+                                <label for="copilotNiveau">Niveau</label>
+                                <select id="copilotNiveau">
+                                    <option value="débutant">🌱 Débutant</option>
+                                    <option value="intermédiaire" selected>⚡ Intermédiaire</option>
+                                    <option value="avancé">🔥 Avancé</option>
+                                </select>
+                            </div>
+                            <div class="copilot-field">
+                                <label for="copilotDuree">Durée (minutes)</label>
+                                <select id="copilotDuree">
+                                    <option value="30">30 min</option>
+                                    <option value="45" selected>45 min</option>
+                                    <option value="60">60 min</option>
+                                    <option value="90">90 min</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label style="display:block;font-size:12px;font-weight:700;color:#2d6a4f;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Équipement disponible</label>
+                        <div class="copilot-equip-grid">
+                            <input type="checkbox" class="copilot-equip-check" id="eq_aucun" value="aucun" checked>
+                            <label for="eq_aucun" class="copilot-equip-label">🏠 Poids du corps</label>
+
+                            <input type="checkbox" class="copilot-equip-check" id="eq_halteres" value="haltères">
+                            <label for="eq_halteres" class="copilot-equip-label">🏋️ Haltères</label>
+
+                            <input type="checkbox" class="copilot-equip-check" id="eq_barre" value="barre">
+                            <label for="eq_barre" class="copilot-equip-label">📏 Barre</label>
+
+                            <input type="checkbox" class="copilot-equip-check" id="eq_machine" value="machine">
+                            <label for="eq_machine" class="copilot-equip-label">⚙️ Machines</label>
+
+                            <input type="checkbox" class="copilot-equip-check" id="eq_elastique" value="élastique">
+                            <label for="eq_elastique" class="copilot-equip-label">🔗 Élastiques</label>
+
+                            <input type="checkbox" class="copilot-equip-check" id="eq_banc" value="banc">
+                            <label for="eq_banc" class="copilot-equip-label">🪑 Banc</label>
+                        </div>
+
+                        <button type="button" class="copilot-generate-btn" onclick="_copilotGenerate()">
+                            ⚡ Générer ma séance
+                        </button>
+                    </div>
+
+                    <!-- TAB 2: NLP -->
+                    <div class="copilot-panel" id="copilotPanel_nlp">
+                        <p class="copilot-nlp-hint">
+                            Décrivez votre séance en langage naturel. Le copilote comprend les groupes musculaires, 
+                            la durée, l'équipement et le niveau. Vous pouvez aussi dicter avec le micro 🎤
+                        </p>
+                        <div class="copilot-nlp-examples">
+                            <span class="copilot-nlp-example" onclick="document.getElementById('copilotNlpInput').value=this.textContent;_copilotParse()">musculation 45 min avec haltères</span>
+                            <span class="copilot-nlp-example" onclick="document.getElementById('copilotNlpInput').value=this.textContent;_copilotParse()">course footing 30 min débutant</span>
+                            <span class="copilot-nlp-example" onclick="document.getElementById('copilotNlpInput').value=this.textContent;_copilotParse()">natation 60 min endurance</span>
+                            <span class="copilot-nlp-example" onclick="document.getElementById('copilotNlpInput').value=this.textContent;_copilotParse()">yoga relaxation 30 min</span>
+                            <span class="copilot-nlp-example" onclick="document.getElementById('copilotNlpInput').value=this.textContent;_copilotParse()">cardio HIIT 30 min poids du corps</span>
+                        </div>
+                        <div class="copilot-nlp-wrapper">
+                            <textarea id="copilotNlpInput" class="copilot-nlp-input" placeholder="Ex: &quot;jambes 45 min, j'ai des haltères&quot; ou &quot;cardio intense 30 min à la maison&quot;"></textarea>
+                            <button type="button" class="copilot-mic-btn" id="copilotMicBtn" onclick="_copilotMic()" title="Dictée vocale (Web Speech API)">🎤</button>
+                        </div>
+                        <button type="button" class="copilot-generate-btn" onclick="_copilotParse()">
+                            🧠 Analyser et générer
+                        </button>
+                    </div>
+
+                    <!-- Results (shared) -->
+                    <div style="padding: 0 28px 28px;">
+                        <div class="copilot-results" id="copilotResults"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- END COPILOTE -->
+
+            <div id="recommendedSection" class="recommendations-section" style="display:none;">
+                <h2 class="section-title">Recommended for you</h2>
+                <div id="recommendedCardsGrid" class="programme-cards-grid"></div>
+            </div>
+
+            <!-- PROGRAMME NEWS CARDS -->
+            <div id="programmeCardsSection">
+                <h2 class="section-title">🔥 Programmes disponibles</h2>
+                <div id="programmeCardsGrid" class="programme-cards-grid">
+                    <div class="programme-cards-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Chargement des programmes…</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETAIL MODAL OVERLAY -->
+            <div id="programmeModal" class="programme-modal-overlay" style="display:none;">
+                <div class="programme-modal">
+                    <button class="programme-modal-close" id="modalCloseBtn" aria-label="Fermer">&times;</button>
+                    <div class="programme-modal-header">
+                        <div class="programme-modal-icon">📋</div>
+                        <div>
+                            <h3 class="programme-modal-title" id="modal_nom">—</h3>
+                            <span class="programme-modal-type" id="modal_type">—</span>
+                        </div>
+                    </div>
+                    <div class="programme-modal-body">
+                        <div class="modal-detail-row">
+                            <span class="modal-detail-label">📅 Date de début</span>
+                            <span class="modal-detail-value" id="modal_date">—</span>
+                        </div>
+                        <div class="modal-detail-row">
+                            <span class="modal-detail-label">📊 Niveau</span>
+                            <span class="modal-detail-value" id="modal_niveau">—</span>
+                        </div>
+                        <div class="modal-detail-row">
+                            <span class="modal-detail-label">🔄 Fréquence</span>
+                            <span class="modal-detail-value" id="modal_frequence">—</span>
+                        </div>
+                        <div class="modal-detail-row">
+                            <span class="modal-detail-label">⏱️ Durée (semaines)</span>
+                            <span class="modal-detail-value" id="modal_duree">—</span>
+                        </div>
+                        <div class="modal-detail-row">
+                            <span class="modal-detail-label">🧑‍🏫 Coach</span>
+                            <span class="modal-detail-value" id="modal_coach">—</span>
+                        </div>
+                        <div class="modal-detail-row">
+                            <span class="modal-detail-label">✅ Statut</span>
+                            <span class="modal-detail-value" id="modal_statut">—</span>
+                        </div>
+                    </div>
+                    <div class="modal-detail-row" style="display:block; margin-top:12px;">
+                        <span class="modal-detail-label">🏋️ Exercices du programme</span>
+                        <div style="margin-top:8px; border:1px solid #eceff3; border-radius:8px; overflow:hidden;">
+                            <table style="width:100%; border-collapse:collapse;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left; padding:8px;">Nom</th>
+                                        <th style="text-align:left; padding:8px;">Durée</th>
+                                        <th style="text-align:left; padding:8px;">Séries</th>
+                                        <th style="text-align:left; padding:8px;">Répétitions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modal_exercises_body">
+                                    <tr>
+                                        <td colspan="4" style="padding:8px;">Chargement...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-submit programme-modal-confirm" id="modalConfirmBtn">
+                        ✅ Confirmer ma participation
+                    </button>
+                </div>
+            </div>
+
+            <div id="lastTrainingCard" class="info-card" style="display:none;">
+                <div class="info-card-header">
+                    <div>
+                        <strong>📌 Récapitulatif</strong><br>
+                        <span class="info-card-text" id="lastTrainingText">Aucun choix pour le moment.</span>
+                    </div>
+                    <span class="badge badge-success" id="lastTrainingBadge">Programme</span>
+                </div>
+            </div>
+
+            <!-- Navigation button to historique -->
+            <div class="navigation-buttons" style="margin-top: 20px; margin-bottom: 20px;">
+                <a href="historique.html" class="btn btn-primary">📜 Voir l'historique</a>
+            </div>
+
+            <div class="card section-card">
+                <div class="card-header">💡 Conseil du coach</div>
+                <div class="section-card-content">
+                    <p class="text-muted">Les programmes sont créés et mis à jour dans l'espace administration. Vous
+                        choisissez uniquement celui auquel vous souhaitez participer.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 SportFuel — Nutrition intelligente pour sportifs
+    </div>
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/copilote.js"></script>
+    <script>
+        const APP_BASE_URL = `${window.location.protocol}//localhost/Esprit-PW-2A19-2526-SportFuel`;
+        const messageContainer = document.getElementById('messageContainer');
+        const lastTrainingCard = document.getElementById('lastTrainingCard');
+        const lastTrainingText = document.getElementById('lastTrainingText');
+        const recommendedSection = document.getElementById('recommendedSection');
+        const recommendedGrid = document.getElementById('recommendedCardsGrid');
+        const cardsGrid = document.getElementById('programmeCardsGrid');
+        const modal = document.getElementById('programmeModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+
+        const programmesCache = {};
+        let selectedProgrammeId = null;
+
+        /* ── Sport-type icons mapping ── */
+        const sportIcons = {
+            'football': '⚽', 'foot': '⚽',
+            'basketball': '🏀', 'basket': '🏀',
+            'tennis': '🎾',
+            'natation': '🏊', 'swimming': '🏊',
+            'course': '🏃', 'running': '🏃', 'jogging': '🏃',
+            'cyclisme': '🚴', 'vélo': '🚴', 'cycling': '🚴',
+            'boxe': '🥊', 'boxing': '🥊',
+            'yoga': '🧘',
+            'musculation': '💪', 'fitness': '💪', 'gym': '💪',
+            'arts martiaux': '🥋', 'karaté': '🥋', 'judo': '🥋',
+            'volleyball': '🏐', 'volley': '🏐',
+            'handball': '🤾',
+            'rugby': '🏉',
+            'escalade': '🧗',
+            'danse': '💃',
+            'ski': '⛷️',
+        };
+
+        function getSportIcon(type) {
+            if (!type) return '🏋️';
+            const lower = type.toLowerCase().trim();
+            for (const [key, icon] of Object.entries(sportIcons)) {
+                if (lower.includes(key)) return icon;
+            }
+            return '🏋️';
+        }
+
+        /* ── Accent colors for cards (cycling palette) ── */
+        const accentColors = [
+            { border: '#52b788', bg: 'rgba(82,183,136,0.08)', glow: 'rgba(82,183,136,0.25)' },
+            { border: '#f4845f', bg: 'rgba(244,132,95,0.08)', glow: 'rgba(244,132,95,0.25)' },
+            { border: '#f9a825', bg: 'rgba(249,168,37,0.08)', glow: 'rgba(249,168,37,0.25)' },
+            { border: '#95d5b2', bg: 'rgba(149,213,178,0.08)', glow: 'rgba(149,213,178,0.25)' },
+            { border: '#6ec6ff', bg: 'rgba(110,198,255,0.08)', glow: 'rgba(110,198,255,0.25)' },
+        ];
+
+        function formatDateFr(isoDate) {
+            if (!isoDate) return '—';
+            return new Date(isoDate + 'T12:00:00').toLocaleDateString('fr-FR');
+        }
+
+        function sanitizePipeValue(value) {
+            return String(value || '').replace(/\|/g, '/').trim();
+        }
+
+        function buildParticipationNotes(programme) {
+            const programmeNom = sanitizePipeValue(programme.libelle_programme || ('Programme #' + programme.id_entrainement));
+            const niveau = sanitizePipeValue(programme.niveau || '—');
+            const frequence = sanitizePipeValue(programme.frequence || '—');
+            const coach = sanitizePipeValue(programme.coach || '—');
+            return `__PARTICIPATION__|programme_id:${programme.id_entrainement}|programme_nom:${programmeNom}|niveau:${niveau}|frequence:${frequence}|coach:${coach}`;
+        }
+
+        /* ── Build a single programme card ── */
+        function createProgrammeCard(programme, index) {
+            const accent = accentColors[index % accentColors.length];
+            const icon = getSportIcon(programme.titre);
+            const nom = (programme.libelle_programme && programme.libelle_programme.trim())
+                ? programme.libelle_programme.trim()
+                : ('Programme #' + programme.id_entrainement);
+            const type = (programme.titre && programme.titre.trim()) ? programme.titre.trim() : '—';
+            const coach = (programme.coach && programme.coach.trim()) ? programme.coach.trim() : 'Non assigné';
+
+            const card = document.createElement('div');
+            card.className = 'programme-news-card';
+            card.setAttribute('data-id', programme.id_entrainement);
+            card.style.setProperty('--card-accent', accent.border);
+            card.style.setProperty('--card-accent-bg', accent.bg);
+            card.style.setProperty('--card-accent-glow', accent.glow);
+
+            card.innerHTML = `
+                <div class="pnc-accent-bar"></div>
+                <div class="pnc-body">
+                    <div class="pnc-icon">${icon}</div>
+                    <div class="pnc-info">
+                        <h3 class="pnc-name">${nom}</h3>
+                        <div class="pnc-meta">
+                            <span class="pnc-type-badge">${type}</span>
+                            <span class="pnc-coach">🧑‍🏫 ${coach}</span>
+                        </div>
+                    </div>
+                    <div class="pnc-arrow">›</div>
+                </div>
+            `;
+
+            card.addEventListener('click', function () {
+                openModal(String(programme.id_entrainement));
+            });
+
+            return card;
+        }
+
+        function createRecommendationCard(programme, index) {
+            const card = createProgrammeCard(programme, index);
+            card.classList.add('recommended-program-card');
+
+            const reasons = Array.isArray(programme.reasons) ? programme.reasons : [];
+            if (reasons.length > 0) {
+                const reason = document.createElement('div');
+                reason.className = 'recommendation-reason';
+                reason.textContent = 'Why recommended: ' + reasons[0];
+                card.appendChild(reason);
+            }
+
+            return card;
+        }
+
+        function mergeProgrammesIntoCache(programmes) {
+            programmes.forEach(function (p) {
+                const id = String(p.id_entrainement);
+                if (!programmesCache[id]) {
+                    programmesCache[id] = p;
+                    return;
+                }
+                programmesCache[id] = { ...programmesCache[id], ...p };
+            });
+        }
+
+        /* ── Modal logic ── */
+        function openModal(id) {
+            const p = programmesCache[id];
+            if (!p) return;
+            selectedProgrammeId = id;
+
+            document.getElementById('modal_nom').textContent = p.libelle_programme || '—';
+            document.getElementById('modal_type').textContent = p.titre || '—';
+            document.getElementById('modal_date').textContent = formatDateFr(p.date_entrainement);
+            document.getElementById('modal_niveau').textContent = p.niveau || '—';
+            document.getElementById('modal_frequence').textContent = p.frequence || '—';
+            document.getElementById('modal_duree').textContent = p.duree_semaines || '—';
+            document.getElementById('modal_coach').textContent = p.coach || '—';
+            document.getElementById('modal_statut').textContent = p.statut || '—';
+            loadProgrammeExercises(id);
+
+            modal.style.display = 'flex';
+            requestAnimationFrame(() => modal.classList.add('visible'));
+        }
+
+        async function loadProgrammeExercises(programmeId) {
+            const tbody = document.getElementById('modal_exercises_body');
+            tbody.innerHTML = '<tr><td colspan="4" style="padding:8px;">Chargement...</td></tr>';
+            try {
+                const response = await fetch(`${APP_BASE_URL}/includes/list_exercices_seance.php?id_entrainement=${encodeURIComponent(programmeId)}`);
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || 'Chargement impossible');
+                }
+                const rows = Array.isArray(data.data) ? data.data : [];
+                if (!rows.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="padding:8px;">Aucun exercice lié à ce programme.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = rows.map(function (row) {
+                    return `
+                        <tr>
+                            <td style="padding:8px;">${row.nom_exercice || '—'}</td>
+                            <td style="padding:8px;">${row.duree_secondes ? row.duree_secondes + ' s' : '—'}</td>
+                            <td style="padding:8px;">${row.series || '—'}</td>
+                            <td style="padding:8px;">${row.repetitions || '—'}</td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="4" style="padding:8px;">Erreur de chargement des exercices.</td></tr>';
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove('visible');
+            setTimeout(() => { modal.style.display = 'none'; }, 280);
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.style.display !== 'none') closeModal();
+        });
+
+        /* ── Confirm participation ── */
+        modalConfirmBtn.addEventListener('click', async function () {
+            if (!selectedProgrammeId) return;
+            const p = programmesCache[selectedProgrammeId];
+            const resume = p
+                ? (p.libelle_programme + ' (' + (p.titre || '') + ') — début ' + formatDateFr(p.date_entrainement) + ', niveau ' + (p.niveau || '—') + ', fréquence ' + (p.frequence || '—'))
+                : ('Programme #' + selectedProgrammeId);
+
+            if (!p) return;
+
+            try {
+                modalConfirmBtn.disabled = true;
+                modalConfirmBtn.textContent = 'Enregistrement...';
+
+                const all = await getAllEntrainements();
+                const tag = `programme_id:${p.id_entrainement}`;
+                const alreadyParticipated = Array.isArray(all) && all.some(function (row) {
+                    return typeof row.notes_globales === 'string' && row.notes_globales.includes('__PARTICIPATION__|') && row.notes_globales.includes(tag);
+                });
+
+                if (alreadyParticipated) {
+                    messageContainer.innerHTML = '<div class="alert alert-warning"><strong>Info :</strong> Vous participez déjà à ce programme.</div>';
+                    lastTrainingText.textContent = resume;
+                    lastTrainingCard.style.display = 'block';
+                    closeModal();
+                    return;
+                }
+
+                const today = new Date().toISOString().slice(0, 10);
+                const notesParticipation = buildParticipationNotes(p);
+                const saveResult = await createEntrainement(
+                    p.titre || 'Programme',
+                    today,
+                    p.duree_totale || null,
+                    notesParticipation,
+                    null,
+                );
+
+                if (saveResult && !saveResult.error) {
+                    messageContainer.innerHTML = '<div class="alert alert-success"><strong>Succès :</strong> Votre participation a bien été enregistrée.</div>';
+                    lastTrainingText.textContent = resume;
+                    lastTrainingCard.style.display = 'block';
+                    closeModal();
+                } else {
+                    messageContainer.innerHTML = '<div class="alert alert-danger"><strong>Erreur :</strong> Impossible d enregistrer votre participation.</div>';
+                }
+            } catch (e) {
+                messageContainer.innerHTML = '<div class="alert alert-danger"><strong>Erreur :</strong> Probleme de connexion lors de l enregistrement.</div>';
+            } finally {
+                modalConfirmBtn.disabled = false;
+                modalConfirmBtn.textContent = '✅ Confirmer ma participation';
+            }
+        });
+
+        /* ── Load programmes from DB ── */
+        async function loadProgrammesFromDatabase() {
+            try {
+                const response = await fetch(`${APP_BASE_URL}/includes/get_programmes.php`);
+                const text = await response.text();
+                const data = JSON.parse(text);
+
+                if (!response.ok || !data.success || !Array.isArray(data.data) || data.data.length === 0) {
+                    cardsGrid.innerHTML = `
+                        <div class="programme-cards-empty">
+                            <div class="empty-icon">📭</div>
+                            <p>Aucun programme disponible pour le moment.</p>
+                            <span>Revenez bientôt !</span>
+                        </div>`;
+                    return;
+                }
+
+                Object.keys(programmesCache).forEach(function (k) { delete programmesCache[k]; });
+                cardsGrid.innerHTML = '';
+
+                data.data.forEach(function (p, i) {
+                    const id = String(p.id_entrainement);
+                    programmesCache[id] = p;
+                    const card = createProgrammeCard(p, i);
+                    cardsGrid.appendChild(card);
+                });
+            } catch (error) {
+                cardsGrid.innerHTML = `
+                    <div class="programme-cards-empty">
+                        <div class="empty-icon">⚠️</div>
+                        <p>Impossible de charger les programmes.</p>
+                        <span>Vérifiez votre connexion et réessayez.</span>
+                    </div>`;
+            }
+        }
+
+        async function loadRecommendedProgrammes() {
+            try {
+                if (typeof getRecommendedProgrammes !== 'function') {
+                    return;
+                }
+                const recommendations = await getRecommendedProgrammes();
+                if (!Array.isArray(recommendations) || recommendations.length === 0) {
+                    return;
+                }
+
+                mergeProgrammesIntoCache(recommendations);
+                recommendedGrid.innerHTML = '';
+                recommendations.forEach(function (p, i) {
+                    recommendedGrid.appendChild(createRecommendationCard(p, i));
+                });
+                recommendedSection.style.display = 'block';
+            } catch (error) {
+                recommendedSection.style.display = 'none';
+            }
+        }
+
+        async function initPage() {
+            await loadRecommendedProgrammes();
+            await loadProgrammesFromDatabase();
+        }
+
+        initPage();
+    </script>
+</body>
+
+</html>

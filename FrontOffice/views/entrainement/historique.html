@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportFuel — Historique des entraînements</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/entrainement.css">
+    <script src="../../assets/js/api.js"></script>
+</head>
+<body class="fo-with-sidebar">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <a href="#" class="sidebar-brand">
+        <div class="sidebar-logo">SF</div>
+        <span>Sport<em>Fuel</em></span>
+    </a>
+    <div class="sidebar-role">UTILISATEUR</div>
+
+    <ul class="sidebar-menu">
+        <li><a href="#"><span class="icon">📊</span> Tableau de bord</a></li>
+    </ul>
+    <div class="sidebar-section">Modules</div>
+    <ul class="sidebar-menu">
+        <li><a href="#"><span class="icon">🍽️</span> Mon plan</a></li>
+        <li><a href="#" class="active"><span class="icon">🏋️</span> Entraînements</a></li>
+        <li><a href="../courses/courses.html"><span class="icon">🛒</span> Courses</a></li>
+        <li><a href="../aliments/aliments.html"><span class="icon">🥗</span> Aliments</a></li>
+    </ul>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main-area">
+    <div class="topbar">
+        <h1>📜 Historique des entraînements</h1>
+        <span class="date">Mardi 7 avril 2026</span>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="navigation-buttons section-spacing">
+        <a href="ajout_seance.html" class="btn btn-primary">📅 Planifier une séance</a>
+    </div>
+
+    <!-- Résumé statistique -->
+    <div class="stat-cards section-spacing">
+        <div class="stat-card"><div class="stat-value" id="totalSessions">0</div><div class="stat-label">séances totales</div></div>
+        <div class="stat-card"><div class="stat-value" id="monthSessions">0</div><div class="stat-label">ce mois</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalCalories">0 kcal</div><div class="stat-label">calories brûlées</div></div>
+        <div class="stat-card"><div class="stat-value" id="avgRating">0/5</div><div class="stat-label">moyenne ressenti</div></div>
+    </div>
+
+    <!-- Barre de filtres -->
+    <div class="filters-bar">
+        <div class="filter-item">
+            <label>Type d'entraînement</label>
+            <select>
+                <option>Tous</option>
+                <option>Musculation</option>
+                <option>Cardio</option>
+                <option>Course à pied</option>
+                <option>Natation</option>
+                <option>Yoga</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Intensité</label>
+            <select>
+                <option>Toutes</option>
+                <option>Faible</option>
+                <option>Modérée</option>
+                <option>Élevée</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Période</label>
+            <select>
+                <option>Ce mois</option>
+                <option>3 derniers mois</option>
+                <option>2026</option>
+                <option>Tout</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <button class="btn btn-primary btn-filter">🔍 Filtrer</button>
+        </div>
+        <div class="filter-item">
+            <button class="btn btn-secondary btn-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- Tableau historique -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr><th>Date</th><th>Type</th><th>Durée</th><th>Statut</th><th>Calories</th><th>Notes</th></tr>
+            </thead>
+            <tbody id="trainingTableBody">
+                <tr><td colspan="6" style="text-align: center; padding: 20px; color: #999;">Chargement...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Graphique progression -->
+    <div class="card section-card">
+        <div class="card-header">📈 Progression mensuelle (calories brûlées)</div>
+        <div class="section-card-content">
+            <div class="progress-bar">
+                <div class="progress-bar-fill"></div>
+            </div>
+            <div class="progress-labels">
+                <span>Sem 1</span><span>Sem 2</span><span>Sem 3</span><span>Sem 4</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    &copy; 2026 SportFuel — Nutrition intelligente pour sportifs
+</div>
+<script>
+    let allTrainings = [];
+
+    // Charger les entraînements
+    async function loadTrainings() {
+        allTrainings = await getAllEntrainements();
+        displayTrainings(allTrainings);
+        updateStatistics();
+    }
+
+    // Afficher les entraînements dans le tableau
+    function displayTrainings(trainings) {
+        const tableBody = document.getElementById('trainingTableBody');
+
+        if (trainings.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #999;">Aucun entraînement enregistré</td></tr>';
+            return;
+        }
+
+        tableBody.innerHTML = trainings.map(training => {
+            const date = new Date(training.date_entrainement).toLocaleDateString('fr-FR');
+            const calories = training.duree_totale * 7; // Approximation
+            const notes = training.notes_globales ? training.notes_globales.substring(0, 30) + '...' : '—';
+
+            return `
+                <tr>
+                    <td>${date}</td>
+                    <td>${training.titre}</td>
+                    <td>${training.duree_totale} min</td>
+                    <td><span class="badge badge-moderée">${training.statut}</span></td>
+                    <td>${calories} kcal</td>
+                    <td>${notes}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Mettre à jour les statistiques
+    function updateStatistics() {
+        const totalSessions = allTrainings.length;
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+
+        const monthSessions = allTrainings.filter(t => {
+            const trainDate = new Date(t.date_entrainement);
+            return trainDate.getMonth() === currentMonth && trainDate.getFullYear() === currentYear;
+        }).length;
+
+        const totalCalories = allTrainings.reduce((sum, t) => sum + (t.duree_totale * 7), 0);
+        const avgRating = (totalSessions > 0) ? (4.5).toFixed(1) : '0';
+
+        document.getElementById('totalSessions').textContent = totalSessions;
+        document.getElementById('monthSessions').textContent = monthSessions;
+        document.getElementById('totalCalories').textContent = totalCalories + ' kcal';
+        document.getElementById('avgRating').textContent = avgRating + '/5';
+    }
+
+    // Filtrer le tableau
+    function filterTable() {
+        const typeFilter = document.querySelector('.filter-item:first-child select')?.value || 'Tous';
+        const intensiteFilter = document.querySelector('.filter-item:nth-child(2) select')?.value || 'Toutes';
+
+        const filtered = allTrainings.filter(training => {
+            return (typeFilter === 'Tous' || training.titre === typeFilter) &&
+                   (intensiteFilter === 'Toutes' || training.statut === intensiteFilter);
+        });
+
+        displayTrainings(filtered);
+    }
+
+    // Réinitialiser les filtres
+    function resetFilters() {
+        const typeSelect = document.querySelector('.filter-item:first-child select');
+        const intensiteSelect = document.querySelector('.filter-item:nth-child(2) select');
+        const periodeSelect = document.querySelector('.filter-item:nth-child(3) select');
+
+        if (typeSelect) typeSelect.value = 'Tous';
+        if (intensiteSelect) intensiteSelect.value = 'Toutes';
+        if (periodeSelect) periodeSelect.value = 'Ce mois';
+
+        displayTrainings(allTrainings);
+    }
+
+    // Attacher les événements
+    const filterBtn = document.querySelector('.btn-filter');
+    if (filterBtn) filterBtn.onclick = filterTable;
+
+    const resetBtn = document.querySelector('.btn-reset');
+    if (resetBtn) resetBtn.onclick = resetFilters;
+
+    // Charger les données au démarrage
+    loadTrainings();
+</script>
+</body>
+</html>

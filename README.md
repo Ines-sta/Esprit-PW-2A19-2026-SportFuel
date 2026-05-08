@@ -65,6 +65,8 @@ git clone https://github.com/Ines-sta/Esprit-PW-2A19-2526-SportFuel.git
 | **Back Office — Aliments** | http://localhost/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/aliment_controller.php |
 | **Front Office — Catalogue** | http://localhost/Esprit-PW-2A19-2526-SportFuel/FrontOffice/controllers/aliment_controller.php |
 
+- Option module utilisateurs: placez le projet dans `www`/`htdocs`, demarrez Apache+MySQL, puis lancez `init_db.php` si vous souhaitez initialiser la base automatiquement.
+
 ## Structure du projet
 
 ```
