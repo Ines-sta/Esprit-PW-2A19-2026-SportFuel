@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - SportFuel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+      if (window.location.protocol === 'file:') {
+        window.location.replace('http://localhost/SportFuel-Module1/view/connexion.html');
+      }
+    </script>
+    <style>
+        .panel.signup-mode { transform: translateX(-100%); }
+        .image-area {
+            background-image: url('img1.png') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+        .auth-step {
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+            height: 0;
+            overflow: hidden;
+            transition: opacity .35s ease, transform .35s ease;
+        }
+        .auth-step.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            height: auto;
+            overflow: visible;
+        }
+        .forgot-progress { display: none; margin: 6px 0 12px; }
+        .forgot-progress.active { display: block; }
+        .progress-track {
+            height: 7px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.25);
+            overflow: hidden;
+            margin-bottom: 7px;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 33.33%;
+            background: linear-gradient(90deg, #52b788, #f4a261);
+            transition: width .35s ease;
+        }
+        .progress-label { color: #e9f1ee; font-size: 12px; font-weight: 700; }
+        .forgot-link, .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+        }
+        .forgot-link {
+            background: linear-gradient(135deg, rgba(82,183,136,.28), rgba(244,162,97,.28));
+            border: 1px solid rgba(255,255,255,.28);
+            border-radius: 999px;
+            padding: 10px 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,.18);
+            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+        }
+        .forgot-link:hover {
+            transform: translateY(-1px);
+            border-color: rgba(244,162,97,.85);
+            box-shadow: 0 10px 24px rgba(244,162,97,.25);
+        }
+        .back-link:hover { color: #fff; text-decoration: underline; }
+        .otp-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 10px 0 6px;
+        }
+        .otp-input {
+            width: 23%;
+            min-width: 0;
+            text-align: center;
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .step-msg {
+            margin: 4px 0 8px;
+            color: #d8f3dc;
+            font-size: 13px;
+            text-align: center;
+        }
+        .reset-feedback {
+            margin-top: 10px;
+            font-size: 13px;
+            min-height: 18px;
+            text-align: center;
+        }
+        .reset-feedback.success { color: #95d5b2; }
+        .reset-feedback.error { color: #fca5a5; }
+
+        /* Anti-Brute-Force Styles */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+        }
+        .shake { animation: shake 0.4s ease-in-out; }
+        .field-error-msg {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 5px;
+            display: block;
+            text-align: left;
+            font-weight: 600;
+        }
+        .attempt-icons {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 4px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        .input-group { position: relative; width: 100%; }
+        input:disabled, button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+        .banned-icon { font-size: 70px; margin-bottom: 20px; display: block; filter: none !important; }
+        .banned-title { color: #ff6b6b; font-size: 24px; margin-bottom: 10px; }
+        .banned-msg { color: #e9f1ee; font-size: 15px; line-height: 1.6; margin-bottom: 15px; }
+        .banned-contact { color: #52b788; font-weight: bold; text-decoration: none; }
+        .banned-box { text-align: center; padding: 20px 0; }
+
+        /* Face ID Styles (Option B - AI Recognition) */
+        .faceid-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .faceid-badge.active { color: #52b788; border: 1px solid rgba(82, 183, 136, 0.3); }
+        .faceid-badge.inactive { color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.3); }
+        .faceid-badge a {
+            color: inherit;
+            text-decoration: underline;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .faceid-btn {
+            width: 100%;
+            margin-top: 15px;
+            background: transparent;
+            border: 2px solid #52b788;
+            color: #52b788;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .faceid-btn:hover { background: rgba(82, 183, 136, 0.1); }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 15px 0;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .separator::before, .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .separator:not(:empty)::before { margin-right: .5em; }
+        .separator:not(:empty)::after { margin-left: .5em; }
+
+        /* Scan Animation Overlay */
+        .scan-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .camera-box {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #52b788;
+            box-shadow: 0 0 30px rgba(82, 183, 136, 0.4);
+            margin-bottom: 20px;
+            background: #000;
+        }
+        #webcam {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1); /* Mirror effect */
+        }
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #52b788;
+            box-shadow: 0 0 15px #52b788;
+            animation: scan-move 2s linear infinite;
+            z-index: 10;
+        }
+        @keyframes scan-move {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+        
+        .scan-msg {
+            font-size: 18px;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        /* Popup Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .modal-btn-primary { background: #52b788; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; }
+        .modal-btn-secondary { background: transparent; color: rgba(255, 255, 255, 0.5); border: none; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="panel" id="connexionPanel">
+        <div class="image-area">
+            <h3>Start your healthy journey</h3>
+            <p class="toggle-text">Bienvenue chez SportFuel</p>
+        </div>
+        <div class="content">
+            <div class="form-box">
+                <h2 id="authTitle">Connexion</h2>
+
+                <div class="forgot-progress" id="forgotProgress">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-label" id="progressLabel">Étape 1 / 3</div>
+                </div>
+
+                <div class="auth-step active" id="viewLogin">
+                    <div id="faceIdBadge" class="faceid-badge"></div>
+
+                    <form id="connexionForm" action="../controller/AuthController.php?action=connexion" method="POST" novalidate>
+                        <input type="text" name="email" id="email" placeholder="📧 Email">
+                        <div class="input-group">
+                            <input type="password" name="password" id="password" placeholder="🔒 Mot de passe">
+                            <div id="attemptIcons" class="attempt-icons"></div>
+                        </div>
+                        <span id="loginError" class="field-error-msg"></span>
+                        <button type="submit" class="submit-btn" id="loginBtn">🚀 Se Connecter</button>
+                    </form>
+            
+                    <div class="separator">ou</div>
+                    <button type="button" id="faceIdBtn" class="faceid-btn">
+                        <span class="face-icon">👤</span>
+                        Se connecter avec Face ID
+                    </button>
+
+                    <a class="forgot-link" id="forgotLink" href="#" onclick="return startForgotPasswordFlow(event);">Mot de passe oublié ?</a>
+                    <a class="link-btn" href="inscription.html">Pas de compte ? S'inscrire</a>
+                </div>
+
+                <div class="auth-step" id="viewBanned">
+                    <div class="banned-box">
+                        <span class="banned-icon">🚫</span>
+                        <h2 class="banned-title">Compte suspendu</h2>
+                        <p class="banned-msg">Votre compte a été désactivé par l’administrateur.<br>Veuillez contacter le support.</p>
+                        <p class="banned-msg">Email : <a href="mailto:contact@sportfuel.tn" class="banned-contact">contact@sportfuel.tn</a></p>
+                        <button type="button" onclick="window.location.reload();">Retour à l'accueil</button>
+                    </div>
+                </div>
+
+                <div class="auth-step" id="viewStep1">
+                    <input type="text" id="forgotEmail" placeholder="📧 Entrez votre Gmail">
+                    <button type="button" id="sendCodeBtn" onclick="return sendOtpCodeFlow(event);">Envoyer le code</button>
+                    <a class="back-link" id="backToLogin1" href="#" onclick="return backToLoginFlow(event);">← Retour à la connexion</a>
+                </div>
+
+                <div class="auth-step" id="viewStep2">
+                    <p class="step-msg" id="otpInfo">Code envoyé à votre Gmail 📧</p>
+                    <div class="otp-row">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" data-otp-index="0">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" data-otp-index="1">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" data-otp-index="2">
+                        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" data-otp-index="3">
+                    </div>
+                    <button type="button" id="verifyOtpBtn" onclick="return verifyOtpFlow(event);">Vérifier</button>
+                    <a class="back-link" id="backToStep1" href="#" onclick="return goBackToStep1Flow(event);">← Retour</a>
+                </div>
+
+                <div class="auth-step" id="viewStep3">
+                    <input type="password" id="newPassword" placeholder="🔒 Nouveau mot de passe">
+                    <input type="password" id="confirmNewPassword" placeholder="🔐 Confirmer le mot de passe">
+                    <button type="button" id="savePasswordBtn" onclick="return saveNewPasswordFlow(event);">Enregistrer</button>
+                    <div class="reset-feedback" id="resetFeedback"></div>
+                    <a class="back-link" id="backToLogin3" href="#" onclick="return backToLoginFlow(event);">← Retour à la connexion</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scan Animation Overlay -->
+    <div id="scanOverlay" class="scan-container">
+        <div class="camera-box">
+            <video id="webcam" autoplay muted playsinline></video>
+            <div class="scan-line"></div>
+        </div>
+        <div id="scanMsg" class="scan-msg">Initialisation de la caméra...</div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="faceIdModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-icon">🪪</span>
+            <h3 class="modal-title">Activer Face ID</h3>
+            <p class="modal-msg">Connectez-vous plus rapidement avec votre visage.</p>
+            <div class="modal-btns">
+                <button id="activateFaceIdBtn" class="modal-btn-primary">Activer Face ID</button>
+                <button id="skipFaceIdBtn" class="modal-btn-secondary">Plus tard</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script src="connexion.js"></script>
+    <script>
+      function startForgotPasswordFlow(event) {
+        if (event) event.preventDefault();
+
+        if (typeof window.startForgotPasswordFlowInternal === 'function') {
+          window.startForgotPasswordFlowInternal();
+          return false;
+        }
+
+        var title = document.getElementById('authTitle');
+        var progress = document.getElementById('forgotProgress');
+        var progressFill = document.getElementById('progressFill');
+        var progressLabel = document.getElementById('progressLabel');
+        var login = document.getElementById('viewLogin');
+        var step1 = document.getElementById('viewStep1');
+        var emailInput = document.getElementById('forgotEmail');
+
+        if (title) title.textContent = 'Mot de passe oublié';
+        if (progress) progress.classList.add('active');
+        if (progressFill) progressFill.style.width = '33.33%';
+        if (progressLabel) progressLabel.textContent = 'Étape 1 / 3';
+        if (login) login.classList.remove('active');
+        if (step1) step1.classList.add('active');
+        if (emailInput) emailInput.focus();
+        return false;
+      }
+
+      function sendOtpCodeFlow(event) {
+        if (event) event.preventDefault();
+
+        if (typeof window.sendOtpCodeFlowInternal === 'function') {
+          window.sendOtpCodeFlowInternal();
+          return false;
+        }
+
+        var emailInput = document.getElementById('forgotEmail');
+        var otpInfo = document.getElementById('otpInfo');
+        var progressFill = document.getElementById('progressFill');
+        var progressLabel = document.getElementById('progressLabel');
+        var step1 = document.getElementById('viewStep1');
+        var step2 = document.getElementById('viewStep2');
+        var otpFirst = document.querySelector('.otp-input');
+        var email = emailInput ? emailInput.value.trim() : '';
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+          alert('❌ Entrez un Gmail valide.');
+          return false;
+        }
+
+        window.__sportfuelOtp = String(Math.floor(1000 + Math.random() * 9000));
+        window.__sportfuelOtpEmail = email;
+        console.log('OTP SportFuel (fallback/dev):', window.__sportfuelOtp);
+
+        if (otpInfo) otpInfo.textContent = 'Code envoyé à votre Gmail 📧 : ' + email;
+        if (progressFill) progressFill.style.width = '66.66%';
+        if (progressLabel) progressLabel.textContent = 'Étape 2 / 3';
+        if (step1) step1.classList.remove('active');
+        if (step2) step2.classList.add('active');
+        if (otpFirst) otpFirst.focus();
+        return false;
+      }
+
+      function goBackToStep1Flow(event) {
+        if (event) event.preventDefault();
+
+        if (typeof window.goBackToStep1FlowInternal === 'function') {
+          window.goBackToStep1FlowInternal();
+          return false;
+        }
+
+        var progressFill = document.getElementById('progressFill');
+        var progressLabel = document.getElementById('progressLabel');
+        var step1 = document.getElementById('viewStep1');
+        var step2 = document.getElementById('viewStep2');
+        var emailInput = document.getElementById('forgotEmail');
+
+        if (progressFill) progressFill.style.width = '33.33%';
+        if (progressLabel) progressLabel.textContent = 'Étape 1 / 3';
+        if (step2) step2.classList.remove('active');
+        if (step1) step1.classList.add('active');
+        if (emailInput) emailInput.focus();
+        return false;
+      }
+
+      function verifyOtpFlow(event) {
+        if (event) event.preventDefault();
+
+        if (typeof window.verifyOtpFlowInternal === 'function') {
+          window.verifyOtpFlowInternal();
+          return false;
+        }
+
+        var inputs = document.querySelectorAll('.otp-input');
+        var code = '';
+        for (var i = 0; i < inputs.length; i++) code += (inputs[i].value || '');
+        var expected = window.__sportfuelOtp || '';
+
+        if (code.length !== 4) {
+          alert('❌ Entrez le code OTP complet (4 chiffres).');
+          return false;
+        }
+        if (code !== expected) {
+          alert('❌ Code OTP incorrect.');
+          return false;
+        }
+
+        var progressFill = document.getElementById('progressFill');
+        var progressLabel = document.getElementById('progressLabel');
+        var step2 = document.getElementById('viewStep2');
+        var step3 = document.getElementById('viewStep3');
+        var newPassword = document.getElementById('newPassword');
+        if (progressFill) progressFill.style.width = '99.99%';
+        if (progressLabel) progressLabel.textContent = 'Étape 3 / 3';
+        if (step2) step2.classList.remove('active');
+        if (step3) step3.classList.add('active');
+        if (newPassword) newPassword.focus();
+        return false;
+      }
+
+      function saveNewPasswordFlow(event) {
+        if (event) event.preventDefault();
+
+        if (typeof window.saveNewPasswordFlowInternal === 'function') {
+          window.saveNewPasswordFlowInternal();
+          return false;
+        }
+
+        var newPwd = document.getElementById('newPassword');
+        var confirmPwd = document.getElementById('confirmNewPassword');
+        var feedback = document.getElementById('resetFeedback');
+        var p1 = newPwd ? newPwd.value : '';
+        var p2 = confirmPwd ? confirmPwd.value : '';
+
+        if (!feedback) return false;
+        feedback.className = 'reset-feedback';
+
+        if (p1.length < 6) {
+          feedback.textContent = '❌ Le mot de passe doit contenir au moins 6 caractères.';
+          feedback.classList.add('error');
+          return false;
+        }
+        if (p1 !== p2) {
+          feedback.textContent = '❌ Les mots de passe ne correspondent pas.';
+          feedback.classList.add('error');
+          return false;
+        }
+        feedback.textContent = '⚠️ Veuillez patienter, chargement du script...';
+        feedback.classList.add('error');
+        return false;
+      }
+
+      function backToLoginFlow(event) {
+        if (event) event.preventDefault();
+
+        if (typeof window.backToLoginFlowInternal === 'function') {
+          window.backToLoginFlowInternal();
+          return false;
+        }
+
+        var login = document.getElementById('viewLogin');
+        var step1 = document.getElementById('viewStep1');
+        var step2 = document.getElementById('viewStep2');
+        var step3 = document.getElementById('viewStep3');
+        var progress = document.getElementById('forgotProgress');
+        var title = document.getElementById('authTitle');
+        if (title) title.textContent = 'Connexion';
+        if (progress) progress.classList.remove('active');
+        if (step1) step1.classList.remove('active');
+        if (step2) step2.classList.remove('active');
+        if (step3) step3.classList.remove('active');
+        if (login) login.classList.add('active');
+        return false;
+      }
+    </script>
+</body>
+</html>
+
