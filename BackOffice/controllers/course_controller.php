@@ -2,6 +2,7 @@
 // Controller: Course (BackOffice — CRUD + recherche + stats + utilisateurs dummy)
 
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/cloudinary.php';
 require_once __DIR__ . '/../models/Course.php';
 require_once __DIR__ . '/../models/Aliment.php';
 
@@ -54,9 +55,15 @@ switch ($action) {
             elseif (empty($statut))                         $error = "Le statut est obligatoire.";
             elseif (!in_array($statut, $statutsAutorises))  $error = "Statut invalide.";
             else {
-                $courseModel->genererListeCourses($id_utilisateur, $nom, $date, $statut);
-                header('Location: course_controller.php?success=ajout');
-                exit;
+                $uploadErr = '';
+                $image_url = cloudinary_handle_upload($_FILES['image'] ?? null, CLOUDINARY_FOLDER . '/courses', $uploadErr);
+                if ($uploadErr !== '') {
+                    $error = $uploadErr;
+                } else {
+                    $courseModel->genererListeCourses($id_utilisateur, $nom, $date, $statut, [], $image_url);
+                    header('Location: course_controller.php?success=ajout');
+                    exit;
+                }
             }
         }
         break;
@@ -78,9 +85,15 @@ switch ($action) {
             elseif (empty($statut))                         $error = "Le statut est obligatoire.";
             elseif (!in_array($statut, $statutsAutorises))  $error = "Statut invalide.";
             else {
-                $courseModel->modifier($id, $id_utilisateur, $nom, $date, $statut);
-                header('Location: course_controller.php?action=voir&id=' . $id . '&success=modif');
-                exit;
+                $uploadErr = '';
+                $image_url = cloudinary_handle_upload($_FILES['image'] ?? null, CLOUDINARY_FOLDER . '/courses', $uploadErr);
+                if ($uploadErr !== '') {
+                    $error = $uploadErr;
+                } else {
+                    $courseModel->modifier($id, $id_utilisateur, $nom, $date, $statut, $image_url);
+                    header('Location: course_controller.php?action=voir&id=' . $id . '&success=modif');
+                    exit;
+                }
             }
         }
         break;

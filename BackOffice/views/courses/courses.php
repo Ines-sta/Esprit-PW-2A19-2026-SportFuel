@@ -205,6 +205,7 @@
             <table id="tableCourses">
                 <thead>
                     <tr>
+                        <th>Image</th>
                         <th>Nom</th>
                         <th>Utilisateur</th>
                         <th>Date</th>
@@ -216,10 +217,17 @@
                 </thead>
                 <tbody>
                     <?php if (empty($courses)): ?>
-                        <tr><td colspan="7" style="text-align:center;color:#6c757d;">Aucune liste trouvée.</td></tr>
+                        <tr><td colspan="8" style="text-align:center;color:#6c757d;">Aucune liste trouvée.</td></tr>
                     <?php else: ?>
                         <?php foreach ($courses as $c): ?>
                         <tr>
+                            <td>
+                                <?php if (!empty($c['image_url'])): ?>
+                                    <img src="<?php echo htmlspecialchars(cloudinary_thumb($c['image_url'], 80, 80)); ?>" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:6px;">
+                                <?php else: ?>
+                                    <span style="color:#bbb;font-size:24px;">🛒</span>
+                                <?php endif; ?>
+                            </td>
                             <td><?php echo htmlspecialchars($c['nom']); ?> <small style="color:#6c757d;">#<?php echo $c['id_course']; ?></small></td>
                             <td><?php echo htmlspecialchars(getUserName($users, $c['id_utilisateur'])); ?></td>
                             <td><?php echo htmlspecialchars($c['date']); ?></td>
@@ -256,7 +264,7 @@
 <div class="modal-overlay <?php echo (!empty($error) && $action === 'ajouter') ? 'active' : ''; ?>" id="modalAjout">
     <div class="modal">
         <h3>Nouvelle liste de courses</h3>
-        <form method="POST" action="course_controller.php?action=ajouter" onsubmit="return validerFormCourse(this)">
+        <form method="POST" action="course_controller.php?action=ajouter" enctype="multipart/form-data" onsubmit="return validerFormCourse(this)">
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom de la liste</label>
@@ -287,6 +295,10 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group" style="margin-top:12px;">
+                <label>Image (JPEG/PNG/WebP/GIF, max 5 Mo)</label>
+                <input type="file" name="image" accept="image/*">
+            </div>
             <div id="erreurAjout" style="color:#e63946;margin-top:8px;display:none;"></div>
             <div class="modal-actions">
                 <button type="button" class="btn btn-outline" onclick="document.getElementById('modalAjout').classList.remove('active')">Annuler</button>
@@ -301,7 +313,7 @@
 <div class="modal-overlay active" id="modalModif">
     <div class="modal">
         <h3>Modifier la liste #<?php echo $courseEdit['id_course']; ?></h3>
-        <form method="POST" action="course_controller.php?action=modifier" onsubmit="return validerFormCourse(this)">
+        <form method="POST" action="course_controller.php?action=modifier" enctype="multipart/form-data" onsubmit="return validerFormCourse(this)">
             <input type="hidden" name="id" value="<?php echo $courseEdit['id_course']; ?>">
             <div class="form-row">
                 <div class="form-group">
@@ -331,6 +343,14 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
+            </div>
+            <div class="form-group" style="margin-top:12px;">
+                <label>Image</label>
+                <?php if (!empty($courseEdit['image_url'])): ?>
+                    <div style="margin-bottom:8px;"><img src="<?php echo htmlspecialchars(cloudinary_thumb($courseEdit['image_url'], 120, 120)); ?>" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:6px;"></div>
+                <?php endif; ?>
+                <input type="file" name="image" accept="image/*">
+                <small style="color:#6c757d;display:block;margin-top:4px;">Laisser vide pour conserver l'image actuelle.</small>
             </div>
             <div id="erreurModif" style="color:#e63946;margin-top:8px;display:none;"></div>
             <div class="modal-actions">

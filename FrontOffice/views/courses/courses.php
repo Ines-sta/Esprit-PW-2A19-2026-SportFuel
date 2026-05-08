@@ -35,6 +35,9 @@
     <?php if (!empty($success)): ?>
         <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
     <?php endif; ?>
+    <?php if (!empty($error)): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+    <?php endif; ?>
 
     <div class="welcome-banner">
         <div>
@@ -159,6 +162,10 @@
         </div>
     </div>
 
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+        <button class="btn btn-primary" type="button" onclick="document.getElementById('optimizerModal').classList.add('active')">✨ Générer une course optimisée</button>
+    </div>
+
     <!-- Recherche & filtres -->
     <form method="GET" action="course_controller.php" class="search-bar" style="margin-bottom:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
         <input type="text" name="q" value="<?php echo htmlspecialchars($filtre_q); ?>" placeholder="Rechercher par nom..." style="flex:1;min-width:200px;padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
@@ -183,7 +190,13 @@
                 elseif ($c['statut'] === 'Complétée') $badgeClass = 'badge-bio';
             ?>
             <div class="food-card">
-                <div class="food-card-img">🛒</div>
+                <div class="food-card-img">
+                    <?php if (!empty($c['image_url'])): ?>
+                        <img src="<?php echo htmlspecialchars(cloudinary_thumb($c['image_url'], 400, 400)); ?>" alt="<?php echo htmlspecialchars($c['nom']); ?>" style="width:100%;height:100%;object-fit:cover;">
+                    <?php else: ?>
+                        🛒
+                    <?php endif; ?>
+                </div>
                 <div class="food-card-body">
                     <h4><?php echo htmlspecialchars($c['nom']); ?></h4>
                     <p class="category"><?php echo htmlspecialchars($c['date']); ?> &middot; <?php echo htmlspecialchars(getUserName($users, $c['id_utilisateur'])); ?></p>
@@ -199,6 +212,99 @@
             </div>
             <?php endforeach; ?>
         <?php endif; ?>
+    </div>
+
+    <div class="modal-overlay <?php echo !empty($showOptimizerModal) ? 'active' : ''; ?>" id="optimizerModal">
+        <div class="modal" style="max-width:800px;">
+            <h3>Optimiseur</h3>
+
+            <form method="POST" action="course_controller.php?action=optimiser_preview">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nom de la liste</label>
+                        <input type="text" name="nom" value="<?php echo htmlspecialchars($optimizerInput['nom'] ?? 'Liste optimisée'); ?>" placeholder="Ex: Semaine prise de masse">
+                    </div>
+                    <div class="form-group">
+                        <label>Cible kcal totale</label>
+                        <input type="text" name="kcal_target" value="<?php echo htmlspecialchars((string)($optimizerInput['kcal_target'] ?? 2000)); ?>" placeholder="Ex: 2200">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Budget max (TND)</label>
+                        <input type="text" name="budget_max" value="<?php echo htmlspecialchars((string)($optimizerInput['budget_max'] ?? 20)); ?>" placeholder="Ex: 25">
+                    </div>
+                    <div class="form-group" style="display:flex;align-items:flex-end;gap:18px;">
+                        <label style="display:flex;align-items:center;gap:6px;font-weight:500;">
+                            <input type="checkbox" name="prefer_bio" value="1" <?php echo !empty($optimizerInput['prefer_bio']) ? 'checked' : ''; ?>>
+                            Prioriser Bio
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;font-weight:500;">
+                            <input type="checkbox" name="prefer_local" value="1" <?php echo !empty($optimizerInput['prefer_local']) ? 'checked' : ''; ?>>
+                            Prioriser Local
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-actions" style="margin-top:4px;">
+                    <button type="button" class="btn btn-outline" onclick="document.getElementById('optimizerModal').classList.remove('active')">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Calculer l'aperçu</button>
+                </div>
+            </form>
+
+            <?php if (!empty($optimizerPreview)): ?>
+                <?php if (!empty($optimizerPreview['warnings'])): ?>
+                    <div class="alert alert-danger" style="margin-top:14px;">
+                        <?php echo htmlspecialchars(implode(' ', $optimizerPreview['warnings'])); ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="card" style="margin-top:14px;padding:14px;">
+                    <h4 style="margin-bottom:10px;">Aperçu du panier proposé</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Aliment</th>
+                                    <th>Catégorie</th>
+                                    <th>Quantité</th>
+                                    <th>Kcal</th>
+                                    <th>Coût (TND)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach (($optimizerPreview['items'] ?? []) as $it): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($it['nom']); ?></td>
+                                        <td><?php echo htmlspecialchars($it['categorie']); ?></td>
+                                        <td><?php echo htmlspecialchars($it['quantite'] . ' ' . $it['unite']); ?></td>
+                                        <td><?php echo htmlspecialchars((string)$it['kcal']); ?></td>
+                                        <td><?php echo number_format((float)$it['cout'], 2); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top:10px;color:#495057;font-size:14px;display:flex;gap:14px;flex-wrap:wrap;">
+                        <span><strong>Kcal:</strong> <?php echo htmlspecialchars((string)$optimizerPreview['totals']['kcal_total']); ?> / <?php echo htmlspecialchars((string)$optimizerPreview['totals']['kcal_target']); ?></span>
+                        <span><strong>Couverture:</strong> <?php echo htmlspecialchars((string)$optimizerPreview['totals']['couverture']); ?>%</span>
+                        <span><strong>Coût:</strong> <?php echo number_format((float)$optimizerPreview['totals']['cout_total'], 2); ?> / <?php echo number_format((float)$optimizerPreview['totals']['budget_max'], 2); ?> TND</span>
+                        <span><strong>Budget restant:</strong> <?php echo number_format((float)$optimizerPreview['totals']['restant'], 2); ?> TND</span>
+                    </div>
+
+                    <?php if (!empty($optimizerPreview['items'])): ?>
+                        <form method="POST" action="course_controller.php?action=optimiser_create" style="margin-top:12px;display:flex;justify-content:flex-end;">
+                            <input type="hidden" name="nom" value="<?php echo htmlspecialchars($optimizerInput['nom']); ?>">
+                            <input type="hidden" name="kcal_target" value="<?php echo htmlspecialchars((string)$optimizerInput['kcal_target']); ?>">
+                            <input type="hidden" name="budget_max" value="<?php echo htmlspecialchars((string)$optimizerInput['budget_max']); ?>">
+                            <input type="hidden" name="prefer_bio" value="<?php echo !empty($optimizerInput['prefer_bio']) ? '1' : '0'; ?>">
+                            <input type="hidden" name="prefer_local" value="<?php echo !empty($optimizerInput['prefer_local']) ? '1' : '0'; ?>">
+                            <button type="submit" class="btn btn-success">Confirmer la création</button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
     <?php endif; ?>
 

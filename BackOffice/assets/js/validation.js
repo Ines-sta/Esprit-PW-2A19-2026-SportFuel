@@ -11,6 +11,7 @@ function validerFormAliment(form) {
     var categorie = form.querySelector('[name="categorie"]').value.trim();
     var kcal = form.querySelector('[name="kcal_portion"]').value.trim();
     var co2 = form.querySelector('[name="co2_impact"]').value.trim();
+    var prix = form.querySelector('[name="prix_unitaire"]').value.trim();
     var erreurs = [];
 
     if (nom === '') {
@@ -35,6 +36,12 @@ function validerFormAliment(form) {
         erreurs.push("L'impact CO₂ est obligatoire.");
     } else if (isNaN(co2) || parseFloat(co2) < 0) {
         erreurs.push("L'impact CO₂ doit être un nombre positif.");
+    }
+
+    if (prix === '') {
+        erreurs.push("Le prix unitaire est obligatoire.");
+    } else if (isNaN(prix) || parseFloat(prix) <= 0) {
+        erreurs.push("Le prix unitaire doit être un nombre positif.");
     }
 
     return afficherErreurs(form, erreurs);
