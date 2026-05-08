@@ -1,6 +1,6 @@
 <?php
-require 'c:\xampp\htdocs\SportFuel-Module1\controller\config.php';
-require 'c:\xampp\htdocs\SportFuel-Module1\model\Utilisateur.php';
+require __DIR__ . '/controller/config.php';
+require __DIR__ . '/model/Utilisateur.php';
 
 $users = Utilisateur::getAll($pdo);
 foreach($users as $u) {

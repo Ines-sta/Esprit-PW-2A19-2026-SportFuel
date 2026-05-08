@@ -1,6 +1,6 @@
 <?php
-require 'c:\xampp\htdocs\SportFuel-Module1\controller\smtp_settings.php';
-require 'c:\xampp\htdocs\SportFuel-Module1\controller\api.php';
+require __DIR__ . '/controller/smtp_settings.php';
+require __DIR__ . '/controller/api.php';
 
 $settings = [
     'host' => $SMTP_HOST,

@@ -1,7 +1,7 @@
 <?php
 /**
  * Initialisation automatique de la base SportFuel via PDO (aucun import SQL manuel).
- * Ouvrez une fois : http://localhost/SportFuel-Module1/init_db.php
+ * Ouvrez une fois : http://localhost/Esprit-PW-2A19-2526-SportFuel/init_db.php
  * Supprimez ce fichier après l'installation en production.
  */
 
@@ -72,7 +72,7 @@ try {
             <p>La base <strong>sportfuel</strong> et la table <strong>utilisateurs</strong> ont été créées via PDO.</p>
             $adminNotice
             <p><strong>Compte Admin :</strong><br>Email : admin@sportfuel.tn<br>Mot de passe : admin123</p>
-            <a href='http://localhost/SportFuel-Module1/view/index.html'>🚀 Accéder à l'application</a>
+            <a href='http://localhost/Esprit-PW-2A19-2526-SportFuel/view/index.html'>🚀 Accéder à l'application</a>
         </div>
     </body>
     </html>

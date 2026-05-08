@@ -15,6 +15,10 @@
     <div style="display:flex;flex-direction:column;gap:12px;">
         <a class="btn btn-primary" href="controllers/aliment_controller.php">🥗 Gérer les aliments</a>
         <a class="btn btn-primary" href="controllers/course_controller.php">🛒 Gérer les listes de courses</a>
+        <a class="btn btn-primary" href="views/entrainement/gestion_entrainement.html">🏋️ Gérer les entraînements</a>
+        <a class="btn btn-primary" href="views/coach/index.php">🤝 Publications et suivi coach</a>
+        <a class="btn btn-outline" href="../index.php?page=back&action=listPlans">🍽️ Plans alimentaires</a>
+        <a class="btn btn-outline" href="../view/admin.html">👥 Utilisateurs</a>
     </div>
 </div>
 </body>

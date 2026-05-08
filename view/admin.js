@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (btn.classList.contains('delete')) {
         if (confirm(`⚠️ Voulez-vous vraiment supprimer DÉFINITIVEMENT l'utilisateur : ${uName} ?`)) {
-          fetch('/SportFuel-Module1/controller/AdminController.php?action=delete', {
+          fetch('/Esprit-PW-2A19-2526-SportFuel/controller/AdminController.php?action=delete', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: uId })
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data.id = currentEditId;
       }
 
-      const endpoint = editMode ? '/SportFuel-Module1/controller/AdminController.php?action=edit' : '/SportFuel-Module1/controller/AdminController.php?action=add';
+      const endpoint = editMode ? '/Esprit-PW-2A19-2526-SportFuel/controller/AdminController.php?action=edit' : '/Esprit-PW-2A19-2526-SportFuel/controller/AdminController.php?action=add';
 
       fetch(endpoint, {
         method: 'POST',

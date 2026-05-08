@@ -75,18 +75,19 @@ class AuthController {
 // Automatically process POST requests coming from forms
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
     $auth = new AuthController($pdo);
+    $basePath = '/Esprit-PW-2A19-2526-SportFuel';
     
     if ($_GET['action'] === 'inscription') {
         $result = $auth->inscription($_POST);
         if ($result['success']) {
             if ($result['role'] === 'Admin') {
-                header('Location: /SportFuel-Module1/view/admin.html');
+                header('Location: ' . $basePath . '/view/admin.html');
             } else {
-                header('Location: /SportFuel-Module1/view/profil.html');
+                header('Location: ' . $basePath . '/view/profil.html');
             }
             exit();
         } else {
-            echo "<script>alert('".$result['message']."'); window.location.href='/SportFuel-Module1/view/inscription.html';</script>";
+            echo "<script>alert('".$result['message']."'); window.location.href='" . $basePath . "/view/inscription.html';</script>";
         }
     }
     
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
         $isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 
         if ($result['success']) {
-            $redirect = ($result['role'] === 'Admin') ? '/SportFuel-Module1/view/admin.html' : '/SportFuel-Module1/view/profil.html';
+            $redirect = ($result['role'] === 'Admin') ? $basePath . '/view/admin.html' : $basePath . '/view/profil.html';
             if ($isAjax) {
                 echo json_encode(['success' => true, 'redirect' => $redirect]);
             } else {
@@ -106,14 +107,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
             if ($isAjax) {
                 echo json_encode(['success' => false, 'message' => $result['message']]);
             } else {
-                echo "<script>alert('".$result['message']."'); window.location.href='/SportFuel-Module1/view/connexion.html';</script>";
+                echo "<script>alert('".$result['message']."'); window.location.href='" . $basePath . "/view/connexion.html';</script>";
             }
         }
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
     if ($_GET['action'] === 'logout') {
+        $basePath = '/Esprit-PW-2A19-2526-SportFuel';
         session_destroy();
-        header('Location: /SportFuel-Module1/view/connexion.html');
+        header('Location: ' . $basePath . '/view/connexion.html');
         exit();
     }
 }

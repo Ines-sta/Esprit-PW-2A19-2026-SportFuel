@@ -16,6 +16,9 @@
     <div style="display:flex;flex-direction:column;gap:12px;">
         <a class="btn btn-primary" href="controllers/aliment_controller.php">🥗 Catalogue d'aliments</a>
         <a class="btn btn-primary" href="controllers/course_controller.php">🛒 Mes listes de courses</a>
+        <a class="btn btn-primary" href="views/entrainement/ajout_seance.html">🏋️ Mes entraînements</a>
+        <a class="btn btn-primary" href="views/coach/dashboard.php">💬 Messages et demandes</a>
+        <a class="btn btn-outline" href="../index.php?page=plans">🍽️ Mon plan alimentaire</a>
     </div>
 </div>
 </body>

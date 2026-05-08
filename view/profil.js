@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    fetch('/SportFuel-Module1/controller/ProfilController.php?action=save', {
+    fetch('/Esprit-PW-2A19-2526-SportFuel/controller/ProfilController.php?action=save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -108,12 +108,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   window.deleteAccount = function() {
     if (confirm("Voulez-vous VRAIMENT supprimer votre compte ? Cette action est totalement irréversible.")) {
-      fetch('/SportFuel-Module1/controller/ProfilController.php?action=deleteAccount', { method: 'POST' })
+      fetch('/Esprit-PW-2A19-2526-SportFuel/controller/ProfilController.php?action=deleteAccount', { method: 'POST' })
       .then(r => r.json())
       .then(res => {
          if (res.success) {
             alert('Compte supprimé définitivement.');
-            window.location.href = '/SportFuel-Module1/controller/AuthController.php?action=logout';
+          window.location.href = '/Esprit-PW-2A19-2526-SportFuel/controller/AuthController.php?action=logout';
          } else {
             alert('Erreur: ' + (res.message || 'inconnue'));
          }

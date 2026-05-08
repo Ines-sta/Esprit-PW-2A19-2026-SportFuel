@@ -15,23 +15,23 @@
 
 <!-- ===== SIDEBAR ===== -->
 <aside class="sidebar">
-    <a href="../../index.php" class="sidebar-brand">
+    <a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php" class="sidebar-brand">
         <div class="sidebar-logo">SF</div>
         <span>Sport<em>Fuel</em></span>
     </a>
     <div class="sidebar-role">ADMIN</div>
 
     <ul class="sidebar-menu">
-        <li><a href="#"><span class="icon">📊</span> Dashboard</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php"><span class="icon">📊</span> Dashboard</a></li>
     </ul>
     <div class="sidebar-section">Modules</div>
     <ul class="sidebar-menu">
-        <li><a href="#"><span class="icon">👥</span> Utilisateurs</a></li>
-        <li><a href="#"><span class="icon">🍽️</span> Plans alimentaires</a></li>
-        <li><a href="#"><span class="icon">🏋️</span> Entraînements</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/view/admin.html"><span class="icon">👥</span> Utilisateurs</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=listPlans"><span class="icon">🍽️</span> Plans alimentaires</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/views/entrainement/gestion_entrainement.html"><span class="icon">🏋️</span> Entraînements</a></li>
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/aliment_controller.php"><span class="icon">🥗</span> Aliments</a></li>
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/course_controller.php" class="active"><span class="icon">🛒</span> Listes de courses</a></li>
-        <li><a href="#"><span class="icon">🤝</span> Espace coach</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/views/coach/index.php"><span class="icon">🤝</span> Espace coach</a></li>
     </ul>
 </aside>
 

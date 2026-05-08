@@ -30,8 +30,8 @@ $utilisateurs = Utilisateur::getAll($pdo);
         <p>Administration — Panneau de contrôle</p>
       </div>
       <div class="topbar-actions">
-        <a class="btn btn-outline" href="/SportFuel-Module1/view/index.html" style="text-decoration:none;">🏠 Accueil</a>
-        <a class="btn btn-outline" href="/SportFuel-Module1/controller/AuthController.php?action=logout" style="text-decoration:none; color:#dc2626; border-color:#fee2e2; background:#fef2f2;">🚪 Déconnexion</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/view/index.html" style="text-decoration:none;">🏠 Accueil</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/controller/AuthController.php?action=logout" style="text-decoration:none; color:#dc2626; border-color:#fee2e2; background:#fef2f2;">🚪 Déconnexion</a>
         <div class="notif-btn">🔔<div class="notif-dot"></div></div>
         <button class="btn btn-outline">📤 Exporter</button>
         <button class="btn btn-primary" onclick="openModal(false)">➕ Ajouter un utilisateur</button>

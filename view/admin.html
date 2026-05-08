@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="admin.css">
   <script>
     if (window.location.protocol === 'file:') {
-      window.location.replace('http://localhost/SportFuel-Module1/view/admin.html');
+      window.location.replace('http://localhost/Esprit-PW-2A19-2526-SportFuel/view/admin.html');
     }
   </script>
 </head>
@@ -20,8 +20,8 @@
         <p>Administration — Panneau de contrôle</p>
       </div>
       <div class="topbar-actions">
-        <a class="btn btn-outline" href="/SportFuel-Module1/view/index.html" style="text-decoration:none;">🏠 Accueil</a>
-        <a class="btn btn-outline" href="/SportFuel-Module1/controller/AuthController.php?action=logout"
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/view/index.html" style="text-decoration:none;">🏠 Accueil</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/controller/AuthController.php?action=logout"
            style="text-decoration:none;color:#dc2626;border-color:#fee2e2;background:#fef2f2;">🚪 Déconnexion</a>
         <div class="notif-btn">🔔<div class="notif-dot"></div></div>
         <button class="btn btn-primary" onclick="openModal(false)">➕ Ajouter un utilisateur</button>
@@ -124,7 +124,7 @@
   </div>
 
   <script>
-    const API = '/SportFuel-Module1/controller/api.php';
+    const API = '/Esprit-PW-2A19-2526-SportFuel/controller/api.php';
     let editMode = false;
     let currentEditId = null;
     let allUsers = [];
@@ -134,10 +134,10 @@
       const res  = await fetch(`${API}?action=check_session`);
       const sess = await res.json();
       if (!sess.authenticated) {
-        window.location.href = '/SportFuel-Module1/view/connexion.html'; return;
+        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/view/connexion.html'; return;
       }
       if (sess.role !== 'Admin') {
-        window.location.href = '/SportFuel-Module1/view/profil.html'; return;
+        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/view/profil.html'; return;
       }
       loadUsers();
 

@@ -55,23 +55,22 @@ $date_jour = date('l j F Y');
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-    <a href="#" class="sidebar-brand">
+    <a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php" class="sidebar-brand">
         <div class="sidebar-logo">SF</div>
         <span>Sport<em>Fuel</em></span>
     </a>
     <div class="sidebar-role">ADMIN</div>
 
     <ul class="sidebar-menu">
-        <li><a href="#"><span class="icon">📊</span> Dashboard</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php"><span class="icon">📊</span> Dashboard</a></li>
     </ul>
     <div class="sidebar-section">Modules</div>
     <ul class="sidebar-menu">
-        <li><a href="#"><span class="icon">👥</span> Utilisateurs</a></li>
-        <li><a href="#"><span class="icon">🍽️</span> Plans alimentaires</a></li>
-        <li><a href="#"><span class="icon">🏋️</span> Entraînements</a></li>
-        <li><a href="../aliments/aliments.html"><span class="icon">🥗</span> Aliments & courses</a></li>
-        <li><a href="../categories/categories.html"><span class="icon">📁</span> Catégories</a></li>
-        <li><a href="../courses/courses.html"><span class="icon">🛒</span> Listes de courses</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/view/admin.html"><span class="icon">👥</span> Utilisateurs</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=listPlans"><span class="icon">🍽️</span> Plans alimentaires</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/views/entrainement/gestion_entrainement.html"><span class="icon">🏋️</span> Entraînements</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/aliment_controller.php"><span class="icon">🥗</span> Aliments & courses</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/course_controller.php"><span class="icon">🛒</span> Listes de courses</a></li>
         <li><a href="index.php" class="<?php echo $is_all_page ? 'active' : ''; ?>"><span class="icon">📝</span> Publications & Suivi</a></li>
         <li><a href="demandes-entrainement.php" class="<?php echo $is_training_page ? 'active' : ''; ?>"><span class="icon">🏋️</span> Demandes entraînement</a></li>
         <li><a href="demandes-nutrition.php" class="<?php echo $is_nutrition_page ? 'active' : ''; ?>"><span class="icon">🥗</span> Demandes nutrition</a></li>

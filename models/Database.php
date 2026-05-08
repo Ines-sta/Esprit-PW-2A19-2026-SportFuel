@@ -5,7 +5,7 @@ class Database {
     public static function getConnection() {
         if (self::$pdo === null) {
             $host = '127.0.0.1';
-            $dbname = 'sportfueldb';
+            $dbname = 'sportfuel';
             $username = 'root';
             $password = '';
             $port = '3306';

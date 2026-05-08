@@ -15,14 +15,14 @@
 
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar">
-    <a href="../../index.php" class="navbar-brand">
+    <a href="/Esprit-PW-2A19-2526-SportFuel/FrontOffice/index.php" class="navbar-brand">
         <div class="navbar-logo">SF</div>
         <span>Sport<em>Fuel</em></span>
     </a>
     <ul class="navbar-links">
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Mon plan</a></li>
-        <li><a href="#">Entraînements</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/FrontOffice/index.php">Dashboard</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=plans">Mon plan</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/FrontOffice/views/entrainement/ajout_seance.html">Entraînements</a></li>
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/FrontOffice/controllers/course_controller.php" class="active">Courses</a></li>
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/FrontOffice/controllers/aliment_controller.php">Aliments</a></li>
     </ul>
