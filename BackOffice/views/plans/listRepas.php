@@ -2,13 +2,13 @@
 /**
  * BackOffice — Liste des repas
  */
-require_once 'Controller/RepasController.php';
+require_once __DIR__ . '/../../controllers/RepasController.php';
 $repasController = new RepasController();
 
 $id_plan = $_GET['id_plan'] ?? null;
 if ($id_plan) {
     $repasList = $repasController->listRepasByPlan($id_plan);
-    require_once 'Controller/PlanAlimentaireController.php';
+    require_once __DIR__ . '/../../controllers/PlanAlimentaireController.php';
     $planController = new PlanAlimentaireController();
     $planFiltre = $planController->getPlan($id_plan);
 } else {
@@ -27,7 +27,7 @@ if ($id_plan) {
 <body>
 <div class="app-layout">
 
-    <?php include 'View/partials/sidebar.php'; ?>
+    <?php include __DIR__ . '/../../partials/sidebar.php'; ?>
 
     <div class="main-content">
         <div class="page-header">
@@ -92,7 +92,7 @@ if ($id_plan) {
                 <?php endif; ?>
             </div>
         </div>
-        <?php include 'View/partials/footer.php'; ?>
+        <?php include __DIR__ . '/../../partials/footer.php'; ?>
     </div>
 </div>
 

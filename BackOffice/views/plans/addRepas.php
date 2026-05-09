@@ -2,7 +2,7 @@
 /**
  * BackOffice — Formulaire d'ajout d'un repas
  */
-require_once 'Controller/PlanAlimentaireController.php';
+require_once __DIR__ . '/../../controllers/PlanAlimentaireController.php';
 $planController = new PlanAlimentaireController();
 $plans = $planController->listPlans();
 ?>
@@ -17,7 +17,7 @@ $plans = $planController->listPlans();
 <body>
 <div class="app-layout">
 
-    <?php include 'View/partials/sidebar.php'; ?>
+    <?php include __DIR__ . '/../../partials/sidebar.php'; ?>
 
     <div class="main-content">
         <div class="page-header">
@@ -95,7 +95,7 @@ $plans = $planController->listPlans();
                 </div>
             </div>
         </div>
-        <?php include 'View/partials/footer.php'; ?>
+        <?php include __DIR__ . '/../../partials/footer.php'; ?>
     </div>
 </div>
 <script src="public/js/addRepas.js"></script>

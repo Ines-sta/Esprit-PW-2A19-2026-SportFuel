@@ -2,8 +2,8 @@
 /**
  * BackOffice — Modification d'un repas
  */
-require_once 'Controller/RepasController.php';
-require_once 'Controller/PlanAlimentaireController.php';
+require_once __DIR__ . '/../../controllers/RepasController.php';
+require_once __DIR__ . '/../../controllers/PlanAlimentaireController.php';
 $repasController = new RepasController();
 $planController  = new PlanAlimentaireController();
 
@@ -25,7 +25,7 @@ $jours = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 <body>
 <div class="app-layout">
 
-    <?php include 'View/partials/sidebar.php'; ?>
+    <?php include __DIR__ . '/../../partials/sidebar.php'; ?>
 
     <div class="main-content">
         <div class="page-header">
@@ -103,7 +103,7 @@ $jours = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
                 </div>
             </div>
         </div>
-        <?php include 'View/partials/footer.php'; ?>
+        <?php include __DIR__ . '/../../partials/footer.php'; ?>
     </div>
 </div>
 <script src="public/js/addRepas.js"></script>

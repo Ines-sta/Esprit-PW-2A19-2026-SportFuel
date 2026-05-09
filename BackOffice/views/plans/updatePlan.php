@@ -2,7 +2,7 @@
 /**
  * BackOffice — Modification d'un plan alimentaire
  */
-require_once 'Controller/PlanAlimentaireController.php';
+require_once __DIR__ . '/../../controllers/PlanAlimentaireController.php';
 $planController = new PlanAlimentaireController();
 $id = $_GET['id'] ?? null;
 if (!$id) { header('Location: index.php?page=back&action=listPlans'); exit; }
@@ -20,7 +20,7 @@ if (!$plan) { header('Location: index.php?page=back&action=listPlans'); exit; }
 <body>
 <div class="app-layout">
 
-    <?php include 'View/partials/sidebar.php'; ?>
+    <?php include __DIR__ . '/../../partials/sidebar.php'; ?>
 
     <div class="main-content">
         <div class="page-header">
@@ -99,7 +99,7 @@ if (!$plan) { header('Location: index.php?page=back&action=listPlans'); exit; }
                 </div>
             </div>
         </div>
-        <?php include 'View/partials/footer.php'; ?>
+        <?php include __DIR__ . '/../../partials/footer.php'; ?>
     </div>
 </div>
 <script src="public/js/addPlan.js"></script>

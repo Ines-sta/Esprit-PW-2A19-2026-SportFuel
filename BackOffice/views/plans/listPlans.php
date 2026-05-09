@@ -2,7 +2,7 @@
 /**
  * BackOffice — Liste des plans alimentaires
  */
-require_once 'Controller/PlanAlimentaireController.php';
+require_once __DIR__ . '/../../controllers/PlanAlimentaireController.php';
 $planController = new PlanAlimentaireController();
 $plans = $planController->listPlans();
 
@@ -23,7 +23,7 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
 <body>
 <div class="app-layout">
 
-    <?php include 'View/partials/sidebar.php'; ?>
+    <?php include __DIR__ . '/../../partials/sidebar.php'; ?>
 
     <div class="main-content">
         <div class="page-header">
@@ -63,7 +63,7 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
                 </div>
                 <div class="stat-card">
                     <?php
-                    require_once 'Controller/RepasController.php';
+                    require_once __DIR__ . '/../../controllers/RepasController.php';
                     $repasController = new RepasController();
                     $totalRepas = count($repasController->listRepas());
                     ?>
@@ -127,7 +127,7 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
             </div>
 
         </div>
-        <?php include 'View/partials/footer.php'; ?>
+        <?php include __DIR__ . '/../../partials/footer.php'; ?>
     </div>
 </div>
 

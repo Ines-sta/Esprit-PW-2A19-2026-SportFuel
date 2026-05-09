@@ -2,7 +2,7 @@
 /**
  * Page d'accueil FrontOffice — SportFuel
  */
-require_once 'Controller/PlanAlimentaireController.php';
+require_once __DIR__ . '/../../../BackOffice/controllers/PlanAlimentaireController.php';
 $planController = new PlanAlimentaireController();
 $allPlans = $planController->listPlans();
 $recentPlans = array_slice($allPlans, 0, 3);
@@ -24,7 +24,7 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
 </head>
 <body>
 
-<?php include 'View/partials/topbar.php'; ?>
+<?php include __DIR__ . '/../../partials/topbar.php'; ?>
 
 <!-- HERO BANNER -->
 <div class="hero-banner">
@@ -90,6 +90,6 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
 
 </div>
 
-<?php include 'View/partials/footer.php'; ?>
+<?php include __DIR__ . '/../../partials/footer.php'; ?>
 </body>
 </html>

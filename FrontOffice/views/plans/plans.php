@@ -2,7 +2,7 @@
 /**
  * Liste de tous les plans — FrontOffice
  */
-require_once 'Controller/PlanAlimentaireController.php';
+require_once __DIR__ . '/../../../BackOffice/controllers/PlanAlimentaireController.php';
 $planController = new PlanAlimentaireController();
 $plans = $planController->listPlans();
 ?>
@@ -16,7 +16,7 @@ $plans = $planController->listPlans();
 </head>
 <body>
 
-<?php include 'View/partials/topbar.php'; ?>
+<?php include __DIR__ . '/../../partials/topbar.php'; ?>
 
 <div class="page-header">
     <div>
@@ -66,7 +66,7 @@ $plans = $planController->listPlans();
 
 </div>
 
-<?php include 'View/partials/footer.php'; ?>
+<?php include __DIR__ . '/../../partials/footer.php'; ?>
 
 <script>
 const filterBtns  = document.querySelectorAll('.filter-btn');
