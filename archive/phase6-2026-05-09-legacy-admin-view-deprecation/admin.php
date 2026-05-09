@@ -1,6 +1,14 @@
 <?php
-header('Location: /Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php');
-exit;
+session_start();
+if (!isset($_SESSION['user_email']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
+    header('Location: index.html');
+    exit;
+}
+require_once __DIR__ . '/../controller/config.php';
+require_once __DIR__ . '/../model/Utilisateur.php';
+
+$stats = Utilisateur::getStats($pdo);
+$utilisateurs = Utilisateur::getAll($pdo);
 ?>
 <!DOCTYPE html>
 <html lang="fr">

@@ -4,8 +4,10 @@
  * Toutes les requêtes JS passent par ici
  */
 session_start();
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/../model/Utilisateur.php';
+require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../Model/Utilisateur.php';
+
+$pdo = Config::getConnexion();
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -313,7 +315,7 @@ if ($action === 'login_by_id' && $method === 'POST') {
         echo json_encode([
             'success' => true, 
             'message' => 'Connexion réussie',
-            'redirect' => (strcasecmp($user['role'], 'Admin') === 0) ? 'admin.php' : 'profil.php'
+            'redirect' => (strcasecmp($user['role'], 'Admin') === 0) ? '/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php' : 'profil.php'
         ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Utilisateur introuvable']);

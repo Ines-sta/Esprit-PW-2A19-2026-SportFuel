@@ -1,7 +1,9 @@
 <?php
 session_start();
-require_once __DIR__ . '/../model/Utilisateur.php';
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../Model/Utilisateur.php';
+
+$pdo = Config::getConnexion();
 
 class AuthController {
     private $pdo;

@@ -7,7 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
   <script>
-    window.location.replace('/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php');
+    if (window.location.protocol === 'file:') {
+      window.location.replace('http://localhost/Esprit-PW-2A19-2526-SportFuel/view/admin.html');
+    }
   </script>
 </head>
 <body>
