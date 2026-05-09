@@ -18,7 +18,7 @@
         <a class="btn btn-primary" href="views/entrainement/gestion_entrainement.html">🏋️ Gérer les entraînements</a>
         <a class="btn btn-primary" href="views/coach/index.php">🤝 Publications et suivi coach</a>
         <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=listPlans">🍽️ Plans alimentaires</a>
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/view/admin.html">👥 Utilisateurs</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php">👥 Utilisateurs</a>
     </div>
 </div>
 </body>

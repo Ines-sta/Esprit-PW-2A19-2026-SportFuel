@@ -21,7 +21,7 @@
     </ul>
     <div class="sidebar-section">Modules</div>
     <ul class="sidebar-menu">
-        <li><a href="/Esprit-PW-2A19-2526-SportFuel/view/admin.html"><span class="icon">👥</span> Utilisateurs</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php"><span class="icon">👥</span> Utilisateurs</a></li>
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=listPlans"><span class="icon">🍽️</span> Plans alimentaires</a></li>
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/views/entrainement/gestion_entrainement.html"><span class="icon">🏋️</span> Entraînements</a></li>
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/aliment_controller.php" class="active"><span class="icon">🥗</span> Aliments</a></li>
