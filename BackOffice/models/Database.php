@@ -1,5 +1,5 @@
 <?php
-class Database {
+class SocialDatabase {
     private static $pdo = null;
 
     public static function getConnection() {

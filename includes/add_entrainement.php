@@ -1,8 +1,8 @@
 <?php
 // Handler pour ajouter un entraînement - Utilise le contrôleur MVC
 
-require_once '../config/database.php';
-require_once '../FrontOffice/controllers/EntrainementController.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../FrontOffice/controllers/EntrainementController.php';
 
 header('Content-Type: application/json; charset=utf-8');
 

@@ -6,7 +6,7 @@ class Commentaire {
     private $pdo;
 
     public function __construct() {
-        $this->pdo = Database::getConnection();
+        $this->pdo = SocialDatabase::getConnection();
     }
 
     public function getAllCommentaires() {

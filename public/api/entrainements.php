@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-require_once '../../FrontOffice/controllers/EntrainementController.php';
+require_once __DIR__ . '/../../FrontOffice/controllers/EntrainementController.php';
 
 $controller = new EntrainementController();
 $method = $_SERVER['REQUEST_METHOD'];
