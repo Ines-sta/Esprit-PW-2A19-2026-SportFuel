@@ -315,7 +315,7 @@ class CoachController {
     }
 
     private function getPdo() {
-        return Database::getConnection();
+        return SocialDatabase::getConnection();
     }
 }
 ?>
