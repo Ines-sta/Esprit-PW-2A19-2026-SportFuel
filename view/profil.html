@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="profil.css">
   <script>
     if (window.location.protocol === 'file:') {
-      window.location.replace('http://localhost/Esprit-PW-2A19-2526-SportFuel/view/profil.html');
+      window.location.replace('http://localhost/Esprit-PW-2A19-2526-SportFuel/View/profil.html');
     }
   </script>
 </head>
@@ -16,7 +16,7 @@
   <div class="main">
     <div class="content">
       <div class="page-actions">
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/controller/AuthController.php?action=logout"
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/Controller/AuthController.php?action=logout"
            style="text-decoration:none;color:#dc2626;border-color:#fee2e2;background:#fef2f2;margin-right:15px;">🚪 Déconnexion</a>
         <button class="btn btn-outline" onclick="toggleEdit()">✏️ Modifier</button>
         <button class="btn btn-primary"  onclick="saveProfile()">💾 Enregistrer</button>
@@ -188,7 +188,7 @@
   </div>
 
   <script>
-    const API = '/Esprit-PW-2A19-2526-SportFuel/controller/api.php';
+    const API = '/Esprit-PW-2A19-2526-SportFuel/Controller/api.php';
     let editMode = false;
     let currentUser = null;
 
@@ -197,7 +197,7 @@
       const res  = await fetch(`${API}?action=check_session`);
       const sess = await res.json();
       if (!sess.authenticated) {
-        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/view/connexion.html';
+        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/View/connexion.html';
         return;
       }
       if (sess.role === 'Admin') {
@@ -307,7 +307,7 @@
       const r   = await res.json();
       if (r.success) {
         alert('Compte supprimé.');
-        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/controller/AuthController.php?action=logout';
+        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/Controller/AuthController.php?action=logout';
       } else {
         alert('Erreur : ' + (r.message || 'inconnue'));
       }

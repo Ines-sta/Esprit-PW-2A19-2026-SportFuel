@@ -31,7 +31,7 @@ $imc = ($user->getTaille() > 0) ? round($user->getPoids() / (($user->getTaille()
   <div class="main">
     <div class="content">
       <div class="page-actions">
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/controller/AuthController.php?action=logout" style="text-decoration:none; color:#dc2626; border-color:#fee2e2; background:#fef2f2; margin-right: 15px;">🚪 Déconnexion</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/Controller/AuthController.php?action=logout" style="text-decoration:none; color:#dc2626; border-color:#fee2e2; background:#fef2f2; margin-right: 15px;">🚪 Déconnexion</a>
         <button class="btn btn-outline" onclick="toggleEdit()">✏️ Modifier</button>
         <button class="btn btn-primary" onclick="saveProfile()">💾 Enregistrer</button>
       </div>

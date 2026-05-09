@@ -315,7 +315,7 @@ if ($action === 'login_by_id' && $method === 'POST') {
         echo json_encode([
             'success' => true, 
             'message' => 'Connexion réussie',
-            'redirect' => (strcasecmp($user['role'], 'Admin') === 0) ? '/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php' : 'profil.php'
+            'redirect' => (strcasecmp($user['role'], 'Admin') === 0) ? '/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php' : '/Esprit-PW-2A19-2526-SportFuel/View/profil.html'
         ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Utilisateur introuvable']);

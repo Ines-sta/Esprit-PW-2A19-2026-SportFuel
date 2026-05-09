@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function saveFaceToDatabase(descriptor, redirect = true) {
     try {
-        const response = await fetch('../controller/api.php?action=save_face_descriptor', {
+        const response = await fetch('../Controller/api.php?action=save_face_descriptor', {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

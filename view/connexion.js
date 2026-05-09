@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const API = '../controller/api.php';
+    const API = '../Controller/api.php';
     const connexionForm = document.getElementById('connexionForm');
     const authTitle = document.getElementById('authTitle');
     const forgotProgress = document.getElementById('forgotProgress');
@@ -426,7 +426,7 @@ document.addEventListener('DOMContentLoaded', function () {
         scanMsg.textContent = "Récupération des profils autorisés...";
         let dbDescriptors = [];
         try {
-            const response = await fetch('../controller/api.php?action=get_face_descriptors', {
+            const response = await fetch('../Controller/api.php?action=get_face_descriptors', {
                 credentials: 'include'
             });
             const res = await response.json();
@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     
                     // --- NOUVEAU : Connexion via le serveur ---
                     try {
-                        const loginRes = await fetch('../controller/api.php?action=login_by_id', {
+                        const loginRes = await fetch('../Controller/api.php?action=login_by_id', {
                             method: 'POST',
                             credentials: 'include',
                             headers: { 'Content-Type': 'application/json' },

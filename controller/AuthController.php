@@ -85,11 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
             if ($result['role'] === 'Admin') {
                 header('Location: ' . $basePath . '/BackOffice/index.php');
             } else {
-                header('Location: ' . $basePath . '/view/profil.html');
+                header('Location: ' . $basePath . '/View/profil.html');
             }
             exit();
         } else {
-            echo "<script>alert('".$result['message']."'); window.location.href='" . $basePath . "/view/inscription.html';</script>";
+            echo "<script>alert('".$result['message']."'); window.location.href='" . $basePath . "/View/inscription.html';</script>";
         }
     }
     
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
         $isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 
         if ($result['success']) {
-            $redirect = ($result['role'] === 'Admin') ? $basePath . '/BackOffice/index.php' : $basePath . '/view/profil.html';
+            $redirect = ($result['role'] === 'Admin') ? $basePath . '/BackOffice/index.php' : $basePath . '/View/profil.html';
             if ($isAjax) {
                 echo json_encode(['success' => true, 'redirect' => $redirect]);
             } else {
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
             if ($isAjax) {
                 echo json_encode(['success' => false, 'message' => $result['message']]);
             } else {
-                echo "<script>alert('".$result['message']."'); window.location.href='" . $basePath . "/view/connexion.html';</script>";
+                echo "<script>alert('".$result['message']."'); window.location.href='" . $basePath . "/View/connexion.html';</script>";
             }
         }
     }
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
     if ($_GET['action'] === 'logout') {
         $basePath = '/Esprit-PW-2A19-2526-SportFuel';
         session_destroy();
-        header('Location: ' . $basePath . '/view/connexion.html');
+        header('Location: ' . $basePath . '/View/connexion.html');
         exit();
     }
 }
