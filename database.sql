@@ -1,6 +1,7 @@
 -- ============================================
--- SportFuel — Base de données Module 4
--- Aliments + Listes de courses
+-- SportFuel legacy schema source (Module 4)
+-- Canonical consolidated source: database/schema.sql
+-- Keep this file temporarily for backward compatibility.
 -- ============================================
 
 -- ============================================

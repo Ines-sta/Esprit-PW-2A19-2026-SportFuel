@@ -1,5 +1,6 @@
--- Base de données SportFuel
--- Alimentation durable & Nutrition intelligente
+-- SportFuel legacy schema source (plans/repas)
+-- Canonical consolidated source: database/schema.sql
+-- Keep this file temporarily for backward compatibility.
 
 CREATE DATABASE IF NOT EXISTS SportFuel CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE SportFuel;
