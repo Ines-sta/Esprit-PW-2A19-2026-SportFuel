@@ -2,8 +2,8 @@
 /**
  * Point d'entrée et routeur de l'application SportFuel
  */
-require_once 'Controller/PlanAlimentaireController.php';
-require_once 'Controller/RepasController.php';
+require_once 'BackOffice/controllers/PlanAlimentaireController.php';
+require_once 'BackOffice/controllers/RepasController.php';
 
 $page = $_GET['page'] ?? 'home';
 $action = $_GET['action'] ?? '';
