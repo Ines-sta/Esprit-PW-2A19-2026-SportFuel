@@ -53,6 +53,7 @@ Le projet combine maintenant :
 
 - un bootstrap rapide via `init_db.php` pour `utilisateurs`
 - un schema consolide dans `database/schema.sql`
+- un jeu de donnees de base dans `database/seeds/001-populate-baseline.sql`
 - des migrations SQL dans `database/migrations/`
 
 Flux recommande :
@@ -60,7 +61,8 @@ Flux recommande :
 1. ajuster `Controller/db_settings.php` si besoin
 2. lancer `http://localhost/Esprit-PW-2A19-2526-SportFuel/init_db.php`
 3. appliquer `database/schema.sql` pour la structure complete
-4. appliquer les migrations de `database/migrations/` sur une base existante si necessaire
+4. appliquer `database/seeds/001-populate-baseline.sql` pour peupler la base
+5. appliquer les migrations de `database/migrations/` sur une base existante si necessaire
 
 ### 4. Accéder à l'application
 
