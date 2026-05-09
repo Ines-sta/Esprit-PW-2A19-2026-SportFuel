@@ -12,17 +12,42 @@ $id = $_GET['id'] ?? null;
 $planController = new PlanAlimentaireController();
 $repasController = new RepasController();
 
+/**
+ * Include the first existing template from preferred then legacy paths.
+ */
+function includeFirst(array $paths) {
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            include $path;
+            return;
+        }
+    }
+    throw new RuntimeException('Template introuvable: ' . implode(', ', $paths));
+}
+
 // Routage
 if ($page === 'home') {
-    include 'View/FrontOffice/index.php';
+    includeFirst([
+        'FrontOffice/views/plans/index.php',
+        'View/FrontOffice/index.php'
+    ]);
 } elseif ($page === 'plans') {
-    include 'View/FrontOffice/plans.php';
+    includeFirst([
+        'FrontOffice/views/plans/plans.php',
+        'View/FrontOffice/plans.php'
+    ]);
 } elseif ($page === 'detail' && $id) {
-    include 'View/FrontOffice/detailPlan.php';
+    includeFirst([
+        'FrontOffice/views/plans/detailPlan.php',
+        'View/FrontOffice/detailPlan.php'
+    ]);
 } elseif ($page === 'back') {
     // BackOffice - Plans
     if ($action === 'listPlans') {
-        include 'View/BackOffice/listPlans.php';
+        includeFirst([
+            'BackOffice/views/plans/listPlans.php',
+            'View/BackOffice/listPlans.php'
+        ]);
     } elseif ($action === 'addPlan') {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $plan = new PlanAlimentaire(
@@ -37,7 +62,10 @@ if ($page === 'home') {
             );
             $planController->addPlan($plan);
         } else {
-            include 'View/BackOffice/addPlan.php';
+            includeFirst([
+                'BackOffice/views/plans/addPlan.php',
+                'View/BackOffice/addPlan.php'
+            ]);
         }
     } elseif ($action === 'updatePlan' && $id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -53,14 +81,20 @@ if ($page === 'home') {
             );
             $planController->updatePlan($plan);
         } else {
-            include 'View/BackOffice/updatePlan.php';
+            includeFirst([
+                'BackOffice/views/plans/updatePlan.php',
+                'View/BackOffice/updatePlan.php'
+            ]);
         }
     } elseif ($action === 'deletePlan' && $id) {
         $planController->deletePlan($id);
     }
     // BackOffice - Repas
     elseif ($action === 'listRepas') {
-        include 'View/BackOffice/listRepas.php';
+        includeFirst([
+            'BackOffice/views/plans/listRepas.php',
+            'View/BackOffice/listRepas.php'
+        ]);
     } elseif ($action === 'addRepas') {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $repas = new Repas(
@@ -73,7 +107,10 @@ if ($page === 'home') {
             );
             $repasController->addRepas($repas);
         } else {
-            include 'View/BackOffice/addRepas.php';
+            includeFirst([
+                'BackOffice/views/plans/addRepas.php',
+                'View/BackOffice/addRepas.php'
+            ]);
         }
     } elseif ($action === 'updateRepas' && $id) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -87,7 +124,10 @@ if ($page === 'home') {
             );
             $repasController->updateRepas($repas);
         } else {
-            include 'View/BackOffice/updateRepas.php';
+            includeFirst([
+                'BackOffice/views/plans/updateRepas.php',
+                'View/BackOffice/updateRepas.php'
+            ]);
         }
     } elseif ($action === 'deleteRepas' && $id) {
         $repasController->deleteRepas($id);
