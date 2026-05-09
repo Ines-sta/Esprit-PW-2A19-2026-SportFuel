@@ -97,11 +97,13 @@ CREATE TABLE IF NOT EXISTS course_aliment (
 -- ============================================================
 CREATE TABLE IF NOT EXISTS user (
     id_user INT AUTO_INCREMENT PRIMARY KEY,
+    utilisateur_id INT NULL,
     nom VARCHAR(50),
     prenom VARCHAR(50),
     email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
-    role VARCHAR(50) DEFAULT 'Sportif'
+    role VARCHAR(50) DEFAULT 'Sportif',
+    INDEX idx_user_utilisateur_id (utilisateur_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS publication (
@@ -129,8 +131,37 @@ CREATE TABLE IF NOT EXISTS commentaire (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================================
+-- Training module
+-- ============================================================
+CREATE TABLE IF NOT EXISTS entrainements (
+    id_entrainement INT AUTO_INCREMENT PRIMARY KEY,
+    id_utilisateur INT NOT NULL,
+    titre VARCHAR(255) NOT NULL,
+    date_entrainement DATE NOT NULL,
+    duree_totale INT NULL,
+    notes_globales TEXT NULL,
+    statut VARCHAR(30) NOT NULL DEFAULT 'En attente',
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs(id)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS exercices_seance (
+    id_exercice_seance INT AUTO_INCREMENT PRIMARY KEY,
+    id_entrainement INT NOT NULL,
+    nom_exercice VARCHAR(255) NOT NULL,
+    duree_secondes INT NOT NULL,
+    series INT NULL,
+    repetitions INT NULL,
+    charge_kg DECIMAL(8,2) NULL,
+    distance_km DECIMAL(8,2) NULL,
+    ordre INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (id_entrainement) REFERENCES entrainements(id_entrainement)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================================
 -- NOTE:
--- Training tables (entrainements, exercices_seance) are currently managed
--- through application runtime and should be added here in a follow-up
--- migration once the final table contract is confirmed.
+-- The social table `user` is kept for backward compatibility with existing
+-- publication/commentaire code. `utilisateur_id` provides a bridge to
+-- canonical `utilisateurs.id` during migration.
 -- ============================================================

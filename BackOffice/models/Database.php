@@ -33,11 +33,29 @@ class SocialDatabase {
     private static function ensureSchema(PDO $pdo) {
         $pdo->exec("CREATE TABLE IF NOT EXISTS `user` (
             id_user INT AUTO_INCREMENT PRIMARY KEY,
+            utilisateur_id INT NULL,
             nom VARCHAR(50),
             prenom VARCHAR(50),
             email VARCHAR(100) UNIQUE,
-            password VARCHAR(255)
+            password VARCHAR(255),
+            role VARCHAR(50) DEFAULT 'Sportif',
+            INDEX idx_user_utilisateur_id (utilisateur_id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $stmtUserRole = $pdo->query("SHOW COLUMNS FROM `user` LIKE 'role'");
+        if (!$stmtUserRole->fetch()) {
+            $pdo->exec("ALTER TABLE `user` ADD COLUMN role VARCHAR(50) DEFAULT 'Sportif' AFTER password");
+        }
+
+        $stmtUserUtilisateurId = $pdo->query("SHOW COLUMNS FROM `user` LIKE 'utilisateur_id'");
+        if (!$stmtUserUtilisateurId->fetch()) {
+            $pdo->exec("ALTER TABLE `user` ADD COLUMN utilisateur_id INT NULL AFTER id_user");
+        }
+
+        $stmtIdxBridge = $pdo->query("SHOW INDEX FROM `user` WHERE Key_name = 'idx_user_utilisateur_id'");
+        if (!$stmtIdxBridge->fetch()) {
+            $pdo->exec("ALTER TABLE `user` ADD INDEX idx_user_utilisateur_id (utilisateur_id)");
+        }
 
         $pdo->exec("CREATE TABLE IF NOT EXISTS `publication` (
             id_pub INT AUTO_INCREMENT PRIMARY KEY,
@@ -80,12 +98,46 @@ class SocialDatabase {
             $pdo->exec("ALTER TABLE `commentaire` ADD COLUMN id_user INT DEFAULT 1 AFTER id_pub");
         }
 
+        $utilisateursTableExists = (bool) $pdo->query("SHOW TABLES LIKE 'utilisateurs'")->fetchColumn();
+
+        $countUsers = (int) $pdo->query("SELECT COUNT(*) FROM `user`")->fetchColumn();
+        if ($countUsers === 0 && $utilisateursTableExists) {
+            $stmtUtilisateurs = $pdo->query("SELECT id, nom, email, role FROM utilisateurs ORDER BY id ASC LIMIT 100");
+            $utilisateurs = $stmtUtilisateurs->fetchAll();
+
+            if (!empty($utilisateurs)) {
+                $stmtInsertBridge = $pdo->prepare(
+                    "INSERT IGNORE INTO `user` (id_user, utilisateur_id, nom, prenom, email, password, role)
+                     VALUES (:id_user, :utilisateur_id, :nom, :prenom, :email, :password, :role)"
+                );
+
+                foreach ($utilisateurs as $u) {
+                    $stmtInsertBridge->execute([
+                        'id_user' => (int) $u['id'],
+                        'utilisateur_id' => (int) $u['id'],
+                        'nom' => (string) ($u['nom'] ?? ''),
+                        'prenom' => '',
+                        'email' => (string) ($u['email'] ?? ''),
+                        'password' => '',
+                        'role' => (string) ($u['role'] ?? 'Sportif'),
+                    ]);
+                }
+            }
+        }
+
         $countUsers = (int) $pdo->query("SELECT COUNT(*) FROM `user`")->fetchColumn();
         if ($countUsers === 0) {
-            $pdo->exec("INSERT IGNORE INTO `user` (id_user, nom, prenom, email, password) VALUES
-                (1, 'Doe', 'John', 'john@example.com', 'password'),
-                (2, 'Smith', 'Jane', 'jane@example.com', 'password'),
-                (3, 'Sportif', 'User', 'sportif@example.com', 'password')");
+            $pdo->exec("INSERT IGNORE INTO `user` (id_user, utilisateur_id, nom, prenom, email, password, role) VALUES
+                (1, NULL, 'Doe', 'John', 'john@example.com', 'password', 'Sportif'),
+                (2, NULL, 'Smith', 'Jane', 'jane@example.com', 'password', 'Sportif'),
+                (3, NULL, 'Sportif', 'User', 'sportif@example.com', 'password', 'Sportif')");
+        }
+
+        if ($utilisateursTableExists) {
+            $pdo->exec("UPDATE `user` u
+                        JOIN utilisateurs ut ON u.email = ut.email
+                        SET u.utilisateur_id = ut.id
+                        WHERE u.utilisateur_id IS NULL");
         }
 
         $countPub = (int) $pdo->query("SELECT COUNT(*) FROM `publication`")->fetchColumn();
