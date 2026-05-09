@@ -59,11 +59,120 @@ class Utilisateur {
     public function setRole($role) { $this->role = $role; }
     public function setStatut($statut) { $this->statut = $statut; }
 
+    private static function socialUserTableExists(PDO $pdo) {
+        static $checked = false;
+        static $exists = false;
+
+        if ($checked) {
+            return $exists;
+        }
+
+        try {
+            $stmt = $pdo->query("SHOW TABLES LIKE 'user'");
+            $exists = ($stmt && $stmt->fetchColumn() !== false);
+        } catch (PDOException $e) {
+            $exists = false;
+        }
+
+        $checked = true;
+        return $exists;
+    }
+
+    private static function mirrorToSocialUser(PDO $pdo, $utilisateurId) {
+        if (!self::socialUserTableExists($pdo)) {
+            return;
+        }
+
+        try {
+            $stmtUtilisateur = $pdo->prepare(
+                "SELECT id, nom, email, mot_de_passe, role
+                 FROM utilisateurs
+                 WHERE id = :id
+                 LIMIT 1"
+            );
+            $stmtUtilisateur->execute([':id' => (int)$utilisateurId]);
+            $utilisateur = $stmtUtilisateur->fetch(PDO::FETCH_ASSOC);
+
+            if (!$utilisateur) {
+                return;
+            }
+
+            $stmtExisting = $pdo->prepare(
+                "SELECT id_user
+                 FROM `user`
+                 WHERE utilisateur_id = :utilisateur_id OR email = :email
+                 ORDER BY id_user ASC
+                 LIMIT 1"
+            );
+            $stmtExisting->execute([
+                ':utilisateur_id' => (int)$utilisateur['id'],
+                ':email' => (string)$utilisateur['email']
+            ]);
+            $existing = $stmtExisting->fetch(PDO::FETCH_ASSOC);
+
+            if ($existing) {
+                $stmtUpdate = $pdo->prepare(
+                    "UPDATE `user`
+                     SET utilisateur_id = :utilisateur_id,
+                         nom = :nom,
+                         prenom = :prenom,
+                         email = :email,
+                         password = :password,
+                         role = :role
+                     WHERE id_user = :id_user"
+                );
+                $stmtUpdate->execute([
+                    ':utilisateur_id' => (int)$utilisateur['id'],
+                    ':nom' => (string)$utilisateur['nom'],
+                    ':prenom' => '',
+                    ':email' => (string)$utilisateur['email'],
+                    ':password' => (string)$utilisateur['mot_de_passe'],
+                    ':role' => (string)($utilisateur['role'] ?? 'Sportif'),
+                    ':id_user' => (int)$existing['id_user']
+                ]);
+                return;
+            }
+
+            $stmtInsert = $pdo->prepare(
+                "INSERT INTO `user` (id_user, utilisateur_id, nom, prenom, email, password, role)
+                 VALUES (:id_user, :utilisateur_id, :nom, :prenom, :email, :password, :role)"
+            );
+            $stmtInsert->execute([
+                ':id_user' => (int)$utilisateur['id'],
+                ':utilisateur_id' => (int)$utilisateur['id'],
+                ':nom' => (string)$utilisateur['nom'],
+                ':prenom' => '',
+                ':email' => (string)$utilisateur['email'],
+                ':password' => (string)$utilisateur['mot_de_passe'],
+                ':role' => (string)($utilisateur['role'] ?? 'Sportif')
+            ]);
+        } catch (PDOException $e) {
+            // Keep main utilisateurs write path resilient even if social bridge sync fails.
+        }
+    }
+
+    private static function detachFromSocialUser(PDO $pdo, $utilisateurId) {
+        if (!self::socialUserTableExists($pdo)) {
+            return;
+        }
+
+        try {
+            $stmt = $pdo->prepare("UPDATE `user` SET utilisateur_id = NULL WHERE utilisateur_id = :utilisateur_id");
+            $stmt->execute([':utilisateur_id' => (int)$utilisateurId]);
+        } catch (PDOException $e) {
+            // Ignore detach failures to preserve legacy delete behavior.
+        }
+    }
+
+    public static function syncSocialBridge(PDO $pdo, $utilisateurId) {
+        self::mirrorToSocialUser($pdo, $utilisateurId);
+    }
+
     public function save(PDO $pdo) {
         $sql = "INSERT INTO utilisateurs (nom, email, mot_de_passe, age, poids, taille, role, statut, sport_pratique, objectif, niveau, seances_semaine) 
                 VALUES (:nom, :email, :password, :age, :poids, :taille, :role, :statut, :sport, :objectif, :niveau, :seances_semaine)";
         $stmt = $pdo->prepare($sql);
-        return $stmt->execute([
+        $success = $stmt->execute([
             ':nom' => $this->nom,
             ':email' => $this->email,
             ':password' => $this->password,
@@ -77,12 +186,19 @@ class Utilisateur {
             ':niveau' => $this->niveau,
             ':seances_semaine' => $this->frequence
         ]);
+
+        if ($success) {
+            $this->id = (int)$pdo->lastInsertId();
+            self::mirrorToSocialUser($pdo, $this->id);
+        }
+
+        return $success;
     }
 
     public function update(PDO $pdo) {
         $sql = "UPDATE utilisateurs SET nom = :nom, age = :age, poids = :poids, taille = :taille, sport_pratique = :sport, objectif = :objectif, niveau = :niveau, seances_semaine = :frequence WHERE id = :id";
         $stmt = $pdo->prepare($sql);
-        return $stmt->execute([
+        $success = $stmt->execute([
             ':nom' => $this->nom,
             ':age' => $this->age,
             ':poids' => $this->poids,
@@ -93,6 +209,12 @@ class Utilisateur {
             ':frequence' => $this->frequence,
             ':id' => $this->id
         ]);
+
+        if ($success) {
+            self::mirrorToSocialUser($pdo, $this->id);
+        }
+
+        return $success;
     }
 
     public static function findByEmail(PDO $pdo, $email) {
@@ -150,6 +272,7 @@ class Utilisateur {
 
     public static function delete(PDO $pdo, $id) {
         try {
+            self::detachFromSocialUser($pdo, $id);
             $stmt = $pdo->prepare("DELETE FROM utilisateurs WHERE id = :id");
             return $stmt->execute([':id' => $id]);
         } catch (PDOException $e) {

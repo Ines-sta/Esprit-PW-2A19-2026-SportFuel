@@ -482,7 +482,11 @@ if ($action === 'edit_user' && $method === 'POST') {
             $params = [$data['nom'], $data['email'], password_hash($data['password'], PASSWORD_BCRYPT), $data['role'], $data['statut'], $data['age'] ?? 0, $data['sport'] ?? '', $data['id']];
         }
         $stmt = $pdo->prepare($sql);
-        echo json_encode(['success' => $stmt->execute($params)]);
+        $success = $stmt->execute($params);
+        if ($success) {
+            Utilisateur::syncSocialBridge($pdo, (int)$data['id']);
+        }
+        echo json_encode(['success' => $success]);
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }

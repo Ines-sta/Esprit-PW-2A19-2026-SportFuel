@@ -55,6 +55,11 @@ if ($action === 'delete') {
             
             $stmt = $pdo->prepare($sql);
             $success = $stmt->execute($params);
+
+            if ($success) {
+                Utilisateur::syncSocialBridge($pdo, (int)$data['id']);
+            }
+
             echo json_encode(['success' => $success]);
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);

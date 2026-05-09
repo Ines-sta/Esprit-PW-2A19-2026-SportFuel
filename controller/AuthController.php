@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
         $result = $auth->inscription($_POST);
         if ($result['success']) {
             if ($result['role'] === 'Admin') {
-                header('Location: ' . $basePath . '/view/admin.html');
+                header('Location: ' . $basePath . '/BackOffice/index.php');
             } else {
                 header('Location: ' . $basePath . '/view/profil.html');
             }
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
         $isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 
         if ($result['success']) {
-            $redirect = ($result['role'] === 'Admin') ? $basePath . '/view/admin.html' : $basePath . '/view/profil.html';
+            $redirect = ($result['role'] === 'Admin') ? $basePath . '/BackOffice/index.php' : $basePath . '/view/profil.html';
             if ($isAjax) {
                 echo json_encode(['success' => true, 'redirect' => $redirect]);
             } else {
