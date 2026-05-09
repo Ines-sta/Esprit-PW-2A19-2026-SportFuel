@@ -5,7 +5,7 @@
  * Supprimez ce fichier après l'installation en production.
  */
 
-require_once __DIR__ . '/controller/db_settings.php';
+require_once __DIR__ . '/Controller/db_settings.php';
 
 try {
     $pdo = new PDO("mysql:host=$DB_HOST;charset=utf8mb4", $DB_USER, $DB_PASS);
@@ -72,7 +72,7 @@ try {
             <p>La base <strong>sportfuel</strong> et la table <strong>utilisateurs</strong> ont été créées via PDO.</p>
             $adminNotice
             <p><strong>Compte Admin :</strong><br>Email : admin@sportfuel.tn<br>Mot de passe : admin123</p>
-            <a href='http://localhost/Esprit-PW-2A19-2526-SportFuel/view/index.html'>🚀 Accéder à l'application</a>
+            <a href='http://localhost/Esprit-PW-2A19-2526-SportFuel/View/index.html'>🚀 Accéder à l'application</a>
         </div>
     </body>
     </html>
@@ -89,7 +89,7 @@ try {
     <p>" . htmlspecialchars($e->getMessage()) . "</p>
     <p><strong>Solutions :</strong><br>
     1. Vérifiez que MySQL est démarré dans XAMPP<br>
-    2. Si vous avez un mot de passe MySQL, modifiez <code>controller/db_settings.php</code></p>
+    2. Si vous avez un mot de passe MySQL, modifiez <code>Controller/db_settings.php</code></p>
     </div></body></html>
     ";
 }

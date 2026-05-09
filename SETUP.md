@@ -25,7 +25,7 @@ Ne pas importer de script SQL dans phpMyAdmin : la base est créée automatiquem
 2. Une fois la page affichée avec succès, la base `sportfuel`, la table `utilisateurs` et le compte administrateur par défaut sont prêts.
 
 ### 4. Configuration (si nécessaire)
-Si votre utilisateur MySQL `root` a un mot de passe, modifiez **une seule fois** le fichier `controller/db_settings.php` :
+Si votre utilisateur MySQL `root` a un mot de passe, modifiez **une seule fois** le fichier `Controller/db_settings.php` :
 
 ```php
 $DB_PASS = "votre_mot_de_passe";
@@ -33,7 +33,7 @@ $DB_PASS = "votre_mot_de_passe";
 
 ### 5. Accès au projet
 Ouvrez votre navigateur et allez à l'adresse suivante :
-[http://localhost/SportFuel-Module1/view/index.html](http://localhost/SportFuel-Module1/view/index.html)
+[http://localhost/SportFuel-Module1/View/index.html](http://localhost/SportFuel-Module1/View/index.html)
 
 ## Notes importantes
 * **Session** : Accédez au site via `http://localhost/` et non en ouvrant les fichiers directement (évitez `file:///C:/...`).
