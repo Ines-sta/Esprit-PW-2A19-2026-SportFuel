@@ -1,112 +1,76 @@
-# SportFuel — Guide des URLs
+# SportFuel - Guide runtime actuel
 
-> Base : `http://localhost/SportFuel`
+Base locale recommandee : `http://localhost/Esprit-PW-2A19-2526-SportFuel`
 
----
+## Entrees principales
 
-## FrontOffice
+| Usage | URL |
+|------|-----|
+| Landing page statique | http://localhost/Esprit-PW-2A19-2526-SportFuel/View/index.html |
+| Connexion | http://localhost/Esprit-PW-2A19-2526-SportFuel/View/connexion.html |
+| Profil sportif | http://localhost/Esprit-PW-2A19-2526-SportFuel/View/profil.html |
+| Routeur plans FO/BO | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php |
+| BackOffice canonique | http://localhost/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php |
 
+## Plans alimentaires
+
+### FrontOffice
 | Page | URL |
 |------|-----|
-| Accueil | http://localhost/SportFuel |
-| Liste des plans | http://localhost/SportFuel?page=plans |
-| Détail plan #1 | http://localhost/SportFuel?page=detail&id=1 |
-| Détail plan #2 | http://localhost/SportFuel?page=detail&id=2 |
-| Détail plan #3 | http://localhost/SportFuel?page=detail&id=3 |
+| Accueil plans | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php |
+| Liste des plans | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php?page=plans |
+| Detail plan | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php?page=detail&id=1 |
 
----
-
-## BackOffice — Plans alimentaires
-
+### BackOffice
 | Action | URL |
 |--------|-----|
-| Dashboard / Liste des plans | http://localhost/SportFuel?page=back&action=listPlans |
-| Ajouter un plan | http://localhost/SportFuel?page=back&action=addPlan |
-| Modifier plan #1 | http://localhost/SportFuel?page=back&action=updatePlan&id=1 |
-| Modifier plan #2 | http://localhost/SportFuel?page=back&action=updatePlan&id=2 |
-| Supprimer plan #1 | http://localhost/SportFuel?page=back&action=deletePlan&id=1 |
+| Liste des plans | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=listPlans |
+| Ajouter un plan | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=addPlan |
+| Modifier un plan | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=updatePlan&id=1 |
+| Liste des repas | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=listRepas |
+| Ajouter un repas | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=addRepas |
+| Modifier un repas | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=updateRepas&id=1 |
 
----
+## Sources canoniques actuelles
 
-## BackOffice — Repas
+| Domaine | Fichier / dossier canonique |
+|--------|------------------------------|
+| Routeur plans | `index.php` |
+| Plans BO | `BackOffice/controllers/PlanAlimentaireController.php` |
+| Repas BO | `BackOffice/controllers/RepasController.php` |
+| Vues plans BO | `BackOffice/views/plans/` |
+| Vues plans FO | `FrontOffice/views/plans/` |
+| Social DB bridge | `BackOffice/models/Database.php` |
+| Schema consolide | `database/schema.sql` |
+| Migrations | `database/migrations/` |
 
-| Action | URL |
-|--------|-----|
-| Liste de tous les repas | http://localhost/SportFuel?page=back&action=listRepas |
-| Repas du plan #1 | http://localhost/SportFuel?page=back&action=listRepas&id_plan=1 |
-| Repas du plan #2 | http://localhost/SportFuel?page=back&action=listRepas&id_plan=2 |
-| Ajouter un repas | http://localhost/SportFuel?page=back&action=addRepas |
-| Modifier repas #1 | http://localhost/SportFuel?page=back&action=updateRepas&id=1 |
-| Modifier repas #2 | http://localhost/SportFuel?page=back&action=updateRepas&id=2 |
-| Supprimer repas #1 | http://localhost/SportFuel?page=back&action=deleteRepas&id=1 |
+## Archives de migration
 
----
+Les anciens fichiers remplaces pendant la migration sont conserves sous `archive/`.
+Ils ne doivent plus etre consideres comme source runtime active.
 
-## IDs disponibles en base de données
-
-### Plans (id 1 → 6)
-| ID | Nom |
-|----|-----|
-| 1  | Plan musculation semaine 1 |
-| 2  | Programme minceur printemps |
-| 3  | Maintien forme été |
-| 4  | Marathon préparation |
-| 5  | Prise de masse avancée |
-| 6  | Sèche compétition |
-
-### Repas (id 1 → 14)
-| ID | Jour | Type |
-|----|------|------|
-| 1  | Lundi | petit_dejeuner |
-| 2  | Lundi | dejeuner |
-| 3  | Lundi | diner |
-| 4  | Lundi | collation |
-| 5  | Mardi | petit_dejeuner |
-| 6  | Mardi | dejeuner |
-| 7  | Mardi | diner |
-| 8  | Mercredi | petit_dejeuner |
-| 9  | Mercredi | dejeuner |
-| 10 | Jeudi | petit_dejeuner |
-| 11 | Jeudi | dejeuner |
-| 12 | Jeudi | collation |
-| 13 | Vendredi | petit_dejeuner |
-| 14 | Vendredi | dejeuner |
-
----
-
-## Structure des fichiers
+## Structure simplifiee actuelle
 
 ```
-SportFuel/
-├── index.php                         ← Routeur principal
-├── config.php                        ← Connexion PDO
-├── sportfuel.sql                     ← Import base de données
-├── GUIDE.md                          ← Ce fichier
-├── Model/
-│   ├── PlanAlimentaire.php
-│   └── Repas.php
-├── Controller/
-│   ├── PlanAlimentaireController.php
-│   └── RepasController.php
-├── View/
-│   ├── FrontOffice/
-│   │   ├── index.php
-│   │   ├── plans.php
-│   │   └── detailPlan.php
-│   ├── BackOffice/
-│   │   ├── listPlans.php
-│   │   ├── addPlan.php
-│   │   ├── updatePlan.php
-│   │   ├── listRepas.php
-│   │   ├── addRepas.php
-│   │   └── updateRepas.php
-│   └── partials/
-│       ├── topbar.php
-│       ├── sidebar.php
-│       └── footer.php
-└── public/
-    ├── css/style.css
-    └── js/
-        ├── addPlan.js
-        └── addRepas.js
+Esprit-PW-2A19-2526-SportFuel/
+|- index.php
+|- config.php
+|- database/
+|  |- schema.sql
+|  \- migrations/
+|- BackOffice/
+|  |- controllers/
+|  |- models/
+|  |- partials/
+|  |- views/
+|  \- index.php
+|- FrontOffice/
+|  |- controllers/
+|  |- models/
+|  |- partials/
+|  \- views/
+|- Controller/
+|- Model/
+|- View/
+\- archive/
 ```

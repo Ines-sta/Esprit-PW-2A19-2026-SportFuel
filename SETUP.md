@@ -1,41 +1,38 @@
 # Guide d'installation - SportFuel
 
-Ce guide vous aidera à configurer et lancer le projet SportFuel sur votre ordinateur local.
+Ce guide correspond a la structure canonique actuelle du projet `Esprit-PW-2A19-2526-SportFuel`.
 
-## Pré-requis
-1. **XAMPP** ou **WAMP** installé sur votre ordinateur.
-2. Un navigateur Web moderne (Chrome, Edge, Firefox).
+## Pre-requis
+1. **WAMP** ou **XAMPP** avec Apache + MySQL.
+2. PHP avec PDO MySQL active.
+3. Un navigateur moderne.
 
-## Étapes d'installation
+## Installation rapide
 
-### 1. Préparation des fichiers
-Déplacez tout le dossier du projet (`SportFuel-Module1`) dans le dossier "serveur" de votre logiciel :
-* **XAMPP** : `C:\xampp\htdocs\`
+### 1. Placer le projet dans le serveur local
+Copiez le dossier `Esprit-PW-2A19-2526-SportFuel` dans :
 * **WAMP** : `C:\wamp64\www\`
+* **XAMPP** : `C:\xampp\htdocs\`
 
-### 2. Démarrage du serveur
-1. Ouvrez le panneau de contrôle de XAMPP/WAMP.
-2. Démarrez les services **Apache** et **MySQL**.
+### 2. Demarrer Apache et MySQL
+Lancez votre stack locale puis verifiez que les services Apache et MySQL sont actifs.
 
-### 3. Création de la base de données (PDO, sans fichier SQL)
-Ne pas importer de script SQL dans phpMyAdmin : la base est créée automatiquement par PHP (PDO).
+### 3. Initialiser la base
+Le projet dispose d'un bootstrap PDO pour la table `utilisateurs` et le compte admin par defaut.
 
-1. Ouvrez dans le navigateur :  
-   `http://localhost/SportFuel-Module1/init_db.php`
-2. Une fois la page affichée avec succès, la base `sportfuel`, la table `utilisateurs` et le compte administrateur par défaut sont prêts.
+1. Ouvrez : `http://localhost/Esprit-PW-2A19-2526-SportFuel/init_db.php`
+2. Si besoin, adaptez d'abord `Controller/db_settings.php`.
+3. Pour la structure consolidee complete, utilisez aussi `database/schema.sql`.
+4. Pour une base existante, appliquez les scripts de `database/migrations/` selon le besoin.
 
-### 4. Configuration (si nécessaire)
-Si votre utilisateur MySQL `root` a un mot de passe, modifiez **une seule fois** le fichier `Controller/db_settings.php` :
+### 4. Points d'entree utiles
+* Accueil statique : `http://localhost/Esprit-PW-2A19-2526-SportFuel/View/index.html`
+* Connexion : `http://localhost/Esprit-PW-2A19-2526-SportFuel/View/connexion.html`
+* Routeur plans : `http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php`
+* BackOffice canonique : `http://localhost/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php`
 
-```php
-$DB_PASS = "votre_mot_de_passe";
-```
-
-### 5. Accès au projet
-Ouvrez votre navigateur et allez à l'adresse suivante :
-[http://localhost/SportFuel-Module1/View/index.html](http://localhost/SportFuel-Module1/View/index.html)
-
-## Notes importantes
-* **Session** : Accédez au site via `http://localhost/` et non en ouvrant les fichiers directement (évitez `file:///C:/...`).
-* **Erreurs** : Si vous rencontrez une erreur de connexion, vérifiez que MySQL est bien démarré.
-* **Sécurité** : Après installation sur un serveur réel, supprimez ou protégez `init_db.php` pour éviter qu’il soit réexécuté publiquement.
+## Notes
+* Evitez d'ouvrir les pages directement en `file:///...`.
+* `database/schema.sql` est la source canonique de schema pendant la migration.
+* Les anciens fichiers SQL racine sont conserves temporairement pour compatibilite.
+* Apres installation sur un vrai serveur, protegez ou supprimez `init_db.php`.

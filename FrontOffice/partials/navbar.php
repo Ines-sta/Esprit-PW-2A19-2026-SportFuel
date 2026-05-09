@@ -1,1 +1,1 @@
-<?php include 'View/partials/topbar.php'; ?>
+<?php include __DIR__ . '/topbar.php'; ?>

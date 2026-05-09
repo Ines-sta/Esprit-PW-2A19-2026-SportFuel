@@ -47,25 +47,44 @@ git clone https://github.com/Ines-sta/Esprit-PW-2A19-2526-SportFuel.git
 3. **Démarrer WAMP** : Lancez WampServer. L'icône dans la barre des tâches doit être **verte** (Apache + MySQL actifs).
    - Si l'icône est **orange** ou **rouge**, faites clic gauche → *Redémarrer les services*.
 
-### 3. Créer la base de données via phpMyAdmin
+### 3. Base de donnees
 
-1. Ouvrez votre navigateur et accédez à **http://localhost/phpmyadmin** (ou `http://localhost/phpmyadmin5.2.3/` selon votre version).
-2. Connectez-vous avec :
-   - **Utilisateur** : `root`
-   - **Mot de passe** : *(laisser vide)*
-3. Cliquez sur **« Nouvelle base de données »** dans le panneau de gauche.
-4. Nommez la base **`sportfuel`** et cliquez sur **Créer**.
+Le projet combine maintenant :
 
-   ```
+- un bootstrap rapide via `init_db.php` pour `utilisateurs`
+- un schema consolide dans `database/schema.sql`
+- des migrations SQL dans `database/migrations/`
+
+Flux recommande :
+
+1. ajuster `Controller/db_settings.php` si besoin
+2. lancer `http://localhost/Esprit-PW-2A19-2526-SportFuel/init_db.php`
+3. appliquer `database/schema.sql` pour la structure complete
+4. appliquer les migrations de `database/migrations/` sur une base existante si necessaire
 
 ### 4. Accéder à l'application
 
 | Page | URL |
 |---|---|
+| **Landing / portail** | http://localhost/Esprit-PW-2A19-2526-SportFuel/View/index.html |
+| **Connexion** | http://localhost/Esprit-PW-2A19-2526-SportFuel/View/connexion.html |
+| **Routeur plans** | http://localhost/Esprit-PW-2A19-2526-SportFuel/index.php |
+| **Back Office canonique** | http://localhost/Esprit-PW-2A19-2526-SportFuel/BackOffice/index.php |
 | **Back Office — Aliments** | http://localhost/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/aliment_controller.php |
 | **Front Office — Catalogue** | http://localhost/Esprit-PW-2A19-2526-SportFuel/FrontOffice/controllers/aliment_controller.php |
 
 - Option module utilisateurs: placez le projet dans `www`/`htdocs`, demarrez Apache+MySQL, puis lancez `init_db.php` si vous souhaitez initialiser la base automatiquement.
+
+## Etat actuel de l'architecture
+
+La migration en cours a etabli les sources canoniques suivantes :
+
+- `BackOffice/` et `FrontOffice/` pour le runtime principal
+- `index.php` pour le routage des plans et repas
+- `database/schema.sql` comme source canonique de schema
+- `archive/` pour les anciens fichiers preserves pendant la migration
+
+Les dossiers racine `Controller/`, `Model/` et `View/` existent encore surtout pour compatibilite progressive sur certains flux historiques.
 
 ## Structure du projet
 
