@@ -11,7 +11,7 @@ class Publication {
     public function getAllPublications() {
         $sql = "SELECT p.*, u.nom, u.prenom, u.email
                 FROM publication p
-                LEFT JOIN `user` u ON p.id_user = u.user_id
+                LEFT JOIN `user` u ON p.id_user = u.id_user
                 ORDER BY p.date DESC";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll();

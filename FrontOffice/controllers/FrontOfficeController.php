@@ -257,7 +257,7 @@ class FrontOfficeController {
     private function isPremiumUser($userId) {
         try {
             $pdo = $this->publicationModel->getPdo();
-            $stmt = $pdo->prepare("SELECT * FROM `user` WHERE user_id = ? LIMIT 1");
+            $stmt = $pdo->prepare("SELECT * FROM `user` WHERE id_user = ? LIMIT 1");
             $stmt->execute([(int)$userId]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$user) {
@@ -286,18 +286,18 @@ class FrontOfficeController {
     private function resolveSportifId() {
         // Keep configured id only if that user is a Sportif.
         $pdo = $this->publicationModel->getPdo();
-        $stmtConfigured = $pdo->prepare("SELECT user_id FROM `user` WHERE user_id = ? AND role = 'Sportif' LIMIT 1");
+        $stmtConfigured = $pdo->prepare("SELECT id_user FROM `user` WHERE id_user = ? AND role = 'Sportif' LIMIT 1");
         $stmtConfigured->execute([$this->sportif_id]);
         $configuredUser = $stmtConfigured->fetch();
-        if ($configuredUser && isset($configuredUser['user_id'])) {
-            return (int)$configuredUser['user_id'];
+        if ($configuredUser && isset($configuredUser['id_user'])) {
+            return (int)$configuredUser['id_user'];
         }
 
         // Fallback to first user with role Sportif (not just first user in table).
-        $stmtSportif = $pdo->query("SELECT user_id FROM `user` WHERE role = 'Sportif' ORDER BY user_id ASC LIMIT 1");
+        $stmtSportif = $pdo->query("SELECT id_user FROM `user` WHERE role = 'Sportif' ORDER BY id_user ASC LIMIT 1");
         $sportif = $stmtSportif->fetch();
-        if ($sportif && isset($sportif['user_id'])) {
-            return (int)$sportif['user_id'];
+        if ($sportif && isset($sportif['id_user'])) {
+            return (int)$sportif['id_user'];
         }
 
         return 0;

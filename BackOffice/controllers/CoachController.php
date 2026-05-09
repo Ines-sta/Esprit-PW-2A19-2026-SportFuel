@@ -132,7 +132,7 @@ class CoachController {
 
             $sql = "SELECT p.*, u.nom, u.prenom
                     FROM publication p
-                    JOIN `user` u ON p.id_user = u.user_id
+                    JOIN `user` u ON p.id_user = u.id_user
                     WHERE u.role = 'Sportif'";
             $params = [];
 
@@ -156,7 +156,7 @@ class CoachController {
                 if ($focus === 'nutrition' && $sections['nutrition'] === '') {
                     continue;
                 }
-                $stmt_c = $pdo->prepare("SELECT c.*, u.nom, u.prenom FROM commentaire c JOIN `user` u ON c.id_user = u.user_id WHERE c.id_pub = ? ORDER BY c.date ASC");
+                $stmt_c = $pdo->prepare("SELECT c.*, u.nom, u.prenom FROM commentaire c JOIN `user` u ON c.id_user = u.id_user WHERE c.id_pub = ? ORDER BY c.date ASC");
                 $stmt_c->execute([$p['id_pub']]);
                 $publicationComments = $stmt_c->fetchAll();
                 foreach ($publicationComments as &$pubComment) {
@@ -178,7 +178,7 @@ class CoachController {
             $data['publications'] = $publications;
             // Fetch comments linked to displayed publications (all authors)
             if ($focus === '') {
-                $stmt_comments = $pdo->prepare("SELECT c.*, u.nom, u.prenom FROM commentaire c JOIN `user` u ON c.id_user = u.user_id ORDER BY c.date DESC");
+                $stmt_comments = $pdo->prepare("SELECT c.*, u.nom, u.prenom FROM commentaire c JOIN `user` u ON c.id_user = u.id_user ORDER BY c.date DESC");
                 $stmt_comments->execute();
                 $allComments = $stmt_comments->fetchAll();
 
@@ -201,7 +201,7 @@ class CoachController {
                     $placeholders = implode(',', array_fill(0, count($publicationIds), '?'));
                     $sql = "SELECT c.*, u.nom, u.prenom
                             FROM commentaire c
-                            JOIN `user` u ON c.id_user = u.user_id
+                            JOIN `user` u ON c.id_user = u.id_user
                             WHERE c.id_pub IN ($placeholders)
                             ORDER BY c.date DESC";
                     $stmt_comments = $pdo->prepare($sql);

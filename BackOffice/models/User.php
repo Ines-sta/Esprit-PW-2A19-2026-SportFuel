@@ -9,12 +9,12 @@ class User {
     }
 
     public function getAllUsers() {
-        $stmt = $this->pdo->query("SELECT user_id AS id_user, prenom, nom, email FROM `user`");
+        $stmt = $this->pdo->query("SELECT id_user, prenom, nom, email FROM `user`");
         return $stmt->fetchAll();
     }
 
     public function getUserById($id) {
-        $stmt = $this->pdo->prepare("SELECT user_id AS id_user, prenom, nom, email FROM `user` WHERE user_id = ?");
+        $stmt = $this->pdo->prepare("SELECT id_user, prenom, nom, email FROM `user` WHERE id_user = ?");
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
