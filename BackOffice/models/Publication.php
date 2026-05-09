@@ -9,9 +9,10 @@ class Publication {
     }
 
     public function getAllPublications() {
-        $sql = "SELECT p.*, u.nom, u.prenom, u.email
+        $sql = "SELECT p.*, COALESCE(ut.nom, u.nom) AS nom, COALESCE(u.prenom, '') AS prenom, COALESCE(ut.email, u.email) AS email
                 FROM publication p
                 LEFT JOIN `user` u ON p.id_user = u.id_user
+            LEFT JOIN utilisateurs ut ON u.utilisateur_id = ut.id
                 ORDER BY p.date DESC";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll();

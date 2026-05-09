@@ -9,12 +9,35 @@ class User {
     }
 
     public function getAllUsers() {
-        $stmt = $this->pdo->query("SELECT id_user, prenom, nom, email FROM `user`");
+        $stmt = $this->pdo->query(
+            "SELECT
+                u.id_user,
+                u.utilisateur_id,
+                COALESCE(ut.nom, u.nom) AS nom,
+                COALESCE(u.prenom, '') AS prenom,
+                COALESCE(ut.email, u.email) AS email,
+                COALESCE(ut.role, u.role, 'Sportif') AS role,
+                ut.statut AS statut
+             FROM `user` u
+             LEFT JOIN utilisateurs ut ON u.utilisateur_id = ut.id"
+        );
         return $stmt->fetchAll();
     }
 
     public function getUserById($id) {
-        $stmt = $this->pdo->prepare("SELECT id_user, prenom, nom, email FROM `user` WHERE id_user = ?");
+        $stmt = $this->pdo->prepare(
+            "SELECT
+                u.id_user,
+                u.utilisateur_id,
+                COALESCE(ut.nom, u.nom) AS nom,
+                COALESCE(u.prenom, '') AS prenom,
+                COALESCE(ut.email, u.email) AS email,
+                COALESCE(ut.role, u.role, 'Sportif') AS role,
+                ut.statut AS statut
+             FROM `user` u
+             LEFT JOIN utilisateurs ut ON u.utilisateur_id = ut.id
+             WHERE u.id_user = ?"
+        );
         $stmt->execute([$id]);
         return $stmt->fetch();
     }

@@ -130,14 +130,18 @@ class CoachController {
                 $sort = 'desc';
             }
 
-            $sql = "SELECT p.*, u.nom, u.prenom
+                $sql = "SELECT
+                    p.*,
+                    COALESCE(ut.nom, u.nom) AS nom,
+                    COALESCE(u.prenom, '') AS prenom
                     FROM publication p
                     JOIN `user` u ON p.id_user = u.id_user
-                    WHERE u.role = 'Sportif'";
+                    LEFT JOIN utilisateurs ut ON u.utilisateur_id = ut.id
+                    WHERE COALESCE(ut.role, u.role, 'Sportif') = 'Sportif'";
             $params = [];
 
             if ($search !== '') {
-                $sql .= " AND (u.nom LIKE ? OR u.prenom LIKE ?)";
+                $sql .= " AND (COALESCE(ut.nom, u.nom) LIKE ? OR COALESCE(u.prenom, '') LIKE ?)";
                 $searchLike = '%' . $search . '%';
                 $params[] = $searchLike;
                 $params[] = $searchLike;
@@ -156,7 +160,7 @@ class CoachController {
                 if ($focus === 'nutrition' && $sections['nutrition'] === '') {
                     continue;
                 }
-                $stmt_c = $pdo->prepare("SELECT c.*, u.nom, u.prenom FROM commentaire c JOIN `user` u ON c.id_user = u.id_user WHERE c.id_pub = ? ORDER BY c.date ASC");
+                $stmt_c = $pdo->prepare("SELECT c.*, COALESCE(ut.nom, u.nom) AS nom, COALESCE(u.prenom, '') AS prenom FROM commentaire c JOIN `user` u ON c.id_user = u.id_user LEFT JOIN utilisateurs ut ON u.utilisateur_id = ut.id WHERE c.id_pub = ? ORDER BY c.date ASC");
                 $stmt_c->execute([$p['id_pub']]);
                 $publicationComments = $stmt_c->fetchAll();
                 foreach ($publicationComments as &$pubComment) {
@@ -178,7 +182,7 @@ class CoachController {
             $data['publications'] = $publications;
             // Fetch comments linked to displayed publications (all authors)
             if ($focus === '') {
-                $stmt_comments = $pdo->prepare("SELECT c.*, u.nom, u.prenom FROM commentaire c JOIN `user` u ON c.id_user = u.id_user ORDER BY c.date DESC");
+                $stmt_comments = $pdo->prepare("SELECT c.*, COALESCE(ut.nom, u.nom) AS nom, COALESCE(u.prenom, '') AS prenom FROM commentaire c JOIN `user` u ON c.id_user = u.id_user LEFT JOIN utilisateurs ut ON u.utilisateur_id = ut.id ORDER BY c.date DESC");
                 $stmt_comments->execute();
                 $allComments = $stmt_comments->fetchAll();
 
@@ -199,9 +203,10 @@ class CoachController {
                     $data['commentaires'] = [];
                 } else {
                     $placeholders = implode(',', array_fill(0, count($publicationIds), '?'));
-                    $sql = "SELECT c.*, u.nom, u.prenom
+                        $sql = "SELECT c.*, COALESCE(ut.nom, u.nom) AS nom, COALESCE(u.prenom, '') AS prenom
                             FROM commentaire c
                             JOIN `user` u ON c.id_user = u.id_user
+                            LEFT JOIN utilisateurs ut ON u.utilisateur_id = ut.id
                             WHERE c.id_pub IN ($placeholders)
                             ORDER BY c.date DESC";
                     $stmt_comments = $pdo->prepare($sql);
