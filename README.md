@@ -102,7 +102,7 @@ Esprit-PW-2A19-2526-SportFuel/
 │       ├── aliments/
 │       │   └── aliments.php
 │       └── courses/
-│           └── courses.html
+│           └── courses.php
 ├── BackOffice/
 │   ├── assets/
 │   │   ├── css/
@@ -117,7 +117,7 @@ Esprit-PW-2A19-2526-SportFuel/
 │       ├── aliments/
 │       │   └── aliments.php
 │       └── courses/
-│           └── courses.html
+│           └── courses.php
 └── README.md
 ```
 
@@ -173,7 +173,7 @@ Pour intégrer le template SportFuel dans votre module, suivez ces étapes :
 
 1. Créez vos pages dans `FrontOffice/views/votre-module/` :
    ```
-   FrontOffice/views/votre-module/page.html
+    FrontOffice/views/votre-module/page.php
    ```
 
 2. Utilisez ce squelette HTML :
@@ -198,8 +198,8 @@ Pour intégrer le template SportFuel dans votre module, suivez ces étapes :
            <li><a href="#">Dashboard</a></li>
            <li><a href="#">Mon plan</a></li>
            <li><a href="#">Entraînements</a></li>
-           <li><a href="../courses/courses.html">Courses</a></li>
-           <li><a href="../aliments/aliments.html">Aliments</a></li>
+           <li><a href="/Esprit-PW-2A19-2526-SportFuel/FrontOffice/controllers/course_controller.php">Courses</a></li>
+           <li><a href="/Esprit-PW-2A19-2526-SportFuel/FrontOffice/controllers/aliment_controller.php">Aliments</a></li>
            <!-- Ajoutez votre lien ici avec class="active" -->
        </ul>
        <div class="navbar-user">IN</div>
@@ -232,7 +232,7 @@ Pour intégrer le template SportFuel dans votre module, suivez ces étapes :
 
 1. Créez vos pages dans `BackOffice/views/votre-module/` :
    ```
-   BackOffice/views/votre-module/page.html
+    BackOffice/views/votre-module/page.php
    ```
 
 2. Utilisez ce squelette HTML :
@@ -263,8 +263,8 @@ Pour intégrer le template SportFuel dans votre module, suivez ces étapes :
            <li><a href="#"><span class="icon">👥</span> Utilisateurs</a></li>
            <li><a href="#"><span class="icon">🍽️</span> Plans alimentaires</a></li>
            <li><a href="#"><span class="icon">🏋️</span> Entraînements</a></li>
-           <li><a href="../aliments/aliments.html"><span class="icon">🥗</span> Aliments & courses</a></li>
-           <li><a href="../courses/courses.html"><span class="icon">🛒</span> Listes de courses</a></li>
+           <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/aliment_controller.php"><span class="icon">🥗</span> Aliments & courses</a></li>
+           <li><a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/course_controller.php"><span class="icon">🛒</span> Listes de courses</a></li>
            <li><a href="#"><span class="icon">🤝</span> Espace coach</a></li>
            <!-- Ajoutez votre lien ici avec class="active" -->
        </ul>
@@ -312,7 +312,7 @@ Pour intégrer le template SportFuel dans votre module, suivez ces étapes :
 ### Règles importantes
 
 - **Chemin CSS** : Depuis `views/votre-module/`, le chemin est toujours `../../assets/css/style.css`
-- **Liens entre pages** : Utilisez `../autre-module/page.html` pour naviguer entre modules
+- **Liens entre pages** : privilégiez les routes contrôleur actives ou les URL canoniques du projet
 - **Ne pas modifier** les fichiers `style.css` existants — ajoutez vos styles spécifiques dans un fichier séparé si nécessaire
 - **Respecter l'architecture MVC** : vues dans `views/`, logique dans `controllers/`, données dans `models/`
 
