@@ -1,25 +1,24 @@
 <?php
-session_start();
-require_once __DIR__ . '/../../config.php';
-require_once __DIR__ . '/../../Model/users/Utilisateur.php';
 require_once __DIR__ . '/../partials/avatar.php';
 
-$pdo = Config::getConnexion();
-
-if (!isset($_SESSION['user_email'])) {
-    header('Location: /Esprit-PW-2A19-2526-SportFuel/View/auth/connexion.html');
-    exit();
+if (!isset($viewData) || !is_array($viewData)) {
+  require_once __DIR__ . '/../../Controller/users/ProfilePageController.php';
+  $profilePageController = new ProfilePageController();
+  $viewData = $profilePageController->getViewData();
 }
 
-$user = Utilisateur::findByEmail($pdo, $_SESSION['user_email']);
-if (!$user) {
-    session_destroy();
-    header('Location: /Esprit-PW-2A19-2526-SportFuel/View/auth/connexion.html');
-    exit();
-}
-$imc = ($user->getTaille() > 0) ? round($user->getPoids() / (($user->getTaille() / 100) ** 2), 1) : 0;
-$photoProfilUrl = (string)($user->getPhotoProfilUrl() ?? '');
-$initial = sportfuel_avatar_initials($user->getNom());
+$user = $viewData['user'];
+$imc = $viewData['imc'];
+$photoProfilUrl = $viewData['photoProfilUrl'];
+$initial = $viewData['initial'];
+$roleLabel = $viewData['roleLabel'];
+$isBackofficeRole = $viewData['isBackofficeRole'];
+$isCoachRole = $viewData['isCoachRole'];
+$isAdminRole = $viewData['isAdminRole'];
+$isSportifRole = $viewData['isSportifRole'];
+$coachStats = $viewData['coachStats'];
+$adminStats = $viewData['adminStats'];
+$sportifActivities = $viewData['sportifActivities'];
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -28,13 +27,31 @@ $initial = sportfuel_avatar_initials($user->getNom());
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mon Profil — SportFuel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/profil.css">
+  <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
+  <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/View/users/assets/profil.css">
 </head>
 <body>
-  <div class="main">
-    <div class="content">
+  <?php if ($isBackofficeRole): ?>
+  <div class="app-layout">
+    <?php include __DIR__ . '/../partials/backoffice_sidebar.php'; ?>
+    <div class="main-content profile-main-content">
+      <div class="page-header">
+        <h1>Mon Profil</h1>
+        <div class="page-date">Tableau personnel SportFuel</div>
+      </div>
+  <?php else: ?>
+    <?php include __DIR__ . '/../partials/navbar.php'; ?>
+    <div class="main-content profile-main-content">
+      <div class="page-header">
+        <h1>Mon Profil</h1>
+        <div class="page-date">Espace personnel SportFuel</div>
+      </div>
+  <?php endif; ?>
+      <div class="profile-page">
+    <div class="profile-content">
+      <input type="hidden" id="profileRole" value="<?= htmlspecialchars($roleLabel, ENT_QUOTES, 'UTF-8') ?>">
       <div class="page-actions">
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout" style="text-decoration:none; color:#dc2626; border-color:#fee2e2; background:#fef2f2; margin-right: 15px;">🚪 Déconnexion</a>
+        <a class="btn btn-outline btn-logout" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout">Déconnexion</a>
         <button class="btn btn-outline" onclick="toggleEdit()">✏️ Modifier</button>
         <button class="btn btn-primary" onclick="saveProfile()">💾 Enregistrer</button>
       </div>
@@ -55,24 +72,62 @@ $initial = sportfuel_avatar_initials($user->getNom());
           <div class="hero-name"><?= htmlspecialchars($user->getNom()) ?></div>
           <div class="hero-email"><?= htmlspecialchars($user->getEmail()) ?></div>
           <div class="hero-tags">
-            <div class="hero-tag">🏃 <?= htmlspecialchars($user->getSport() ?: 'Sportif') ?></div>
-            <div class="hero-tag orange">🎯 <?= htmlspecialchars($user->getObjectif() ?: 'Objectif') ?></div>
-            <div class="hero-tag">⭐ <?= htmlspecialchars($user->getNiveau() ?: 'Niveau') ?></div>
+            <?php if ($isSportifRole): ?>
+              <div class="hero-tag">🏃 <?= htmlspecialchars($user->getSport() ?: 'Sportif') ?></div>
+              <div class="hero-tag orange">🎯 <?= htmlspecialchars($user->getObjectif() ?: 'Objectif') ?></div>
+              <div class="hero-tag">⭐ <?= htmlspecialchars($user->getNiveau() ?: 'Niveau') ?></div>
+            <?php elseif ($isCoachRole): ?>
+              <div class="hero-tag">🧭 Coach</div>
+              <div class="hero-tag orange">👥 <?= (int)$coachStats['assigned_athletes'] ?> athlètes suivis</div>
+              <div class="hero-tag">📌 <?= (int)$coachStats['pending_publications'] ?> demandes en attente</div>
+            <?php else: ?>
+              <div class="hero-tag">🛡️ Admin</div>
+              <div class="hero-tag orange">👥 <?= (int)$adminStats['total_users'] ?> utilisateurs</div>
+              <div class="hero-tag">📌 <?= (int)$adminStats['pending_publications'] ?> publications en attente</div>
+            <?php endif; ?>
           </div>
         </div>
         <div class="hero-stats">
-          <div class="hero-stat">
-            <div class="hero-stat-val"><?= htmlspecialchars($user->getPoids()) ?></div>
-            <div class="hero-stat-label">kg</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-val"><?= htmlspecialchars($user->getTaille()) ?></div>
-            <div class="hero-stat-label">cm</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-val"><?= htmlspecialchars($user->getAge()) ?></div>
-            <div class="hero-stat-label">ans</div>
-          </div>
+          <?php if ($isSportifRole): ?>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= htmlspecialchars($user->getPoids()) ?></div>
+              <div class="hero-stat-label">kg</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= htmlspecialchars($user->getTaille()) ?></div>
+              <div class="hero-stat-label">cm</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= htmlspecialchars($user->getAge()) ?></div>
+              <div class="hero-stat-label">ans</div>
+            </div>
+          <?php elseif ($isCoachRole): ?>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= (int)$coachStats['assigned_athletes'] ?></div>
+              <div class="hero-stat-label">athlètes</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= (int)$coachStats['recent_workouts'] ?></div>
+              <div class="hero-stat-label">séances 7j</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= (int)$coachStats['completion_rate'] ?>%</div>
+              <div class="hero-stat-label">adherence</div>
+            </div>
+          <?php else: ?>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= (int)$adminStats['total_users'] ?></div>
+              <div class="hero-stat-label">utilisateurs</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= (int)$adminStats['coach_count'] ?></div>
+              <div class="hero-stat-label">coachs</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-val"><?= (int)$adminStats['sportif_count'] ?></div>
+              <div class="hero-stat-label">sportifs</div>
+            </div>
+          <?php endif; ?>
         </div>
       </div>
 
@@ -87,7 +142,7 @@ $initial = sportfuel_avatar_initials($user->getNom());
               <div class="field-row">
                 <div class="field" style="flex: 1;">
                   <div class="field-label">Nom complet</div>
-                  <input class="field-input" type="text" value="<?= htmlspecialchars($user->getNom()) ?>" id="nom" disabled
+                  <input class="field-input" type="text" value="<?= htmlspecialchars($user->getNom()) ?>" id="nom" data-editable="1" disabled
                          pattern="[A-Za-zÀ-ÿ\s]+" title="Lettres et espaces uniquement">
                 </div>
                 <div class="field" style="flex: 1;">
@@ -103,6 +158,7 @@ $initial = sportfuel_avatar_initials($user->getNom());
           </div>
         </div>
 
+        <?php if ($isSportifRole): ?>
         <div class="card">
           <div class="card-header">
             <div class="card-title">⚖️ Données physiques</div>
@@ -163,7 +219,7 @@ $initial = sportfuel_avatar_initials($user->getNom());
               </div>
               <div class="field">
                 <div class="field-label">Objectif</div>
-                <select class="field-select" id="objectif" disabled>
+                <select class="field-select" id="objectif" data-editable="1" disabled>
                   <option <?= $user->getObjectif() == 'Performance' ? 'selected' : '' ?>>Performance</option>
                   <option <?= $user->getObjectif() == 'Prise de masse' ? 'selected' : '' ?>>Prise de masse</option>
                   <option <?= $user->getObjectif() == 'Perte de poids' ? 'selected' : '' ?>>Perte de poids</option>
@@ -174,7 +230,7 @@ $initial = sportfuel_avatar_initials($user->getNom());
               <div class="field-row">
                 <div class="field">
                   <div class="field-label">Niveau</div>
-                  <select class="field-select" id="niveau" disabled>
+                  <select class="field-select" id="niveau" data-editable="1" disabled>
                     <option <?= $user->getNiveau() == 'Avancé' ? 'selected' : '' ?>>Avancé</option>
                     <option <?= $user->getNiveau() == 'Intermédiaire' ? 'selected' : '' ?>>Intermédiaire</option>
                     <option <?= $user->getNiveau() == 'Débutant' ? 'selected' : '' ?>>Débutant</option>
@@ -182,7 +238,7 @@ $initial = sportfuel_avatar_initials($user->getNom());
                 </div>
                 <div class="field">
                   <div class="field-label">Séances/sem</div>
-                  <input class="field-input" type="text" id="frequence" value="<?= htmlspecialchars($user->getFrequence() > 0 ? $user->getFrequence() : 5) ?>" disabled
+                  <input class="field-input" type="text" id="frequence" data-editable="1" value="<?= htmlspecialchars($user->getFrequence() > 0 ? $user->getFrequence() : 5) ?>" disabled
                          inputmode="numeric" pattern="[0-9]*">
                 </div>
               </div>
@@ -195,34 +251,95 @@ $initial = sportfuel_avatar_initials($user->getNom());
             <div class="card-title">📈 Activité récente</div>
           </div>
           <div class="card-body">
+            <?php if (!empty($sportifActivities)): ?>
             <div class="field-group">
+              <?php foreach ($sportifActivities as $activity): ?>
               <div style="display:flex; align-items:center; gap:14px; padding:12px; background:var(--cream); border-radius:12px;">
-                <div style="font-size:28px;">🥗</div>
+                <div style="font-size:28px;"><?php echo htmlspecialchars((string)($activity['icon'] ?? '📌'), ENT_QUOTES, 'UTF-8'); ?></div>
                 <div>
-                  <div style="font-size:14px; font-weight:600;">Plan alimentaire généré</div>
-                  <div style="font-size:12px; color:var(--muted);">Semaine 3 · Marathon · 1 840 kcal</div>
+                  <div style="font-size:14px; font-weight:600;"><?php echo htmlspecialchars(((string)($activity['label'] ?? 'Activité')) . ' · ' . ((string)($activity['title'] ?? '-')), ENT_QUOTES, 'UTF-8'); ?></div>
+                  <div style="font-size:12px; color:var(--muted);"><?php echo htmlspecialchars((string)($activity['detail'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></div>
                 </div>
-                <div style="margin-left:auto; font-size:12px; color:var(--muted);">Aujourd'hui</div>
+                <div style="margin-left:auto; font-size:12px; color:var(--muted);"><?php echo htmlspecialchars((string)($activity['relative_day'] ?? '-'), ENT_QUOTES, 'UTF-8'); ?></div>
               </div>
-              <div style="display:flex; align-items:center; gap:14px; padding:12px; background:var(--cream); border-radius:12px;">
-                <div style="font-size:28px;">🏃</div>
-                <div>
-                  <div style="font-size:14px; font-weight:600;">Séance enregistrée</div>
-                  <div style="font-size:12px; color:var(--muted);">Course · 12 km · 580 kcal brûlées</div>
-                </div>
-                <div style="margin-left:auto; font-size:12px; color:var(--muted);">Hier</div>
-              </div>
-              <div style="display:flex; align-items:center; gap:14px; padding:12px; background:var(--cream); border-radius:12px;">
-                <div style="font-size:28px;">🛒</div>
-                <div>
-                  <div style="font-size:14px; font-weight:600;">Liste de courses générée</div>
-                  <div style="font-size:12px; color:var(--muted);">14 produits biologiques locaux</div>
-                </div>
-                <div style="margin-left:auto; font-size:12px; color:var(--muted);">Il y a 2j</div>
-              </div>
+              <?php endforeach; ?>
+            </div>
+            <?php else: ?>
+              <p class="muted-note">Aucune activité récente pour le moment.</p>
+            <?php endif; ?>
+          </div>
+        </div>
+        <?php elseif ($isCoachRole): ?>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📊 Vue Coach</div>
+          </div>
+          <div class="card-body">
+            <div class="metric-grid">
+              <div class="metric-card"><strong><?= (int)$coachStats['assigned_athletes'] ?></strong><span>Athlètes assignés</span></div>
+              <div class="metric-card"><strong><?= (int)$coachStats['pending_publications'] ?></strong><span>Demandes en attente</span></div>
+              <div class="metric-card"><strong><?= (int)$coachStats['recent_workouts'] ?></strong><span>Séances sur 7 jours</span></div>
+              <div class="metric-card"><strong><?= (int)$coachStats['completion_rate'] ?>%</strong><span>Taux de complétion</span></div>
             </div>
           </div>
         </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">👥 Athlètes récents</div>
+          </div>
+          <div class="card-body">
+            <?php if (!empty($coachStats['athletes'])): ?>
+              <ul class="list-card">
+                <?php foreach ($coachStats['athletes'] as $ath): ?>
+                  <li>
+                    <strong><?= htmlspecialchars((string)($ath['nom'] ?? 'Athlète')) ?></strong>
+                    <span><?= htmlspecialchars((string)($ath['sport_pratique'] ?? 'Sport')) ?> · <?= htmlspecialchars((string)($ath['niveau'] ?? 'Niveau')) ?></span>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            <?php else: ?>
+              <p class="muted-note">Aucun athlète assigné pour le moment.</p>
+            <?php endif; ?>
+          </div>
+        </div>
+        <?php elseif ($isAdminRole): ?>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🧩 Vue Administrateur</div>
+          </div>
+          <div class="card-body">
+            <div class="metric-grid">
+              <div class="metric-card"><strong><?= (int)$adminStats['total_users'] ?></strong><span>Utilisateurs</span></div>
+              <div class="metric-card"><strong><?= (int)$adminStats['coach_count'] ?></strong><span>Coachs</span></div>
+              <div class="metric-card"><strong><?= (int)$adminStats['sportif_count'] ?></strong><span>Sportifs</span></div>
+              <div class="metric-card"><strong><?= (int)$adminStats['active_this_month'] ?></strong><span>Actifs ce mois</span></div>
+              <div class="metric-card"><strong><?= (int)$adminStats['pending_publications'] ?></strong><span>Publications en attente</span></div>
+              <div class="metric-card"><strong><?= (int)$adminStats['assignments_count'] ?></strong><span>Assignations coach-sportif</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🗂️ Derniers utilisateurs</div>
+          </div>
+          <div class="card-body">
+            <?php if (!empty($adminStats['recent_users'])): ?>
+              <ul class="list-card">
+                <?php foreach ($adminStats['recent_users'] as $recentUser): ?>
+                  <li>
+                    <strong><?= htmlspecialchars((string)($recentUser['nom'] ?? 'Utilisateur')) ?></strong>
+                    <span><?= htmlspecialchars((string)($recentUser['email'] ?? '')) ?> · <?= htmlspecialchars((string)($recentUser['role'] ?? '')) ?> · <?= htmlspecialchars((string)($recentUser['statut'] ?? '')) ?></span>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            <?php else: ?>
+              <p class="muted-note">Aucune donnée utilisateur récente.</p>
+            <?php endif; ?>
+          </div>
+        </div>
+        <?php endif; ?>
       </div>
 
       <div class="danger-zone">
@@ -234,12 +351,14 @@ $initial = sportfuel_avatar_initials($user->getNom());
       </div>
     </div>
   </div>
+  </div>
+  </div>
 
   <div class="save-bar" id="saveBar">
     <span>✏️ Modifications non sauvegardées</span>
     <button class="btn-save" onclick="saveProfile()">Enregistrer</button>
   </div>
 
-  <script src="assets/profil.js"></script>
+  <script src="/Esprit-PW-2A19-2526-SportFuel/View/users/assets/profil.js"></script>
 </body>
 </html>

@@ -24,12 +24,12 @@ if (!function_exists('sportfuel_avatar_markup')) {
         $safeClass = trim((string)$className);
         $safeName = htmlspecialchars((string)$name, ENT_QUOTES, 'UTF-8');
         $safeUrl = trim((string)$url);
+        $initials = htmlspecialchars(sportfuel_avatar_initials($name), ENT_QUOTES, 'UTF-8');
         if ($safeUrl !== '') {
             $encodedUrl = htmlspecialchars($safeUrl, ENT_QUOTES, 'UTF-8');
-            return '<span class="sf-avatar ' . htmlspecialchars($safeClass, ENT_QUOTES, 'UTF-8') . '"><img src="' . $encodedUrl . '" alt="' . $safeName . '"></span>';
+            return '<span class="sf-avatar ' . htmlspecialchars($safeClass, ENT_QUOTES, 'UTF-8') . '"><img src="' . $encodedUrl . '" alt="' . $safeName . '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline-flex\';"><span class="sf-avatar-fallback sf-avatar-fallback-hidden">' . $initials . '</span></span>';
         }
 
-        $initials = htmlspecialchars(sportfuel_avatar_initials($name), ENT_QUOTES, 'UTF-8');
         return '<span class="sf-avatar sf-avatar-fallback ' . htmlspecialchars($safeClass, ENT_QUOTES, 'UTF-8') . '">' . $initials . '</span>';
     }
 }

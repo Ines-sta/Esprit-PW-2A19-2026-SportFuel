@@ -2,10 +2,19 @@
 /**
  * Page d'accueil FrontOffice — SportFuel
  */
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/../../Controller/core/PlanAlimentaireController.php';
+require_once __DIR__ . '/../partials/avatar.php';
 $planController = new PlanAlimentaireController();
 $allPlans = $planController->listPlans();
 $recentPlans = array_slice($allPlans, 0, 3);
+
+$currentUserName = isset($_SESSION['user_nom'])
+    ? (string)$_SESSION['user_nom']
+    : (isset($_SESSION['user_email']) ? explode('@', (string)$_SESSION['user_email'])[0] : 'Sportif');
+$currentUserPhoto = (string)($_SESSION['user_photo'] ?? '');
 
 // Date du jour en français
 $jours_fr = ['Sunday'=>'Dimanche','Monday'=>'Lundi','Tuesday'=>'Mardi','Wednesday'=>'Mercredi','Thursday'=>'Jeudi','Friday'=>'Vendredi','Saturday'=>'Samedi'];
@@ -34,13 +43,10 @@ include __DIR__ . '/../partials/navbar.php';
 <!-- HERO BANNER -->
 <div class="hero-banner">
     <div class="hero-avatar">
-        <svg viewBox="0 0 36 36" fill="none">
-            <circle cx="18" cy="13" r="7" fill="rgba(255,255,255,0.25)"/>
-            <path d="M4 34c0-7.7 6.3-14 14-14s14 6.3 14 14" fill="rgba(255,255,255,0.15)"/>
-        </svg>
+        <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'hero-user-avatar'); ?>
     </div>
     <div class="hero-text">
-        <div class="hero-greeting">Bienvenue sur SportFuel</div>
+        <div class="hero-greeting">Bienvenue sur SportFuel · <?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></div>
         <h1>Votre plan du jour est pret</h1>
         <div class="hero-meta">
             Alimentation durable

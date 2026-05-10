@@ -43,7 +43,10 @@ if ($navbarActive === '') {
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments" class="<?php echo $navbarActive === 'aliments' ? 'active' : ''; ?>">Aliments</a></li>
     </ul>
     <div class="navbar-actions">
-        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&amp;action=logout" class="navbar-logout">Logout</a>
-        <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'navbar-user'); ?>
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&amp;action=logout" class="navbar-logout">Deconnexion</a>
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=profil" class="navbar-profile-link" title="Mon profil">
+            <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'navbar-user'); ?>
+            <span class="navbar-profile-name"><?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></span>
+        </a>
     </div>
 </nav>

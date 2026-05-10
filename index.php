@@ -167,6 +167,12 @@ if ($page === 'home') {
 } elseif ($page === 'users') {
     requireAdminRole();
     include 'View/users/index.php';
+} elseif ($page === 'profil') {
+    requireAuthenticatedUser();
+    require_once 'Controller/users/ProfilePageController.php';
+    $profilePageController = new ProfilePageController();
+    $viewData = $profilePageController->getViewData();
+    include 'View/users/profil.php';
 } elseif ($page === 'dashboard') {
     requireBackofficeRole();
     $role = sportfuel_current_role();

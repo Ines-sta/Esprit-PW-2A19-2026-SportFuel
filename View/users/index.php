@@ -200,6 +200,12 @@ $utilisateurs = Utilisateur::getAll($pdo);
             flex-shrink: 0;
         }
 
+        .users-admin-page .user-avatar.sf-avatar-fallback,
+        .users-admin-page .user-avatar .sf-avatar-fallback {
+            background: linear-gradient(135deg, #52b788, #2d6a4f);
+            color: #fff;
+        }
+
         .users-admin-page .user-name {
             font-weight: 600;
         }

@@ -22,15 +22,31 @@ class ProfilController {
             return array('success' => false, 'message' => 'Utilisateur introuvable');
         }
 
-        // Mise à jour des champs si fournis
-        if (isset($data['nom'])) $user->setNom($data['nom']);
-        if (isset($data['age'])) $user->setAge((int)$data['age']);
-        if (isset($data['poids'])) $user->setPoids((float)$data['poids']);
-        if (isset($data['taille'])) $user->setTaille((float)$data['taille']);
-        if (isset($data['sport'])) $user->setSport($data['sport']);
-        if (isset($data['objectif'])) $user->setObjectif($data['objectif']);
-        if (isset($data['niveau'])) $user->setNiveau($data['niveau']);
-        if (isset($data['frequence'])) $user->setFrequence((int)$data['frequence']);
+        $role = trim((string)($_SESSION['role'] ?? 'Sportif'));
+        $isAdmin = strcasecmp($role, 'Admin') === 0;
+        $isCoach = strcasecmp($role, 'Coach') === 0;
+        $isSportif = !$isAdmin && !$isCoach;
+
+        if (isset($data['nom'])) {
+            $nom = trim((string)$data['nom']);
+            if ($nom === '' || mb_strlen($nom, 'UTF-8') < 3) {
+                return array('success' => false, 'message' => 'Nom invalide');
+            }
+            $user->setNom($nom);
+        }
+
+        if ($isSportif) {
+            if (isset($data['age'])) $user->setAge(max(0, (int)$data['age']));
+            if (isset($data['poids'])) $user->setPoids(max(0, (float)$data['poids']));
+            if (isset($data['taille'])) $user->setTaille(max(0, (float)$data['taille']));
+            if (isset($data['sport'])) $user->setSport(trim((string)$data['sport']));
+            if (isset($data['objectif'])) $user->setObjectif(trim((string)$data['objectif']));
+            if (isset($data['niveau'])) $user->setNiveau(trim((string)$data['niveau']));
+            if (isset($data['frequence'])) {
+                $frequence = (int)$data['frequence'];
+                $user->setFrequence(max(0, min(21, $frequence)));
+            }
+        }
 
         if ($user->update($this->pdo)) {
             $_SESSION['user_nom'] = $user->getNom();

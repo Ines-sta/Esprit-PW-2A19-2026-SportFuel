@@ -7,6 +7,7 @@ session_start();
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../config/cloudinary.php';
 require_once __DIR__ . '/../../Model/users/Utilisateur.php';
+require_once __DIR__ . '/../shared/ProfileSummaryService.php';
 require_once __DIR__ . '/../core/role_context.php';
 
 $pdo = Config::getConnexion();
@@ -347,6 +348,9 @@ if ($action === 'me' && $method === 'GET') {
         $imc = ($user->getTaille() > 0)
             ? round($user->getPoids() / (($user->getTaille() / 100) ** 2), 1)
             : 0;
+        $normalizedRole = sportfuel_current_role();
+        $summary = ProfileSummaryService::getSummaryByRole($pdo, $normalizedRole, (int)$user->getId());
+
         echo json_encode(['success' => true, 'user' => [
             'id'        => $user->getId(),
             'nom'       => $user->getNom(),
@@ -361,7 +365,8 @@ if ($action === 'me' && $method === 'GET') {
             'frequence' => $user->getFrequence(),
             'role'      => $user->getRole(),
             'statut'    => $user->getStatut(),
-            'imc'       => $imc
+            'imc'       => $imc,
+            'summary'   => $summary
         ]]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Utilisateur introuvable']);
@@ -375,14 +380,32 @@ if ($action === 'save_profil' && $method === 'POST') {
     $user = Utilisateur::findByEmail($pdo, $email);
     if (!$user) { echo json_encode(['success' => false, 'message' => 'Introuvable']); exit; }
 
-    if (isset($data['nom']))      $user->setNom($data['nom']);
-    if (isset($data['age']))      $user->setAge((int)$data['age']);
-    if (isset($data['poids']))    $user->setPoids((float)$data['poids']);
-    if (isset($data['taille']))   $user->setTaille((float)$data['taille']);
-    if (isset($data['sport']))    $user->setSport($data['sport']);
-    if (isset($data['objectif'])) $user->setObjectif($data['objectif']);
-    if (isset($data['niveau']))   $user->setNiveau($data['niveau']);
-    if (isset($data['frequence'])) $user->setFrequence((int)$data['frequence']);
+    $isAdmin = strcasecmp($role, 'Admin') === 0;
+    $isCoach = strcasecmp($role, 'Coach') === 0;
+    $isSportif = !$isAdmin && !$isCoach;
+
+    if (isset($data['nom'])) {
+        $nom = trim((string)$data['nom']);
+        if ($nom === '' || mb_strlen($nom, 'UTF-8') < 3) {
+            echo json_encode(['success' => false, 'message' => 'Nom invalide']);
+            exit;
+        }
+        $user->setNom($nom);
+    }
+
+    // Champs sportifs : modifiables uniquement par le role Sportif.
+    if ($isSportif) {
+        if (isset($data['age']))      $user->setAge(max(0, (int)$data['age']));
+        if (isset($data['poids']))    $user->setPoids(max(0, (float)$data['poids']));
+        if (isset($data['taille']))   $user->setTaille(max(0, (float)$data['taille']));
+        if (isset($data['sport']))    $user->setSport(trim((string)$data['sport']));
+        if (isset($data['objectif'])) $user->setObjectif(trim((string)$data['objectif']));
+        if (isset($data['niveau']))   $user->setNiveau(trim((string)$data['niveau']));
+        if (isset($data['frequence'])) {
+            $frequence = (int)$data['frequence'];
+            $user->setFrequence(max(0, min(21, $frequence)));
+        }
+    }
 
     if ($user->update($pdo)) {
         $_SESSION['user_nom'] = $user->getNom();

@@ -13,15 +13,16 @@ $currentUserName = isset($_SESSION['user_nom'])
 $currentUserPhoto = (string)($_SESSION['user_photo'] ?? '');
 ?>
 <aside class="sidebar">
-    <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=dashboard" class="sidebar-brand">
-        <div class="sidebar-logo">SF</div>
-        <span>Sport<em>Fuel</em></span>
-    </a>
-    <div class="sidebar-profile-chip">
-        <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'sidebar-profile-avatar'); ?>
-        <div class="sidebar-profile-name"><?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></div>
+    <div class="sidebar-profile-head">
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=profil" class="sidebar-profile-chip sidebar-profile-link" title="Mon profil">
+            <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'sidebar-profile-avatar'); ?>
+            <div>
+                <div class="sidebar-profile-name"><?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></div>
+                <div class="sidebar-role"><?php echo htmlspecialchars($roleLabel); ?></div>
+            </div>
+        </a>
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout" class="sidebar-logout-icon" title="Déconnexion" aria-label="Déconnexion">⏻</a>
     </div>
-    <div class="sidebar-role"><?php echo htmlspecialchars($roleLabel); ?></div>
 
     <ul class="sidebar-menu">
         <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=dashboard" class="<?php echo $sidebarActive === 'dashboard' ? 'active' : ''; ?>"><span class="icon">📊</span> Dashboard</a></li>
@@ -44,8 +45,9 @@ $currentUserPhoto = (string)($_SESSION['user_photo'] ?? '');
     </ul>
 
     <div class="sidebar-footer">
-        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout" title="Déconnexion">
-            <span class="icon">🚪</span> Déconnexion
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=dashboard" class="sidebar-brand sidebar-brand-bottom" title="SportFuel">
+            <div class="sidebar-logo">SF</div>
+            <span>Sport<em>Fuel</em></span>
         </a>
     </div>
 </aside>

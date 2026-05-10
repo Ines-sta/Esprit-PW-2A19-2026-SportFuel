@@ -21,10 +21,10 @@ $currentUserPhoto = (string)($_SESSION['user_photo'] ?? '');
             <small>Admin</small>
         </div>
     </div>
-    <div class="sidebar-profile-chip" style="margin: 2px 16px 10px;">
+    <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=profil" class="sidebar-profile-chip sidebar-profile-link" style="margin: 2px 16px 10px;" title="Mon profil">
         <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'sidebar-profile-avatar'); ?>
         <div class="sidebar-profile-name"><?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></div>
-    </div>
+    </a>
     <nav class="sidebar-nav">
         <a href="index.php?page=back&action=listPlans"
            class="sidebar-link <?= ($page === 'back' && $action === 'listPlans') ? 'active' : '' ?>">

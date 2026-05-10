@@ -23,14 +23,30 @@ body {
   color: var(--text);
 }
 
-.main {
+.profile-main-content {
+  background: linear-gradient(180deg, #f6fbf8 0%, #f3f8f5 100%);
+}
+
+.profile-page {
   width: 100%;
 }
 
-.content {
+.profile-content {
   padding: 32px;
   max-width: 1300px;
   margin: 0 auto;
+}
+
+.btn-logout {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fff1f1;
+}
+
+.btn-logout:hover {
+  color: #991b1b;
+  background: #fee2e2;
+  border-color: #fca5a5;
 }
 
 .page-actions {
@@ -293,6 +309,66 @@ body {
 
 .card-body {
   padding: 24px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.metric-card {
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #ffffff, #f7fbf8);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-card strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: var(--green-dark);
+}
+
+.metric-card span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.list-card {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list-card li {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fafdfb;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.list-card li strong {
+  font-size: 14px;
+  color: var(--green-dark);
+}
+
+.list-card li span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.muted-note {
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .field-group {

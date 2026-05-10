@@ -4,6 +4,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const inputs = document.querySelectorAll('.field-input, .field-select');
   const sportTags = document.querySelectorAll('.sport-tag');
   const sportInput = document.getElementById('sport');
+  const roleInput = document.getElementById('profileRole');
+  const currentRole = (roleInput ? roleInput.value : 'sportif').toLowerCase();
   const profilePhotoInput = document.getElementById('profilePhotoInput');
   const profileAvatar = document.getElementById('profileAvatar');
 
@@ -85,9 +87,12 @@ window.addEventListener('DOMContentLoaded', () => {
   window.toggleEdit = function() {
     editMode = !editMode;
     inputs.forEach(inp => {
-      // Don't enable email field since we use it as identifier usually, 
-      // but let's allow it if we want. For safety, let's keep email disabled if it has id="email"
       if (inp.id === 'email' || inp.id === 'mdp') return;
+      const canEdit = inp.getAttribute('data-editable') === '1';
+      if (!canEdit) {
+        inp.disabled = true;
+        return;
+      }
       
       inp.style.background = editMode ? 'white' : 'var(--cream)';
       inp.style.borderColor = editMode ? 'var(--green-mid)' : 'var(--border)';
@@ -99,32 +104,38 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   window.saveProfile = function() {
-    const nom = document.getElementById('nom').value.trim();
-    const age = document.getElementById('age')?.innerText || document.getElementById('age')?.value; // Check if it's value or text
-    const poids = document.getElementById('poids')?.value || '';
-    const taille = document.getElementById('taille')?.value || '';
-    
-    
-    const data = {
-        nom: nom,
-        sport: sportInput ? sportInput.value : 'Marathon',
-        objectif: document.getElementById('objectif')?.value || 'Performance',
-        niveau: document.getElementById('niveau')?.value || 'Débutant',
-        frequence: document.getElementById('frequence')?.value || '5'
-    };
+    const nomElement = document.getElementById('nom');
+    const data = {};
+
+    if (nomElement) {
+      data.nom = nomElement.value.trim();
+    }
+
+    if (currentRole === 'sportif') {
+      if (sportInput) data.sport = sportInput.value;
+
+      const objectifElement = document.getElementById('objectif');
+      if (objectifElement) data.objectif = objectifElement.value;
+
+      const niveauElement = document.getElementById('niveau');
+      if (niveauElement) data.niveau = niveauElement.value;
+
+      const frequenceElement = document.getElementById('frequence');
+      if (frequenceElement) data.frequence = frequenceElement.value;
+    }
 
     // JS Validation
-    if (data.nom.length < 3) {
+    if (!data.nom || data.nom.length < 3) {
         alert('❌ Le nom est trop court.');
         return;
     }
 
-    if (isNaN(data.frequence) || data.frequence < 0 || data.frequence > 21) {
+    if (Object.prototype.hasOwnProperty.call(data, 'frequence') && (isNaN(data.frequence) || data.frequence < 0 || data.frequence > 21)) {
         alert('❌ La fréquence hebdomadaire doit être entre 0 et 21.');
         return;
     }
 
-    fetch('/Esprit-PW-2A19-2526-SportFuel/Controller/ProfilController.php?action=save', {
+    fetch('/Esprit-PW-2A19-2526-SportFuel/Controller/api/api.php?action=save_profil', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -160,7 +171,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   window.deleteAccount = function() {
     if (confirm("Voulez-vous VRAIMENT supprimer votre compte ? Cette action est totalement irréversible.")) {
-      fetch('/Esprit-PW-2A19-2526-SportFuel/Controller/ProfilController.php?action=deleteAccount', { method: 'POST' })
+      fetch('/Esprit-PW-2A19-2526-SportFuel/Controller/api/api.php?action=delete_account', { method: 'POST' })
       .then(r => r.json())
       .then(res => {
          if (res.success) {
