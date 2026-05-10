@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/cloudinary.php';
 require_once __DIR__ . '/../../Model/nutrition/CourseUser.php';
 
 if (session_status() === PHP_SESSION_NONE) {

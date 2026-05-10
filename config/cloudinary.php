@@ -17,6 +17,52 @@ const CLOUDINARY_FOLDER     = 'sportfuel';
 const CLOUDINARY_MAX_BYTES  = 5 * 1024 * 1024; // 5 Mo
 const CLOUDINARY_ALLOWED_MIMES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
+function cloudinary_ini_bytes($value) {
+    $value = trim((string)$value);
+    if ($value === '') return 0;
+    $unit = strtolower(substr($value, -1));
+    $num = (float)$value;
+    switch ($unit) {
+        case 'g': return (int)($num * 1024 * 1024 * 1024);
+        case 'm': return (int)($num * 1024 * 1024);
+        case 'k': return (int)($num * 1024);
+        default: return (int)$num;
+    }
+}
+
+function cloudinary_effective_upload_limit() {
+    $uploadMax = cloudinary_ini_bytes(ini_get('upload_max_filesize'));
+    $postMax = cloudinary_ini_bytes(ini_get('post_max_size'));
+
+    // 0 can mean "unlimited" in php.ini for some directives.
+    $limits = [CLOUDINARY_MAX_BYTES];
+    if ($uploadMax > 0) $limits[] = $uploadMax;
+    if ($postMax > 0) $limits[] = $postMax;
+
+    return min($limits);
+}
+
+function cloudinary_upload_error_message($errorCode) {
+    $maxBytes = cloudinary_effective_upload_limit();
+    $maxMo = max(1, (int)round($maxBytes / (1024 * 1024)));
+
+    switch ((int)$errorCode) {
+        case UPLOAD_ERR_INI_SIZE:
+        case UPLOAD_ERR_FORM_SIZE:
+            return "Image trop volumineuse (max environ {$maxMo} Mo selon configuration serveur).";
+        case UPLOAD_ERR_PARTIAL:
+            return 'Téléversement interrompu. Réessayez.';
+        case UPLOAD_ERR_NO_TMP_DIR:
+            return 'Configuration serveur invalide: dossier temporaire manquant.';
+        case UPLOAD_ERR_CANT_WRITE:
+            return 'Impossible d\'écrire le fichier temporaire sur le serveur.';
+        case UPLOAD_ERR_EXTENSION:
+            return 'Le téléversement a été bloqué par une extension PHP.';
+        default:
+            return "Erreur lors du téléversement (code {$errorCode}).";
+    }
+}
+
 /**
  * Upload signé d'un fichier vers Cloudinary.
  * @param string $tmpFilePath Chemin local du fichier (ex: $_FILES['image']['tmp_name'])
@@ -113,18 +159,21 @@ function cloudinary_handle_upload($fileField, $folder = CLOUDINARY_FOLDER, &$err
     }
 
     if ($fileField['error'] !== UPLOAD_ERR_OK) {
-        $error = "Erreur lors du téléversement (code {$fileField['error']}).";
+        $error = cloudinary_upload_error_message($fileField['error']);
         return null;
     }
 
-    if (($fileField['size'] ?? 0) > CLOUDINARY_MAX_BYTES) {
-        $error = 'Image trop volumineuse (max 5 Mo).';
+    $maxBytes = cloudinary_effective_upload_limit();
+    if (($fileField['size'] ?? 0) > $maxBytes) {
+        $maxMo = max(1, (int)round($maxBytes / (1024 * 1024)));
+        $error = "Image trop volumineuse (max {$maxMo} Mo).";
         return null;
     }
 
     // Détection MIME réelle
     $tmp = $fileField['tmp_name'] ?? '';
-    if (!is_uploaded_file($tmp)) {
+    // Certains environnements retournent false sur is_uploaded_file malgré un tmp valide.
+    if (!is_uploaded_file($tmp) && !is_file($tmp)) {
         $error = 'Fichier invalide.';
         return null;
     }

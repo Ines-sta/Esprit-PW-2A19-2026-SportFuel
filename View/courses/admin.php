@@ -80,7 +80,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
         <div class="card-header">
             <h3><?php echo htmlspecialchars($courseDetail['nom']); ?> <small style="color:#6c757d;">#<?php echo $courseDetail['id_course']; ?></small></h3>
             <div class="detail-head-actions">
-                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=edit&id=<?php echo $courseDetail['id_course']; ?>" class="btn btn-warning btn-sm">Modifier</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=edit&id=<?php echo $courseDetail['id_course']; ?>&from=detail" class="btn btn-warning btn-sm">Modifier</a>
                 <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses" class="btn btn-outline btn-sm">← Retour</a>
             </div>
         </div>
@@ -175,8 +175,8 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                 <option value="<?php echo $u['id']; ?>" <?php echo (string)$filtre_user === (string)$u['id'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($u['nom']); ?></option>
             <?php endforeach; ?>
         </select>
-        <input type="text" name="date_min" value="<?php echo htmlspecialchars($filtre_date_min); ?>" placeholder="Du (AAAA-MM-JJ)" style="padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
-        <input type="text" name="date_max" value="<?php echo htmlspecialchars($filtre_date_max); ?>" placeholder="Au (AAAA-MM-JJ)" style="padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+        <input type="date" name="date_min" value="<?php echo htmlspecialchars($filtre_date_min); ?>" style="padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
+        <input type="date" name="date_max" value="<?php echo htmlspecialchars($filtre_date_max); ?>" style="padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
         <button class="btn btn-primary" type="submit">🔍 Rechercher</button>
         <a class="btn btn-outline" href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses">Réinitialiser</a>
     </form>
@@ -229,7 +229,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                             </td>
                             <td class="actions">
                                 <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=voir&id=<?php echo $c['id_course']; ?>" class="btn btn-success btn-sm">Voir</a>
-                                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=edit&id=<?php echo $c['id_course']; ?>" class="btn btn-warning btn-sm">Modifier</a>
+                                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=edit&id=<?php echo $c['id_course']; ?>&from=list" class="btn btn-warning btn-sm">Modifier</a>
                                 <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=supprimer" style="display:inline;" onsubmit="return confirm('Supprimer cette liste ?');">
                                     <input type="hidden" name="id" value="<?php echo $c['id_course']; ?>">
                                     <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
@@ -270,7 +270,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
             <div class="form-row">
                 <div class="form-group">
                     <label>Date</label>
-                    <input type="text" name="date" placeholder="AAAA-MM-JJ">
+                    <input type="date" name="date">
                 </div>
                 <div class="form-group">
                     <label>Statut</label>
@@ -302,6 +302,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
         <h3>Modifier la liste #<?php echo $courseEdit['id_course']; ?></h3>
         <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=modifier" enctype="multipart/form-data" onsubmit="return validerFormCourse(this)">
             <input type="hidden" name="id" value="<?php echo $courseEdit['id_course']; ?>">
+            <input type="hidden" name="edit_source" value="<?php echo htmlspecialchars($editSource); ?>">
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom de la liste</label>
@@ -320,7 +321,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
             <div class="form-row">
                 <div class="form-group">
                     <label>Date</label>
-                    <input type="text" name="date" value="<?php echo htmlspecialchars($courseEdit['date']); ?>">
+                    <input type="date" name="date" value="<?php echo htmlspecialchars($courseEdit['date']); ?>">
                 </div>
                 <div class="form-group">
                     <label>Statut</label>
@@ -341,7 +342,9 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
             </div>
             <div id="erreurModif" style="color:#e63946;margin-top:8px;display:none;"></div>
             <div class="modal-actions">
-                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses" class="btn btn-outline">Annuler</a>
+                <a href="<?php echo $editSource === 'list'
+                    ? '/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses'
+                    : '/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=voir&id=' . $courseEdit['id_course']; ?>" class="btn btn-outline">Annuler</a>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
         </form>

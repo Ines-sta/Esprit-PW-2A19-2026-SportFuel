@@ -836,6 +836,25 @@ button { cursor: pointer; font-family: 'Inter', sans-serif; }
 
 .btn-sm { padding: 5px 13px; font-size: 12px; border-radius: 7px; }
 
+.btn.is-submitting {
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.btn-spinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    display: inline-block;
+    animation: sf-btn-spin 0.75s linear infinite;
+}
+
+@keyframes sf-btn-spin {
+    to { transform: rotate(360deg); }
+}
+
 /* ── FORMS ───────────────────────────────────── */
 .form-page { max-width: 660px; }
 

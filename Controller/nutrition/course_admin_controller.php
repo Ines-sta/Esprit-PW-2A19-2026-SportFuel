@@ -84,6 +84,7 @@ $allowedUserIds = array_map(static function ($user) {
 $courseModel = new Course($pdo);
 $alimentModel = new Aliment($pdo);
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
+$editSource = isset($_GET['from']) && $_GET['from'] === 'list' ? 'list' : 'detail';
 $error = '';
 $success = '';
 $statutsAutorises = ['Non démarrée', 'En cours', 'Complétée'];
@@ -125,6 +126,7 @@ switch ($action) {
             $nom = trim($_POST['nom'] ?? '');
             $date = trim($_POST['date'] ?? '');
             $statut = trim($_POST['statut'] ?? '');
+            $editSource = (isset($_POST['edit_source']) && $_POST['edit_source'] === 'list') ? 'list' : 'detail';
 
             if ($id <= 0) $error = 'Course invalide.';
             elseif (!isCourseAllowed($courseModel, $id, $allowedUserIds)) $error = 'Acces refuse a cette course.';
@@ -142,7 +144,11 @@ switch ($action) {
                     $error = $uploadErr;
                 } else {
                     $courseModel->modifier($id, $id_utilisateur, $nom, $date, $statut, $image_url);
-                    header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=voir&id=' . $id . '&success=modif');
+                    if ($editSource === 'list') {
+                        header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&success=modif');
+                    } else {
+                        header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=voir&id=' . $id . '&success=modif');
+                    }
                     exit;
                 }
             }

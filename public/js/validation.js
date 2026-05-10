@@ -3,6 +3,53 @@
 // Pas de validation HTML5 (contrainte du projet)
 // ============================================
 
+function setFormSubmittingState(form, isSubmitting, loadingLabel) {
+    var submitBtn = form.querySelector('button[type="submit"]');
+    if (!submitBtn) return;
+
+    if (!submitBtn.dataset.originalHtml) {
+        submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+    }
+
+    if (isSubmitting) {
+        var safeLabel = loadingLabel || 'Envoi en cours...';
+        submitBtn.disabled = true;
+        submitBtn.classList.add('is-submitting');
+        submitBtn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span><span>' + safeLabel + '</span>';
+    } else {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-submitting');
+        submitBtn.innerHTML = submitBtn.dataset.originalHtml;
+    }
+}
+
+function finalizeFormValidation(form, erreurs, loadingLabel) {
+    var isValid = afficherErreurs(form, erreurs);
+    if (!isValid) {
+        setFormSubmittingState(form, false);
+        return false;
+    }
+
+    setFormSubmittingState(form, true, loadingLabel);
+    return true;
+}
+
+function isValidIsoDate(dateValue) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        return false;
+    }
+
+    var parts = dateValue.split('-');
+    var year = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10);
+    var day = parseInt(parts[2], 10);
+    var parsed = new Date(Date.UTC(year, month - 1, day));
+
+    return parsed.getUTCFullYear() === year &&
+        parsed.getUTCMonth() === month - 1 &&
+        parsed.getUTCDate() === day;
+}
+
 /**
  * Valider le formulaire Aliment (ajout et modification)
  */
@@ -44,7 +91,7 @@ function validerFormAliment(form) {
         erreurs.push("Le prix unitaire doit être un nombre positif.");
     }
 
-    return afficherErreurs(form, erreurs);
+    return finalizeFormValidation(form, erreurs, 'Enregistrement...');
 }
 
 /**
@@ -69,7 +116,7 @@ function validerFormCourse(form) {
 
     if (date === '') {
         erreurs.push("La date est obligatoire.");
-    } else if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    } else if (!isValidIsoDate(date)) {
         erreurs.push("La date doit être au format AAAA-MM-JJ.");
     }
 
@@ -77,7 +124,7 @@ function validerFormCourse(form) {
         erreurs.push("Le statut est obligatoire.");
     }
 
-    return afficherErreurs(form, erreurs);
+    return finalizeFormValidation(form, erreurs, 'Enregistrement...');
 }
 
 /**
@@ -125,6 +172,18 @@ function afficherErreurs(form, erreurs) {
     }
     return true;
 }
+
+window.addEventListener('pageshow', function () {
+    var buttons = document.querySelectorAll('button.is-submitting');
+    for (var i = 0; i < buttons.length; i++) {
+        var btn = buttons[i];
+        btn.disabled = false;
+        btn.classList.remove('is-submitting');
+        if (btn.dataset.originalHtml) {
+            btn.innerHTML = btn.dataset.originalHtml;
+        }
+    }
+});
 
 /**
  * Valider le formulaire Programme d'entraînement (admin)
