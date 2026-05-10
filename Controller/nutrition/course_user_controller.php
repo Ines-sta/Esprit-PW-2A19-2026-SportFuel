@@ -75,8 +75,8 @@ switch ($action) {
                 'nom' => trim($_POST['nom'] ?? 'Liste optimisée'),
                 'kcal_target' => floatval($_POST['kcal_target'] ?? 0),
                 'budget_max' => floatval($_POST['budget_max'] ?? 0),
-                'prefer_bio' => isset($_POST['prefer_bio']) ? 1 : 0,
-                'prefer_local' => isset($_POST['prefer_local']) ? 1 : 0,
+                'prefer_bio' => ((string)($_POST['prefer_bio'] ?? '0') === '1') ? 1 : 0,
+                'prefer_local' => ((string)($_POST['prefer_local'] ?? '0') === '1') ? 1 : 0,
             ];
 
             if ($optimizerInput['nom'] === '') $error = 'Le nom de la liste est obligatoire.';
@@ -104,8 +104,8 @@ switch ($action) {
                 'nom' => trim($_POST['nom'] ?? 'Liste optimisée'),
                 'kcal_target' => floatval($_POST['kcal_target'] ?? 0),
                 'budget_max' => floatval($_POST['budget_max'] ?? 0),
-                'prefer_bio' => intval($_POST['prefer_bio'] ?? 0),
-                'prefer_local' => intval($_POST['prefer_local'] ?? 0),
+                'prefer_bio' => ((string)($_POST['prefer_bio'] ?? '0') === '1') ? 1 : 0,
+                'prefer_local' => ((string)($_POST['prefer_local'] ?? '0') === '1') ? 1 : 0,
             ];
 
             if ($optimizerInput['nom'] === '') $error = 'Le nom de la liste est obligatoire.';

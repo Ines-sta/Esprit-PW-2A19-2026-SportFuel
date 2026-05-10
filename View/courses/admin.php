@@ -284,7 +284,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
             </div>
             <div class="form-group" style="margin-top:12px;">
                 <label>Image (JPEG/PNG/WebP/GIF, max 5 Mo)</label>
-                <input type="file" name="image" accept="image/*">
+                <input type="file" class="sf-file-input" name="image" accept="image/*">
             </div>
             <div id="erreurAjout" style="color:#e63946;margin-top:8px;display:none;"></div>
             <div class="modal-actions">
@@ -336,7 +336,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                 <?php if (!empty($courseEdit['image_url'])): ?>
                     <div style="margin-bottom:8px;"><img src="<?php echo htmlspecialchars(cloudinary_thumb($courseEdit['image_url'], 120, 120)); ?>" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:6px;"></div>
                 <?php endif; ?>
-                <input type="file" name="image" accept="image/*">
+                <input type="file" class="sf-file-input" name="image" accept="image/*">
                 <small style="color:#6c757d;display:block;margin-top:4px;">Laisser vide pour conserver l'image actuelle.</small>
             </div>
             <div id="erreurModif" style="color:#e63946;margin-top:8px;display:none;"></div>

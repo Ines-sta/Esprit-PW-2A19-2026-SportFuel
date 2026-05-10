@@ -181,13 +181,13 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                 <label>Prix unitaire (TND)</label>
                 <input type="text" name="prix_unitaire" placeholder="Ex: 1.50">
             </div>
-            <div style="display:flex;gap:24px;">
-                <div class="form-check"><input type="checkbox" name="est_bio" id="checkBio"><label for="checkBio">Produit Bio</label></div>
-                <div class="form-check"><input type="checkbox" name="est_local" id="checkLocal"><label for="checkLocal">Produit Local</label></div>
+            <div class="checkbox-inline-row">
+                <div class="form-check form-check-chip"><input type="checkbox" name="est_bio" id="checkBio"><label for="checkBio">Produit Bio</label></div>
+                <div class="form-check form-check-chip"><input type="checkbox" name="est_local" id="checkLocal"><label for="checkLocal">Produit Local</label></div>
             </div>
             <div class="form-group" style="margin-top:12px;">
                 <label>Image (JPEG/PNG/WebP/GIF, max 5 Mo)</label>
-                <input type="file" name="image" accept="image/*">
+                <input type="file" class="sf-file-input" name="image" accept="image/*">
             </div>
             <div id="erreurAjout" style="color:#e63946;margin-top:8px;display:none;"></div>
             <div class="modal-actions">
@@ -229,16 +229,16 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                 <label>Prix unitaire (TND)</label>
                 <input type="text" name="prix_unitaire" value="<?php echo htmlspecialchars($alimentEdit['prix_unitaire']); ?>">
             </div>
-            <div style="display:flex;gap:24px;">
-                <div class="form-check"><input type="checkbox" name="est_bio" id="editBio" <?php echo $alimentEdit['est_bio'] ? 'checked' : ''; ?>><label for="editBio">Produit Bio</label></div>
-                <div class="form-check"><input type="checkbox" name="est_local" id="editLocal" <?php echo $alimentEdit['est_local'] ? 'checked' : ''; ?>><label for="editLocal">Produit Local</label></div>
+            <div class="checkbox-inline-row">
+                <div class="form-check form-check-chip"><input type="checkbox" name="est_bio" id="editBio" <?php echo $alimentEdit['est_bio'] ? 'checked' : ''; ?>><label for="editBio">Produit Bio</label></div>
+                <div class="form-check form-check-chip"><input type="checkbox" name="est_local" id="editLocal" <?php echo $alimentEdit['est_local'] ? 'checked' : ''; ?>><label for="editLocal">Produit Local</label></div>
             </div>
             <div class="form-group" style="margin-top:12px;">
                 <label>Image</label>
                 <?php if (!empty($alimentEdit['image_url'])): ?>
                     <div style="margin-bottom:8px;"><img src="<?php echo htmlspecialchars(cloudinary_thumb($alimentEdit['image_url'], 120, 120)); ?>" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:6px;"></div>
                 <?php endif; ?>
-                <input type="file" name="image" accept="image/*">
+                <input type="file" class="sf-file-input" name="image" accept="image/*">
                 <small style="color:#6c757d;display:block;margin-top:4px;">Laisser vide pour conserver l'image actuelle.</small>
             </div>
             <div id="erreurModif" style="color:#e63946;margin-top:8px;display:none;"></div>

@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel — Mes Listes de Courses</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css?v=<?php echo urlencode((string)@filemtime(__DIR__ . '/../../public/css/style.css')); ?>">
 </head>
 <body>
 
@@ -224,13 +224,15 @@ include __DIR__ . '/../partials/navbar.php';
                         <label>Budget max (TND)</label>
                         <input type="text" name="budget_max" value="<?php echo htmlspecialchars((string)($optimizerInput['budget_max'] ?? 20)); ?>" placeholder="Ex: 25">
                     </div>
-                    <div class="form-group" style="display:flex;align-items:flex-end;gap:18px;">
-                        <label style="display:flex;align-items:center;gap:6px;font-weight:500;">
-                            <input type="checkbox" name="prefer_bio" value="1" <?php echo !empty($optimizerInput['prefer_bio']) ? 'checked' : ''; ?>>
+                    <div class="form-group optimizer-checkboxes">
+                        <input type="hidden" name="prefer_bio" value="0">
+                        <label class="optimizer-checkbox-label">
+                            <input type="checkbox" class="optimizer-checkbox" name="prefer_bio" value="1" <?php echo !empty($optimizerInput['prefer_bio']) ? 'checked' : ''; ?>>
                             Prioriser Bio
                         </label>
-                        <label style="display:flex;align-items:center;gap:6px;font-weight:500;">
-                            <input type="checkbox" name="prefer_local" value="1" <?php echo !empty($optimizerInput['prefer_local']) ? 'checked' : ''; ?>>
+                        <input type="hidden" name="prefer_local" value="0">
+                        <label class="optimizer-checkbox-label">
+                            <input type="checkbox" class="optimizer-checkbox" name="prefer_local" value="1" <?php echo !empty($optimizerInput['prefer_local']) ? 'checked' : ''; ?>>
                             Prioriser Local
                         </label>
                     </div>
