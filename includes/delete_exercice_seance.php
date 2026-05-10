@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../FrontOffice/controllers/ExerciceSeanceController.php';
+require_once __DIR__ . '/../Controller/training/ExerciceSeanceController.php';
 
 header('Content-Type: application/json; charset=utf-8');
 

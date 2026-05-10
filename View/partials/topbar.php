@@ -12,7 +12,7 @@ $page = $_GET['page'] ?? 'home';
     <ul class="topbar-nav">
         <li><a href="index.php" class="<?= $page === 'home' ? 'active' : '' ?>">Dashboard</a></li>
         <li><a href="index.php?page=plans" class="<?= $page === 'plans' ? 'active' : '' ?>">Mon plan</a></li>
-        <li><a href="index.php?page=back&action=listPlans" class="<?= $page === 'back' ? 'active' : '' ?>">BackOffice</a></li>
+        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=coach" class="<?= in_array($page, ['back', 'coach'], true) ? 'active' : '' ?>">BackOffice</a></li>
     </ul>
     <div class="topbar-avatar">IN</div>
 </header>

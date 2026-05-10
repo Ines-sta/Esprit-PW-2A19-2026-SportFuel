@@ -34,11 +34,11 @@ function validateNom() {
 function validateIdUtilisateur() {
     const val = parseInt(document.getElementById('id_utilisateur').value);
     if (!val || val < 1) {
-        showMsg('id_utilisateur', 'Veuillez saisir un ID utilisateur valide.', 'error');
+        showMsg('id_utilisateur', 'Veuillez selectionner un sportif valide.', 'error');
         setFieldState('id_utilisateur', false);
         return false;
     }
-    showMsg('id_utilisateur', 'ID valide.', 'success');
+    showMsg('id_utilisateur', 'Sportif selectionne.', 'success');
     setFieldState('id_utilisateur', true);
     return true;
 }
@@ -121,7 +121,7 @@ document.getElementById('submitBtn').addEventListener('click', function () {
     if (!document.getElementById('nom').value.trim() || document.getElementById('nom').value.trim().length < 3)
         errors.push('Nom du plan : minimum 3 caractères.');
     if (!document.getElementById('id_utilisateur').value || parseInt(document.getElementById('id_utilisateur').value) < 1)
-        errors.push('ID utilisateur : valeur requise.');
+        errors.push('Sportif : selection requise.');
     if (!document.getElementById('type').value)
         errors.push('Type de plan : sélection requise.');
     const kcal = parseInt(document.getElementById('kcal_cibles').value);

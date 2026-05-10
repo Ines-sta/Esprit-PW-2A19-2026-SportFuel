@@ -2,7 +2,7 @@
 // Handler pour mettre à jour un entraînement - Utilise le contrôleur MVC
 
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../FrontOffice/controllers/EntrainementController.php';
+require_once __DIR__ . '/../Controller/training/EntrainementController.php';
 
 header('Content-Type: application/json; charset=utf-8');
 

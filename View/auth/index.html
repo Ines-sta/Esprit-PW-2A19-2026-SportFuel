@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SportFuel — Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    // Redirection automatique si ouvert depuis file://
+    if (window.location.protocol === 'file:') {
+      window.location.replace('http://localhost/Esprit-PW-2A19-2526-SportFuel/View/auth/index.html');
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green-dark:  #1a3c2e;
+      --green-mid:   #2d6a4f;
+      --green-light: #52b788;
+      --green-pale:  #d8f3dc;
+      --orange:      #f4a261;
+      --cream:       #f8faf8;
+      --border:      #e5e7eb;
+      --text:        #1a1a1a;
+      --muted:       #6b7280;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .left-panel {
+      width: 100vw;
+      height: 100vh;
+      background: transparent;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 40px;
+      overflow: hidden;
+    }
+
+    .bg-circle-1,
+    .bg-circle-2,
+    .bg-circle-3 {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .bg-circle-1 {
+      height: 420px;
+      background: rgba(82, 183, 136, 0.12);
+      top: -100px;
+      left: -80px;
+    }
+
+    .bg-circle-2 {
+      height: 320px;
+      background: rgba(45, 106, 79, 0.25);
+      bottom: -60px;
+      right: -60px;
+    }
+
+    .bg-circle-3 {
+      height: 300px;
+      background: rgba(26, 60, 46, 0.6);
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .brand {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .brand-logo-box {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, var(--green-light), var(--orange));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 900;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-name span {
+      color: #f4a261;
+    }
+
+    .brand-tagline {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    .illustration {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .plate-wrap {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .plate {
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle at 38% 38%, #f8f4ee, #e8e2d8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 90px;
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.45),
+        inset 0 -8px 20px rgba(0, 0, 0, 0.1);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-14px); }
+    }
+
+    .food {
+      position: absolute;
+      font-size: 36px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      animation: floatFood 3s ease-in-out infinite;
+    }
+
+    .food-1 {
+      top: -10px;
+      left: 10px;
+      animation-delay: 0s;
+      font-size: 34px;
+    }
+
+    .food-2 {
+      top: 20px;
+      right: -10px;
+      animation-delay: 0.6s;
+      font-size: 32px;
+    }
+
+    .food-3 {
+      bottom: 10px;
+      left: -10px;
+      animation-delay: 1.0s;
+      font-size: 30px;
+    }
+
+    .food-4 {
+      bottom: 30px;
+      right: 0px;
+      animation-delay: 1.4s;
+      font-size: 28px;
+    }
+
+    .food-5 {
+      top: 50%;
+      left: -30px;
+      animation-delay: 0.3s;
+      font-size: 26px;
+      transform: translateY(-50%);
+    }
+
+    @keyframes floatFood {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(6deg); }
+    }
+
+    .caption {
+      margin-top: 36px;
+      text-align: center;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.8;
+    }
+
+    .caption strong {
+      color: #f4a261;
+      font-weight: 600;
+    }
+
+    .dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      transition: all 0.3s;
+    }
+
+    .dot.active {
+      background: #f4a261;
+      width: 26px;
+      border-radius: 4px;
+    }
+
+    .panel-actions {
+      margin-top: 40px;
+      display: flex;
+      gap: 16px;
+      z-index: 2;
+    }
+
+    .panel-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-login {
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-signup {
+      background: linear-gradient(135deg, #52b788, #f4a261);
+      color: white;
+    }
+
+    .btn-signup:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-signup-admin {
+      background: linear-gradient(135deg, #f4a261, #e76f51);
+      color: white;
+    }
+
+    .btn-signup-admin:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(244,162,97,0.4);
+    }
+
+    .btn-role-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      z-index: 2;
+      margin-top: 32px;
+    }
+
+    .btn-role-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-role-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 620px) {
+      .left-panel {
+        padding: 40px 24px;
+      }
+
+      .brand-name {
+        font-size: 32px;
+      }
+
+      .caption {
+        font-size: 14px;
+      }
+
+      .panel-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .panel-actions a {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="left-panel">
+    <div class="bg-circle-1"></div>
+    <div class="bg-circle-2"></div>
+    <div class="bg-circle-3"></div>
+
+    <div class="brand">
+      <div class="brand-logo-box">SF</div>
+      <div class="brand-name">Sport<span>Fuel</span></div>
+      <div class="brand-tagline">Nutrition intelligente pour sportifs</div>
+    </div>
+
+    <div class="illustration">
+      <div class="plate-wrap">
+        <div class="plate">🥗</div>
+        <span class="food food-1">🥦</span>
+        <span class="food food-2">🍋</span>
+        <span class="food food-3">🥕</span>
+        <span class="food food-4">🫐</span>
+        <span class="food food-5">🌿</span>
+      </div>
+
+      <div class="caption">
+        Bien manger, c'est bien vivre.<br>
+        Rejoignez <strong>SportFuel</strong> et transformez<br>
+        votre alimentation sportive.
+      </div>
+
+      <div class="dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="panel-actions">
+      <a class="btn-login" href="connexion.html">🔑 Se connecter</a>
+    </div>
+
+    <div class="btn-role-section">
+      <div class="btn-role-label">Créer un compte</div>
+      <div class="btn-role-row">
+        <a class="btn-signup" href="inscription.html?role=Sportif">🏃 S'inscrire — Sportif</a>
+        <a class="btn-signup-admin" href="inscription.html?role=Admin">⭐ S'inscrire — Admin</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

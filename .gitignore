@@ -9,4 +9,10 @@ error_log
 .DS_Store
 Thumbs.db
 
-# SQL dumps (optionnel)
+# Folders not pushed to remote
+archive/
+database/
+
+# Setup files
+SETUP.md
+GUIDE.md

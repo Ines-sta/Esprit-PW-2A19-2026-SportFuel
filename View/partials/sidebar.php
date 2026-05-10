@@ -43,19 +43,19 @@ $action = $_GET['action'] ?? '';
 
         <div class="sidebar-section-label">Autres modules</div>
 
-        <a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/aliment_controller.php" class="sidebar-link">
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments" class="sidebar-link">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/></svg>
             Aliments
         </a>
-        <a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/course_controller.php" class="sidebar-link">
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses" class="sidebar-link">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="10" height="10" rx="1"/></svg>
             Courses
         </a>
-        <a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/views/entrainement/gestion_entrainement.html" class="sidebar-link">
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=training" class="sidebar-link">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="8" x2="14" y2="8"/><line x1="8" y1="2" x2="8" y2="14"/></svg>
             Entraînements
         </a>
-        <a href="/Esprit-PW-2A19-2526-SportFuel/BackOffice/views/coach/index.php" class="sidebar-link">
+        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=coach" class="sidebar-link">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><path d="M10 10 L14 14"/></svg>
             Espace coach
         </a>
