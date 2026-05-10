@@ -101,6 +101,13 @@ form {
   gap: 10px;
 }
 
+#passwordGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
 .form-group {
   width: 100%;
 }
