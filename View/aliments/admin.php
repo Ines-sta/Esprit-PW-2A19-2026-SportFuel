@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel Admin — Gestion des Aliments</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
 </head>
 <body>
 <?php
@@ -70,7 +70,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
     <?php endif; ?>
 
     <!-- Recherche & filtres -->
-    <form method="GET" action="/Esprit-PW-2A19-2526-SportFuel/index.php" class="search-bar" style="margin-bottom:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+    <form method="GET" action="/Esprit-PW-2A19-2026-SportFuel/index.php" class="search-bar" style="margin-bottom:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
         <input type="hidden" name="page" value="aliments">
         <input type="text" name="q" value="<?php echo htmlspecialchars($filtre_q); ?>" placeholder="Rechercher un aliment..." style="flex:1;min-width:200px;padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
         <select name="categorie" style="padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
@@ -90,7 +90,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
             <option value="0" <?php echo $filtre_local === '0' ? 'selected' : ''; ?>>Non local</option>
         </select>
         <button class="btn btn-primary" type="submit">🔍 Rechercher</button>
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments">Réinitialiser</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments">Réinitialiser</a>
     </form>
 
     <!-- Tableau Aliments -->
@@ -136,8 +136,8 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                             <td><?php echo $a['est_bio'] ? '<span class="badge badge-bio">Bio</span>' : '—'; ?></td>
                             <td><?php echo $a['est_local'] ? '<span class="badge badge-local">Local</span>' : '—'; ?></td>
                             <td class="actions">
-                                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments&action=edit&id=<?php echo $a['id_aliment']; ?>" class="btn btn-warning btn-sm">Modifier</a>
-                                <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments&action=supprimer" style="display:inline;" onsubmit="return confirm('Supprimer cet aliment ?');">
+                                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments&action=edit&id=<?php echo $a['id_aliment']; ?>" class="btn btn-warning btn-sm">Modifier</a>
+                                <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments&action=supprimer" style="display:inline;" onsubmit="return confirm('Supprimer cet aliment ?');">
                                     <input type="hidden" name="id" value="<?php echo $a['id_aliment']; ?>">
                                     <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
@@ -156,7 +156,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
 <div class="modal-overlay <?php echo (!empty($error) && $action === 'ajouter') ? 'active' : ''; ?>" id="modalAjout">
     <div class="modal">
         <h3>Ajouter un aliment</h3>
-        <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments&action=ajouter" enctype="multipart/form-data" onsubmit="return validerFormAliment(this)">
+        <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments&action=ajouter" enctype="multipart/form-data" onsubmit="return validerFormAliment(this)">
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom de l'aliment</label>
@@ -203,7 +203,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
 <div class="modal-overlay active" id="modalModif">
     <div class="modal">
         <h3>Modifier l'aliment</h3>
-        <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments&action=modifier" enctype="multipart/form-data" onsubmit="return validerFormAliment(this)">
+        <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments&action=modifier" enctype="multipart/form-data" onsubmit="return validerFormAliment(this)">
             <input type="hidden" name="id" value="<?php echo $alimentEdit['id_aliment']; ?>">
             <div class="form-row">
                 <div class="form-group">
@@ -243,7 +243,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
             </div>
             <div id="erreurModif" style="color:#e63946;margin-top:8px;display:none;"></div>
             <div class="modal-actions">
-                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments" class="btn btn-outline">Annuler</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments" class="btn btn-outline">Annuler</a>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
         </form>
@@ -251,7 +251,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
 </div>
 <?php endif; ?>
 
-<script src="/Esprit-PW-2A19-2526-SportFuel/public/js/validation.js"></script>
+<script src="/Esprit-PW-2A19-2026-SportFuel/public/js/validation.js"></script>
 
 </body>
 </html>

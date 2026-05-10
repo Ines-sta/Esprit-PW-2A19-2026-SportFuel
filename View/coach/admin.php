@@ -20,7 +20,7 @@ $sort = $data['sort'] ?? 'desc';
 $stats = $data['stats'] ?? [];
 $usingCanonicalCoachRoute = (($_GET['page'] ?? '') === 'coach');
 if ($usingCanonicalCoachRoute) {
-    $current_page = '/Esprit-PW-2A19-2526-SportFuel/index.php?page=coach';
+    $current_page = '/Esprit-PW-2A19-2026-SportFuel/index.php?page=coach';
     if (in_array($focus, ['entrainement', 'nutrition'], true)) {
         $current_page .= '&focus=' . rawurlencode($focus);
     }
@@ -51,8 +51,8 @@ $date_jour = date('l j F Y');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel Admin — Publications & Commentaires</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/coach.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/coach.css">
 </head>
 <body class="coach-admin-page">
 

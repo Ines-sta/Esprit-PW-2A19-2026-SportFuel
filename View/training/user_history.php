@@ -9,9 +9,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel — Historique des entraînements</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/entrainement.css">
-    <script src="/Esprit-PW-2A19-2526-SportFuel/public/js/api.js"></script>
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/entrainement.css">
+    <script src="/Esprit-PW-2A19-2026-SportFuel/public/js/api.js"></script>
 </head>
 <body>
 
@@ -32,7 +32,7 @@ include __DIR__ . '/../partials/navbar.php';
 
     <!-- Navigation buttons -->
     <div class="search-bar training-actions section-spacing">
-        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=training" class="btn btn-primary">📅 Planifier une séance</a>
+        <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=training" class="btn btn-primary">📅 Planifier une séance</a>
     </div>
 
     <!-- Résumé statistique -->
@@ -97,7 +97,7 @@ include __DIR__ . '/../partials/navbar.php';
     &copy; 2026 SportFuel — Nutrition intelligente pour sportifs
 </div>
 <script>
-    window.SPORTFUEL_APP_BASE = `${window.location.origin}/Esprit-PW-2A19-2526-SportFuel`;
+    window.SPORTFUEL_APP_BASE = `${window.location.origin}/Esprit-PW-2A19-2026-SportFuel`;
     window.SPORTFUEL_USER_ID = <?php echo json_encode($_SESSION['user_id'] ?? null); ?>;
 </script>
 <script>

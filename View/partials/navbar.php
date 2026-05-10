@@ -30,21 +30,21 @@ if ($navbarActive === '') {
 }
 ?>
 <nav class="navbar">
-    <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=home" class="navbar-brand">
+    <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=home" class="navbar-brand">
         <div class="navbar-logo">SF</div>
         <span>Sport<em>Fuel</em></span>
     </a>
     <ul class="navbar-links">
-        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=home" class="<?php echo $navbarActive === 'dashboard' ? 'active' : ''; ?>">Dashboard</a></li>
-        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=plans" class="<?php echo $navbarActive === 'plans' ? 'active' : ''; ?>">Mon plan</a></li>
-        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=coach" class="<?php echo $navbarActive === 'coach' ? 'active' : ''; ?>">Coach</a></li>
-        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=training" class="<?php echo $navbarActive === 'training' ? 'active' : ''; ?>">Entraînements</a></li>
-        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses" class="<?php echo $navbarActive === 'courses' ? 'active' : ''; ?>">Courses</a></li>
-        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments" class="<?php echo $navbarActive === 'aliments' ? 'active' : ''; ?>">Aliments</a></li>
+        <li><a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=home" class="<?php echo $navbarActive === 'dashboard' ? 'active' : ''; ?>">Dashboard</a></li>
+        <li><a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=plans" class="<?php echo $navbarActive === 'plans' ? 'active' : ''; ?>">Mon plan</a></li>
+        <li><a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=coach" class="<?php echo $navbarActive === 'coach' ? 'active' : ''; ?>">Coach</a></li>
+        <li><a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=training" class="<?php echo $navbarActive === 'training' ? 'active' : ''; ?>">Entraînements</a></li>
+        <li><a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses" class="<?php echo $navbarActive === 'courses' ? 'active' : ''; ?>">Courses</a></li>
+        <li><a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments" class="<?php echo $navbarActive === 'aliments' ? 'active' : ''; ?>">Aliments</a></li>
     </ul>
     <div class="navbar-actions">
-        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&amp;action=logout" class="navbar-logout">Deconnexion</a>
-        <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=profil" class="navbar-profile-link" title="Mon profil">
+        <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=auth&amp;action=logout" class="navbar-logout">Deconnexion</a>
+        <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=profil" class="navbar-profile-link" title="Mon profil">
             <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'navbar-user'); ?>
             <span class="navbar-profile-name"><?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></span>
         </a>

@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel — Mes Listes de Courses</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
 </head>
 <body>
 
@@ -65,7 +65,7 @@ include __DIR__ . '/../partials/navbar.php';
                     elseif ($courseDetail['statut'] === 'Complétée') $badgeClass = 'badge-bio';
                 ?>
                 <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($courseDetail['statut']); ?></span>
-                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses" class="btn btn-outline btn-sm">← Retour</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses" class="btn btn-outline btn-sm">← Retour</a>
             </div>
         </div>
         <div class="detail-meta">
@@ -97,7 +97,7 @@ include __DIR__ . '/../partials/navbar.php';
                         ?>
                         <tr class="<?php echo $art['achete'] ? 'checked' : ''; ?>">
                             <td>
-                                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=toggle_achete&id_course=<?php echo $courseDetail['id_course']; ?>&id_aliment=<?php echo $art['id_aliment']; ?>">
+                                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=toggle_achete&id_course=<?php echo $courseDetail['id_course']; ?>&id_aliment=<?php echo $art['id_aliment']; ?>">
                                     <input type="checkbox" <?php echo $art['achete'] ? 'checked' : ''; ?> onclick="return false;">
                                 </a>
                             </td>
@@ -112,7 +112,7 @@ include __DIR__ . '/../partials/navbar.php';
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=toggle_achete&id_course=<?php echo $courseDetail['id_course']; ?>&id_aliment=<?php echo $art['id_aliment']; ?>" class="btn btn-outline btn-sm">
+                                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=toggle_achete&id_course=<?php echo $courseDetail['id_course']; ?>&id_aliment=<?php echo $art['id_aliment']; ?>" class="btn btn-outline btn-sm">
                                     <?php echo $art['achete'] ? 'Annuler' : 'Marquer acheté'; ?>
                                 </a>
                             </td>
@@ -156,7 +156,7 @@ include __DIR__ . '/../partials/navbar.php';
     </div>
 
     <!-- Recherche & filtres -->
-    <form method="GET" action="/Esprit-PW-2A19-2526-SportFuel/index.php" class="search-bar">
+    <form method="GET" action="/Esprit-PW-2A19-2026-SportFuel/index.php" class="search-bar">
         <input type="hidden" name="page" value="courses">
         <input type="text" name="q" value="<?php echo htmlspecialchars($filtre_q); ?>" placeholder="Rechercher par nom...">
         <select name="statut_filtre">
@@ -166,7 +166,7 @@ include __DIR__ . '/../partials/navbar.php';
             <option value="Complétée"    <?php echo $filtre_statut === 'Complétée'    ? 'selected' : ''; ?>>Complétée</option>
         </select>
         <button class="btn btn-primary" type="submit">🔍 Rechercher</button>
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses">Réinitialiser</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses">Réinitialiser</a>
     </form>
 
     <p class="result-count"><?php echo count($courses); ?> liste(s) trouvée(s).</p>
@@ -197,7 +197,7 @@ include __DIR__ . '/../partials/navbar.php';
                         <span class="kcal"><?php echo $c['nb_articles']; ?> articles</span>
                         <span class="co2"><?php echo intval($c['nb_achetes']); ?>/<?php echo $c['nb_articles']; ?> achetés</span>
                     </div>
-                    <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&id=<?php echo $c['id_course']; ?>" class="btn btn-primary btn-sm" style="margin-top:8px;">Consulter</a>
+                    <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&id=<?php echo $c['id_course']; ?>" class="btn btn-primary btn-sm" style="margin-top:8px;">Consulter</a>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -208,7 +208,7 @@ include __DIR__ . '/../partials/navbar.php';
         <div class="modal" style="max-width:800px;">
             <h3>Optimiseur</h3>
 
-            <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=optimiser_preview">
+            <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=optimiser_preview">
                 <div class="form-row">
                     <div class="form-group">
                         <label>Nom de la liste</label>
@@ -283,7 +283,7 @@ include __DIR__ . '/../partials/navbar.php';
                     </div>
 
                     <?php if (!empty($optimizerPreview['items'])): ?>
-                        <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=optimiser_create" class="optimizer-create-form">
+                        <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=optimiser_create" class="optimizer-create-form">
                             <input type="hidden" name="nom" value="<?php echo htmlspecialchars($optimizerInput['nom']); ?>">
                             <input type="hidden" name="kcal_target" value="<?php echo htmlspecialchars((string)$optimizerInput['kcal_target']); ?>">
                             <input type="hidden" name="budget_max" value="<?php echo htmlspecialchars((string)$optimizerInput['budget_max']); ?>">

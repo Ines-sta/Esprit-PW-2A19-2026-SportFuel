@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['user_email']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
-    header('Location: /Esprit-PW-2A19-2526-SportFuel/View/auth/connexion.html');
+    header('Location: /Esprit-PW-2A19-2026-SportFuel/View/auth/connexion.html');
     exit;
 }
 
@@ -22,7 +22,7 @@ $utilisateurs = Utilisateur::getAll($pdo);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel Admin — Gestion des utilisateurs</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
     <style>
         .users-admin-page .main {
             width: 100%;
@@ -551,7 +551,7 @@ $utilisateurs = Utilisateur::getAll($pdo);
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const apiBase = '/Esprit-PW-2A19-2526-SportFuel/Controller/api/api.php';
+        const apiBase = '/Esprit-PW-2A19-2026-SportFuel/Controller/api/api.php';
         let editMode = false;
         let currentEditId = null;
 

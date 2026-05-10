@@ -7,7 +7,7 @@ require_once 'Controller/core/RepasController.php';
 require_once 'Controller/core/role_context.php';
 
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
-$basePath = '/Esprit-PW-2A19-2526-SportFuel';
+$basePath = '/Esprit-PW-2A19-2026-SportFuel';
 $isBareRootRequest = $requestPath === $basePath . '/' || $requestPath === $basePath . '/index.php';
 $isRouterRequest = $requestPath === $basePath . '/' || $requestPath === $basePath . '/index.php';
 $hasExplicitRoute = isset($_GET['page']) || isset($_GET['action']) || isset($_GET['id']);
@@ -32,7 +32,7 @@ if ($isBareRootRequest && !$hasExplicitRoute && $isAuthenticated) {
 
 function requireAuthenticatedUser() {
     if (empty($_SESSION['user_email'])) {
-        header('Location: /Esprit-PW-2A19-2526-SportFuel/View/auth/connexion.html');
+        header('Location: /Esprit-PW-2A19-2026-SportFuel/View/auth/connexion.html');
         exit;
     }
 }
@@ -68,7 +68,7 @@ function currentRole() {
 
 function redirectUnauthorized($message = 'Acces refuse.') {
     $_SESSION['unauthorized_message'] = (string)$message;
-    header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=unauthorized');
+    header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=unauthorized');
     exit;
 }
 

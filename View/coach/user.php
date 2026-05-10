@@ -16,7 +16,7 @@ $db_error = $data['db_error'];
 $focus = $data['focus'] ?? '';
 $usingCanonicalCoachRoute = (($_GET['page'] ?? '') === 'coach');
 if ($usingCanonicalCoachRoute) {
-    $current_page = '/Esprit-PW-2A19-2526-SportFuel/index.php?page=coach';
+    $current_page = '/Esprit-PW-2A19-2026-SportFuel/index.php?page=coach';
     if (in_array($focus, ['entrainement', 'nutrition'], true)) {
         $current_page .= '&focus=' . rawurlencode($focus);
     }
@@ -62,8 +62,8 @@ $pendingPublications = max(0, $totalPublications - $answeredPublications);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel — Mes Messages</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/coach.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/coach.css">
     <style>
         .pub-card { background: white; margin-bottom: 22px; padding: 22px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .pub-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }

@@ -26,8 +26,8 @@ if ($currentCoachName === '') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel Admin — Gestion des entraînements</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/entrainement.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/entrainement.css">
     <style>
         .stats-modal-backdrop {
             position: fixed;
@@ -164,7 +164,7 @@ if ($currentCoachName === '') {
             <!-- Navigation buttons -->
             <div class="search-bar training-actions section-spacing">
                 <button type="button" class="btn btn-primary" id="openProgramModalBtn">➕ Nouveau programme</button>
-                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=training&view=sessions" class="btn btn-outline">⚙️ Gérer les séances</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=training&view=sessions" class="btn btn-outline">⚙️ Gérer les séances</a>
             </div>
 
             <div class="search-bar training-filters section-spacing">
@@ -269,10 +269,10 @@ if ($currentCoachName === '') {
     </div>
 </div>
 
-<script src="/Esprit-PW-2A19-2526-SportFuel/public/js/api.js"></script>
-<script src="/Esprit-PW-2A19-2526-SportFuel/public/js/validation.js"></script>
+<script src="/Esprit-PW-2A19-2026-SportFuel/public/js/api.js"></script>
+<script src="/Esprit-PW-2A19-2026-SportFuel/public/js/validation.js"></script>
 <script>
-    const APP_BASE = `${window.location.origin}/Esprit-PW-2A19-2526-SportFuel`;
+    const APP_BASE = `${window.location.origin}/Esprit-PW-2A19-2026-SportFuel`;
     const IS_COACH_ROLE = <?= $isCoachRole ? 'true' : 'false' ?>;
     const LOGGED_COACH_NAME = <?= json_encode($currentCoachName, JSON_UNESCAPED_UNICODE) ?>;
     let allPrograms = [];

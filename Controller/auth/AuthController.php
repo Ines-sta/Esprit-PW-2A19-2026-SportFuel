@@ -82,7 +82,7 @@ class AuthController {
 // Automatically process POST requests coming from forms
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
     $auth = new AuthController($pdo);
-    $basePath = '/Esprit-PW-2A19-2526-SportFuel';
+    $basePath = '/Esprit-PW-2A19-2026-SportFuel';
     
     if ($_GET['action'] === 'inscription') {
         $result = $auth->inscription($_POST);
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
     if ($_GET['action'] === 'logout') {
-        $basePath = '/Esprit-PW-2A19-2526-SportFuel';
+        $basePath = '/Esprit-PW-2A19-2026-SportFuel';
         session_destroy();
         header('Location: ' . $basePath . '/View/auth/connexion.html');
         exit();

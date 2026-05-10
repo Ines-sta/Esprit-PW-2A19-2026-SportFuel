@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel — Catalogue d'Aliments</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
 </head>
 <body>
 
@@ -54,7 +54,7 @@ include __DIR__ . '/../partials/navbar.php';
     </div>
 
     <!-- Recherche & filtres -->
-    <form method="GET" action="/Esprit-PW-2A19-2526-SportFuel/index.php" class="search-bar">
+    <form method="GET" action="/Esprit-PW-2A19-2026-SportFuel/index.php" class="search-bar">
         <input type="hidden" name="page" value="aliments">
         <input type="text" name="q" value="<?php echo htmlspecialchars($filtre_q); ?>" placeholder="Rechercher un aliment...">
         <select name="categorie">
@@ -74,7 +74,7 @@ include __DIR__ . '/../partials/navbar.php';
             <option value="0" <?php echo $filtre_local === '0' ? 'selected' : ''; ?>>Non local</option>
         </select>
         <button class="btn btn-primary" type="submit">🔍 Rechercher</button>
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments">Réinitialiser</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments">Réinitialiser</a>
     </form>
 
     <!-- Food Grid -->
@@ -126,7 +126,7 @@ include __DIR__ . '/../partials/navbar.php';
                     <?php if (!empty($a['image_url'])): ?>
                         <img src="<?php echo htmlspecialchars(cloudinary_thumb($a['image_url'], 400, 400)); ?>" alt="<?php echo htmlspecialchars($a['nom']); ?>" style="width:100%;height:100%;object-fit:cover;">
                     <?php elseif ($img): ?>
-                        <img src="/Esprit-PW-2A19-2526-SportFuel/public/images/<?php echo $img['file']; ?>" alt="<?php echo htmlspecialchars($img['alt']); ?>" style="width:100%;height:100%;object-fit:contain;">
+                        <img src="/Esprit-PW-2A19-2026-SportFuel/public/images/<?php echo $img['file']; ?>" alt="<?php echo htmlspecialchars($img['alt']); ?>" style="width:100%;height:100%;object-fit:contain;">
                     <?php else: ?>
                         <?php echo $emojis[$a['categorie']] ?? '🍽️'; ?>
                     <?php endif; ?>

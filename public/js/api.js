@@ -1,6 +1,6 @@
 // SportFuel shared training API helpers
 (function () {
-    const APP_BASE = window.SPORTFUEL_APP_BASE || `${window.location.origin}/Esprit-PW-2A19-2526-SportFuel`;
+    const APP_BASE = window.SPORTFUEL_APP_BASE || `${window.location.origin}/Esprit-PW-2A19-2026-SportFuel`;
     const INCLUDES_BASE = `${APP_BASE}/includes`;
 
     function currentUserId() {

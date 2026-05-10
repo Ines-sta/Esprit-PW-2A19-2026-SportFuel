@@ -33,7 +33,7 @@ switch ($action) {
                     $error = $uploadErr;
                 } else {
                     $alimentModel->ajouter($nom, $categorie, $kcal_portion, $co2_impact, $prix_unitaire, $est_bio, $est_local, $image_url);
-                    header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments&success=ajout');
+                    header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments&success=ajout');
                     exit;
                 }
             }
@@ -66,7 +66,7 @@ switch ($action) {
                     $error = $uploadErr;
                 } else {
                     $alimentModel->modifier($id, $nom, $categorie, $kcal_portion, $co2_impact, $prix_unitaire, $est_bio, $est_local, $image_url);
-                    header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments&success=modif');
+                    header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments&success=modif');
                     exit;
                 }
             }
@@ -77,7 +77,7 @@ switch ($action) {
         $id = intval($_REQUEST['id'] ?? 0);
         if ($id > 0) {
             $alimentModel->supprimer($id);
-            header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=aliments&success=suppr');
+            header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=aliments&success=suppr');
             exit;
         }
         break;

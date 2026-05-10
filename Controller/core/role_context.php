@@ -21,14 +21,14 @@ function sportfuel_is_backoffice_role() {
 
 function sportfuel_canonical_redirect_path($role) {
     if (strcasecmp((string)$role, 'Admin') === 0 || strcasecmp((string)$role, 'Coach') === 0) {
-        return '/Esprit-PW-2A19-2526-SportFuel/index.php?page=dashboard';
+        return '/Esprit-PW-2A19-2026-SportFuel/index.php?page=dashboard';
     }
-    return '/Esprit-PW-2A19-2526-SportFuel/index.php?page=home';
+    return '/Esprit-PW-2A19-2026-SportFuel/index.php?page=home';
 }
 
 function sportfuel_legacy_redirect_path($role) {
     if (strcasecmp((string)$role, 'Admin') === 0 || strcasecmp((string)$role, 'Coach') === 0) {
-        return '/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=listPlans';
+        return '/Esprit-PW-2A19-2026-SportFuel/index.php?page=back&action=listPlans';
     }
-    return '/Esprit-PW-2A19-2526-SportFuel/View/users/profil.html';
+    return '/Esprit-PW-2A19-2026-SportFuel/View/users/profil.html';
 }

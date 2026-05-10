@@ -248,7 +248,7 @@ class CoachAdminController {
         $focus = strtolower(trim((string)($_GET['focus'] ?? '')));
 
         if ($currentScript === 'index.php' && (($_GET['page'] ?? '') === 'coach')) {
-            $canonical = '/Esprit-PW-2A19-2526-SportFuel/index.php?page=coach';
+            $canonical = '/Esprit-PW-2A19-2026-SportFuel/index.php?page=coach';
             if (in_array($focus, ['entrainement', 'nutrition'], true)) {
                 $canonical .= '&focus=' . rawurlencode($focus);
             }

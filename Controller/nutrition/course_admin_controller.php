@@ -111,7 +111,7 @@ switch ($action) {
                     $error = $uploadErr;
                 } else {
                     $courseModel->genererListeCourses($id_utilisateur, $nom, $date, $statut, [], $image_url);
-                    header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&success=ajout');
+                    header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&success=ajout');
                     exit;
                 }
             }
@@ -142,7 +142,7 @@ switch ($action) {
                     $error = $uploadErr;
                 } else {
                     $courseModel->modifier($id, $id_utilisateur, $nom, $date, $statut, $image_url);
-                    header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=voir&id=' . $id . '&success=modif');
+                    header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=voir&id=' . $id . '&success=modif');
                     exit;
                 }
             }
@@ -153,7 +153,7 @@ switch ($action) {
         $id = intval($_REQUEST['id'] ?? 0);
         if ($id > 0 && isCourseAllowed($courseModel, $id, $allowedUserIds)) {
             $courseModel->supprimer($id);
-            header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&success=suppr');
+            header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&success=suppr');
             exit;
         } elseif ($id > 0) {
             $error = 'Acces refuse a cette course.';
@@ -174,7 +174,7 @@ switch ($action) {
             elseif (!in_array($unite, $unitesAutorisees, true)) $error = 'Unité invalide.';
             else {
                 $courseModel->ajouterArticle($id_course, $id_aliment, $quantite, $unite);
-                header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=voir&id=' . $id_course . '&success=article_ajout');
+                header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=voir&id=' . $id_course . '&success=article_ajout');
                 exit;
             }
         }
@@ -185,7 +185,7 @@ switch ($action) {
         $id_aliment = intval($_REQUEST['id_aliment'] ?? 0);
         if ($id_course > 0 && $id_aliment > 0 && isCourseAllowed($courseModel, $id_course, $allowedUserIds)) {
             $courseModel->supprimerArticle($id_course, $id_aliment);
-            header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=voir&id=' . $id_course . '&success=article_suppr');
+            header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=voir&id=' . $id_course . '&success=article_suppr');
             exit;
         } elseif ($id_course > 0 && $id_aliment > 0) {
             $error = 'Acces refuse a cette course.';

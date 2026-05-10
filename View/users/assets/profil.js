@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
       payload.append('image', file);
       profileAvatar.classList.add('uploading');
 
-      fetch('/Esprit-PW-2A19-2526-SportFuel/Controller/api/api.php?action=upload_profile_photo', {
+      fetch('/Esprit-PW-2A19-2026-SportFuel/Controller/api/api.php?action=upload_profile_photo', {
         method: 'POST',
         body: payload
       })
@@ -135,7 +135,7 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    fetch('/Esprit-PW-2A19-2526-SportFuel/Controller/api/api.php?action=save_profil', {
+    fetch('/Esprit-PW-2A19-2026-SportFuel/Controller/api/api.php?action=save_profil', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -171,12 +171,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   window.deleteAccount = function() {
     if (confirm("Voulez-vous VRAIMENT supprimer votre compte ? Cette action est totalement irréversible.")) {
-      fetch('/Esprit-PW-2A19-2526-SportFuel/Controller/api/api.php?action=delete_account', { method: 'POST' })
+      fetch('/Esprit-PW-2A19-2026-SportFuel/Controller/api/api.php?action=delete_account', { method: 'POST' })
       .then(r => r.json())
       .then(res => {
          if (res.success) {
             alert('Compte supprimé définitivement.');
-          window.location.href = '/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout';
+          window.location.href = '/Esprit-PW-2A19-2026-SportFuel/index.php?page=auth&action=logout';
          } else {
             alert('Erreur: ' + (res.message || 'inconnue'));
          }

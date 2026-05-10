@@ -63,7 +63,7 @@ switch ($action) {
             $course = $courseModel->getById($id_course);
             if ($course && (int)$course['id_utilisateur'] === $currentUserId) {
                 $courseModel->marquerAchete($id_course, $id_aliment);
-                header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&id=' . $id_course . '&success=achat');
+                header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&id=' . $id_course . '&success=achat');
                 exit;
             }
         }
@@ -131,7 +131,7 @@ switch ($action) {
                         );
 
                         if ($newCourseId > 0) {
-                            header('Location: /Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&id=' . $newCourseId . '&success=optimise');
+                            header('Location: /Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&id=' . $newCourseId . '&success=optimise');
                             exit;
                         }
                         $error = 'Échec de création de la liste optimisée.';

@@ -5,14 +5,14 @@
       "name": "Launch Edge (localhost)",
       "type": "pwa-msedge",
       "request": "launch",
-      "url": "http://localhost/Esprit-PW-2A19-2526-SportFuel/",
+      "url": "http://localhost/Esprit-PW-2A19-2026-SportFuel/",
       "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Launch Chrome (localhost)",
       "type": "pwa-chrome",
       "request": "launch",
-      "url": "http://localhost/Esprit-PW-2A19-2526-SportFuel/",
+      "url": "http://localhost/Esprit-PW-2A19-2026-SportFuel/",
       "webRoot": "${workspaceFolder}"
     }
   ]

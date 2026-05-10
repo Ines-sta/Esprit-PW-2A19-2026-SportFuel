@@ -18,14 +18,14 @@ class ProfilePageController {
         }
 
         if (!isset($_SESSION['user_email'])) {
-            header('Location: /Esprit-PW-2A19-2526-SportFuel/View/auth/connexion.html');
+            header('Location: /Esprit-PW-2A19-2026-SportFuel/View/auth/connexion.html');
             exit;
         }
 
         $user = Utilisateur::findByEmail($this->pdo, (string)$_SESSION['user_email']);
         if (!$user) {
             session_destroy();
-            header('Location: /Esprit-PW-2A19-2526-SportFuel/View/auth/connexion.html');
+            header('Location: /Esprit-PW-2A19-2026-SportFuel/View/auth/connexion.html');
             exit;
         }
 

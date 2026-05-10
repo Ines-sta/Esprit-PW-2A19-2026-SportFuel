@@ -18,8 +18,8 @@ if (!sportfuel_is_backoffice_role()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel Admin — Gestion des séances</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/entrainement.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/entrainement.css">
     <style>
         .admin-session-overlay {
             display: none;
@@ -80,7 +80,7 @@ if (!sportfuel_is_backoffice_role()) {
 
             <!-- Navigation buttons -->
             <div class="search-bar training-actions section-spacing">
-                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=training" class="btn btn-outline">🏋️ Gérer les programmes</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=training" class="btn btn-outline">🏋️ Gérer les programmes</a>
             </div>
 
             <!-- Filtres -->
@@ -169,8 +169,8 @@ if (!sportfuel_is_backoffice_role()) {
     </div>
 </div>
 
-<script src="/Esprit-PW-2A19-2526-SportFuel/public/js/api.js"></script>
-<script src="/Esprit-PW-2A19-2526-SportFuel/public/js/validation.js"></script>
+<script src="/Esprit-PW-2A19-2026-SportFuel/public/js/api.js"></script>
+<script src="/Esprit-PW-2A19-2026-SportFuel/public/js/validation.js"></script>
 <script>
     const currentRole = '<?php echo htmlspecialchars(sportfuel_current_role()); ?>';
     let allSeances = [];

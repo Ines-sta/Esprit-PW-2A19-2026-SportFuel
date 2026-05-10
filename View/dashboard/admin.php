@@ -1,4 +1,4 @@
-ï»¿<?php
+<?php
 /**
  * Admin Dashboard View - Presentation only
  * Data is provided by AdminDashboardController
@@ -6,7 +6,7 @@
 
 // French date formatting
 $jours_fr = ['Sunday'=>'Dimanche','Monday'=>'Lundi','Tuesday'=>'Mardi','Wednesday'=>'Mercredi','Thursday'=>'Jeudi','Friday'=>'Vendredi','Saturday'=>'Samedi'];
-$mois_fr  = ['January'=>'janvier','February'=>'fÃ©vrier','March'=>'mars','April'=>'avril','May'=>'mai','June'=>'juin','July'=>'juillet','August'=>'aoÃ»t','September'=>'septembre','October'=>'octobre','November'=>'novembre','December'=>'dÃ©cembre'];
+$mois_fr  = ['January'=>'janvier','February'=>'février','March'=>'mars','April'=>'avril','May'=>'mai','June'=>'juin','July'=>'juillet','August'=>'août','September'=>'septembre','October'=>'octobre','November'=>'novembre','December'=>'décembre'];
 $today = date('l j F Y');
 foreach ($jours_fr as $en => $fr) $today = str_replace($en, $fr, $today);
 foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
@@ -27,7 +27,7 @@ require_once __DIR__ . '/../partials/avatar.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SportFuel Admin</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
 </head>
 <body>
     <?php
@@ -73,14 +73,14 @@ require_once __DIR__ . '/../partials/avatar.php';
                 <div class="stat-card">
                     <div class="stat-value"><?= $metrics['planMetrics']['total'] ?></div>
                     <div class="stat-label">Plans alimentaires</div>
-                    <div class="stat-delta green">Actifs et assignÃ©s</div>
+                    <div class="stat-delta green">Actifs et assignés</div>
                 </div>
 
                 <!-- Stat 4: Training Completion -->
                 <div class="stat-card">
                     <div class="stat-value"><?= $metrics['trainingMetrics']['completionRate'] ?>%</div>
-                    <div class="stat-label">Taux complÃ©tude entraÃ®nement</div>
-                    <div class="stat-delta green"><?= $metrics['trainingMetrics']['completed'] ?>/<?= $metrics['trainingMetrics']['total'] ?> sÃ©ances</div>
+                    <div class="stat-label">Taux complétude entraînement</div>
+                    <div class="stat-delta green"><?= $metrics['trainingMetrics']['completed'] ?>/<?= $metrics['trainingMetrics']['total'] ?> séances</div>
                 </div>
             </div>
 
@@ -90,14 +90,14 @@ require_once __DIR__ . '/../partials/avatar.php';
                 <div class="stat-card">
                     <div class="stat-value"><?= $metrics['pendingPublications'] ?></div>
                     <div class="stat-label">Publications en attente</div>
-                    <div class="stat-delta stable">Ã€ approuver</div>
+                    <div class="stat-delta stable">À approuver</div>
                 </div>
 
                 <!-- Stat 6: Coach Assignments -->
                 <div class="stat-card">
                     <div class="stat-value"><?= $metrics['coachAssignments']['coaches_count'] ?? 0 ?></div>
                     <div class="stat-label">Coaches actifs</div>
-                    <div class="stat-delta green">Avec <?= $metrics['coachAssignments']['athletes_count'] ?? 0 ?> athlÃ¨tes</div>
+                    <div class="stat-delta green">Avec <?= $metrics['coachAssignments']['athletes_count'] ?? 0 ?> athlètes</div>
                 </div>
 
                 <!-- Stat 7: Plans Distribution -->
@@ -114,8 +114,8 @@ require_once __DIR__ . '/../partials/avatar.php';
                 <!-- Stat 8: Average Sessions -->
                 <div class="stat-card">
                     <div class="stat-value"><?= $metrics['trainingMetrics']['total'] ?></div>
-                    <div class="stat-label">SÃ©ances total</div>
-                    <div class="stat-delta stable">EnregistrÃ©es</div>
+                    <div class="stat-label">Séances total</div>
+                    <div class="stat-delta stable">Enregistrées</div>
                 </div>
             </div>
 
@@ -124,12 +124,12 @@ require_once __DIR__ . '/../partials/avatar.php';
                     <h3>Assignments Coach - Sportif</h3>
                 </div>
                 <div class="assignment-form-wrap">
-                    <form method="post" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=dashboard" class="assignment-form">
+                    <form method="post" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=dashboard" class="assignment-form">
                         <input type="hidden" name="dashboard_action" value="assign_sportif">
                         <div class="assignment-field">
                             <label for="coach_id">Coach</label>
                             <select name="coach_id" id="coach_id" required>
-                                <option value="">SÃ©lectionnez un coach</option>
+                                <option value="">Sélectionnez un coach</option>
                                 <?php foreach ($coaches as $coach): ?>
                                     <option value="<?= (int)$coach['id'] ?>"><?= htmlspecialchars(($coach['nom'] ?? 'Coach') . ' - ' . ($coach['email'] ?? '')) ?></option>
                                 <?php endforeach; ?>
@@ -138,7 +138,7 @@ require_once __DIR__ . '/../partials/avatar.php';
                         <div class="assignment-field">
                             <label for="sportif_id">Sportif</label>
                             <select name="sportif_id" id="sportif_id" required>
-                                <option value="">SÃ©lectionnez un sportif</option>
+                                <option value="">Sélectionnez un sportif</option>
                                 <?php foreach ($sportifs as $sportif): ?>
                                     <option value="<?= (int)$sportif['id'] ?>"><?= htmlspecialchars(($sportif['nom'] ?? 'Sportif') . ' - ' . ($sportif['email'] ?? '') . (!empty($sportif['sport_pratique']) ? ' (' . $sportif['sport_pratique'] . ')' : '')) ?></option>
                                 <?php endforeach; ?>
@@ -153,7 +153,7 @@ require_once __DIR__ . '/../partials/avatar.php';
                             <th>Coach</th>
                             <th>Sportif</th>
                             <th>Sport</th>
-                            <th>AssignÃ© le</th>
+                            <th>Assigné le</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -176,7 +176,7 @@ require_once __DIR__ . '/../partials/avatar.php';
                                     <td><?= htmlspecialchars($assignment['sport_pratique'] ?? 'N/A') ?></td>
                                     <td><?= !empty($assignment['assigned_at']) ? date('d/m/Y H:i', strtotime($assignment['assigned_at'])) : 'N/A' ?></td>
                                     <td>
-                                        <form method="post" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=dashboard" onsubmit="return confirm('Supprimer cette assignment ?');">
+                                        <form method="post" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=dashboard" onsubmit="return confirm('Supprimer cette assignment ?');">
                                             <input type="hidden" name="dashboard_action" value="remove_assignment">
                                             <input type="hidden" name="assignment_id" value="<?= (int)$assignment['id_assignment'] ?>">
                                             <button type="submit" class="btn-remove">Supprimer</button>
@@ -185,7 +185,7 @@ require_once __DIR__ . '/../partials/avatar.php';
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan="5" style="text-align: center; color: var(--text-3);">Aucune assignment configurÃ©e.</td></tr>
+                            <tr><td colspan="5" style="text-align: center; color: var(--text-3);">Aucune assignment configurée.</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -194,14 +194,14 @@ require_once __DIR__ . '/../partials/avatar.php';
             <!-- RECENT ACTIVITY TABLE -->
             <div class="table-section">
                 <div class="table-header">
-                    <h3>Utilisateurs rÃ©cemment inscrits</h3>
+                    <h3>Utilisateurs récemment inscrits</h3>
                 </div>
                 <table>
                     <thead>
                         <tr>
                             <th>Nom</th>
                             <th>Email</th>
-                            <th>RÃ´le</th>
+                            <th>Rôle</th>
                             <th>Sport</th>
                             <th>Date inscription</th>
                             <th>Statut</th>
@@ -233,7 +233,7 @@ require_once __DIR__ . '/../partials/avatar.php';
                             </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan="6" style="text-align: center; color: var(--text-3);">Aucun utilisateur trouvÃ©</td></tr>
+                            <tr><td colspan="6" style="text-align: center; color: var(--text-3);">Aucun utilisateur trouvé</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -249,7 +249,7 @@ require_once __DIR__ . '/../partials/avatar.php';
                         <tr>
                             <th>Auteur</th>
                             <th>Contenu</th>
-                            <th>PrioritÃ©</th>
+                            <th>Priorité</th>
                             <th>Date</th>
                             <th>Statut</th>
                         </tr>
@@ -267,7 +267,7 @@ require_once __DIR__ . '/../partials/avatar.php';
                                 <td><?= htmlspecialchars(substr($pub['text'], 0, 100)) ?>...</td>
                                 <td>
                                     <span class="badge" style="background: #fef3c7; color: #b45309;">
-                                        PrioritÃ©: <?= htmlspecialchars($pub['priorite'] ?? 'N/A') ?>
+                                        Priorité: <?= htmlspecialchars($pub['priorite'] ?? 'N/A') ?>
                                     </span>
                                 </td>
                                 <td><?= date('d/m/Y H:i', strtotime($pub['date'])) ?></td>

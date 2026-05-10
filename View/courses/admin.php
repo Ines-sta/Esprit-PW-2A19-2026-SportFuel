@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel Admin — Listes de Courses</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
 </head>
 <body>
 
@@ -80,8 +80,8 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
         <div class="card-header">
             <h3><?php echo htmlspecialchars($courseDetail['nom']); ?> <small style="color:#6c757d;">#<?php echo $courseDetail['id_course']; ?></small></h3>
             <div class="detail-head-actions">
-                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=edit&id=<?php echo $courseDetail['id_course']; ?>" class="btn btn-warning btn-sm">Modifier</a>
-                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses" class="btn btn-outline btn-sm">← Retour</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=edit&id=<?php echo $courseDetail['id_course']; ?>" class="btn btn-warning btn-sm">Modifier</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses" class="btn btn-outline btn-sm">← Retour</a>
             </div>
         </div>
         <div style="padding:16px;">
@@ -137,7 +137,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                             <?php endif; ?>
                         </td>
                         <td class="actions">
-                            <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=supprimer_article" style="display:inline;" onsubmit="return confirm('Retirer cet article ?');">
+                            <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=supprimer_article" style="display:inline;" onsubmit="return confirm('Retirer cet article ?');">
                                 <input type="hidden" name="id_course" value="<?php echo $courseDetail['id_course']; ?>">
                                 <input type="hidden" name="id_aliment" value="<?php echo $art['id_aliment']; ?>">
                                 <button type="submit" class="btn btn-danger btn-sm">Retirer</button>
@@ -160,7 +160,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
     <!-- ===== LISTE DES COURSES ===== -->
 
     <!-- Recherche & filtres -->
-    <form method="GET" action="/Esprit-PW-2A19-2526-SportFuel/index.php" class="search-bar" style="margin-bottom:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+    <form method="GET" action="/Esprit-PW-2A19-2026-SportFuel/index.php" class="search-bar" style="margin-bottom:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
         <input type="hidden" name="page" value="courses">
         <input type="text" name="q" value="<?php echo htmlspecialchars($filtre_q); ?>" placeholder="Rechercher par nom..." style="flex:1;min-width:180px;padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
         <select name="statut_filtre" style="padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
@@ -178,7 +178,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
         <input type="text" name="date_min" value="<?php echo htmlspecialchars($filtre_date_min); ?>" placeholder="Du (AAAA-MM-JJ)" style="padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
         <input type="text" name="date_max" value="<?php echo htmlspecialchars($filtre_date_max); ?>" placeholder="Au (AAAA-MM-JJ)" style="padding:10px 16px;border:1px solid #ddd;border-radius:8px;font-size:14px;">
         <button class="btn btn-primary" type="submit">🔍 Rechercher</button>
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses">Réinitialiser</a>
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses">Réinitialiser</a>
     </form>
 
     <div class="card">
@@ -228,9 +228,9 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                                 <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($c['statut']); ?></span>
                             </td>
                             <td class="actions">
-                                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=voir&id=<?php echo $c['id_course']; ?>" class="btn btn-success btn-sm">Voir</a>
-                                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=edit&id=<?php echo $c['id_course']; ?>" class="btn btn-warning btn-sm">Modifier</a>
-                                <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=supprimer" style="display:inline;" onsubmit="return confirm('Supprimer cette liste ?');">
+                                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=voir&id=<?php echo $c['id_course']; ?>" class="btn btn-success btn-sm">Voir</a>
+                                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=edit&id=<?php echo $c['id_course']; ?>" class="btn btn-warning btn-sm">Modifier</a>
+                                <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=supprimer" style="display:inline;" onsubmit="return confirm('Supprimer cette liste ?');">
                                     <input type="hidden" name="id" value="<?php echo $c['id_course']; ?>">
                                     <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                                 </form>
@@ -251,7 +251,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
 <div class="modal-overlay <?php echo (!empty($error) && $action === 'ajouter') ? 'active' : ''; ?>" id="modalAjout">
     <div class="modal">
         <h3>Nouvelle liste de courses</h3>
-        <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=ajouter" enctype="multipart/form-data" onsubmit="return validerFormCourse(this)">
+        <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=ajouter" enctype="multipart/form-data" onsubmit="return validerFormCourse(this)">
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom de la liste</label>
@@ -300,7 +300,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
 <div class="modal-overlay active" id="modalModif">
     <div class="modal">
         <h3>Modifier la liste #<?php echo $courseEdit['id_course']; ?></h3>
-        <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=modifier" enctype="multipart/form-data" onsubmit="return validerFormCourse(this)">
+        <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=modifier" enctype="multipart/form-data" onsubmit="return validerFormCourse(this)">
             <input type="hidden" name="id" value="<?php echo $courseEdit['id_course']; ?>">
             <div class="form-row">
                 <div class="form-group">
@@ -341,7 +341,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
             </div>
             <div id="erreurModif" style="color:#e63946;margin-top:8px;display:none;"></div>
             <div class="modal-actions">
-                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses" class="btn btn-outline">Annuler</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses" class="btn btn-outline">Annuler</a>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
         </form>
@@ -354,7 +354,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
 <div class="modal-overlay" id="modalAjoutArticle">
     <div class="modal">
         <h3>Ajouter un article à « <?php echo htmlspecialchars($courseDetail['nom']); ?> »</h3>
-        <form method="POST" action="/Esprit-PW-2A19-2526-SportFuel/index.php?page=courses&action=ajouter_article" onsubmit="return validerFormArticle(this)">
+        <form method="POST" action="/Esprit-PW-2A19-2026-SportFuel/index.php?page=courses&action=ajouter_article" onsubmit="return validerFormArticle(this)">
             <input type="hidden" name="id_course" value="<?php echo $courseDetail['id_course']; ?>">
             <div class="form-row">
                 <div class="form-group">
@@ -393,7 +393,7 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
 </div>
 <?php endif; ?>
 
-<script src="/Esprit-PW-2A19-2526-SportFuel/public/js/validation.js"></script>
+<script src="/Esprit-PW-2A19-2026-SportFuel/public/js/validation.js"></script>
 
 </body>
 </html>

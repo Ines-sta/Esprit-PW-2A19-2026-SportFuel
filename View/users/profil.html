@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="assets/profil.css">
   <script>
     if (window.location.protocol === 'file:') {
-      window.location.replace('http://localhost/Esprit-PW-2A19-2526-SportFuel/View/users/profil.html');
+      window.location.replace('http://localhost/Esprit-PW-2A19-2026-SportFuel/View/users/profil.html');
     }
   </script>
 </head>
@@ -16,7 +16,7 @@
   <div class="main">
     <div class="content">
       <div class="page-actions">
-        <a class="btn btn-outline" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout"
+        <a class="btn btn-outline" href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=auth&action=logout"
            style="text-decoration:none;color:#dc2626;border-color:#fee2e2;background:#fef2f2;margin-right:15px;">🚪 Déconnexion</a>
         <button class="btn btn-outline" onclick="toggleEdit()">✏️ Modifier</button>
         <button class="btn btn-primary"  onclick="saveProfile()">💾 Enregistrer</button>
@@ -188,7 +188,7 @@
   </div>
 
   <script>
-    const API = '/Esprit-PW-2A19-2526-SportFuel/Controller/api/api.php';
+    const API = '/Esprit-PW-2A19-2026-SportFuel/Controller/api/api.php';
     let editMode = false;
     let currentUser = null;
 
@@ -197,11 +197,11 @@
       const res  = await fetch(`${API}?action=check_session`);
       const sess = await res.json();
       if (!sess.authenticated) {
-        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/View/auth/connexion.html';
+        window.location.href = '/Esprit-PW-2A19-2026-SportFuel/View/auth/connexion.html';
         return;
       }
       if (sess.role === 'Admin') {
-        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/index.php?page=back&action=listPlans';
+        window.location.href = '/Esprit-PW-2A19-2026-SportFuel/index.php?page=back&action=listPlans';
         return;
       }
       loadProfile();
@@ -307,7 +307,7 @@
       const r   = await res.json();
       if (r.success) {
         alert('Compte supprimé.');
-        window.location.href = '/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout';
+        window.location.href = '/Esprit-PW-2A19-2026-SportFuel/index.php?page=auth&action=logout';
       } else {
         alert('Erreur : ' + (r.message || 'inconnue'));
       }

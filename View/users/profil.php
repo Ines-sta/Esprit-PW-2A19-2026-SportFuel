@@ -27,8 +27,8 @@ $sportifActivities = $viewData['sportifActivities'];
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mon Profil — SportFuel</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
-  <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/View/users/assets/profil.css">
+  <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
+  <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/View/users/assets/profil.css">
 </head>
 <body>
   <?php if ($isBackofficeRole): ?>
@@ -51,7 +51,7 @@ $sportifActivities = $viewData['sportifActivities'];
     <div class="profile-content">
       <input type="hidden" id="profileRole" value="<?= htmlspecialchars($roleLabel, ENT_QUOTES, 'UTF-8') ?>">
       <div class="page-actions">
-        <a class="btn btn-outline btn-logout" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout">Déconnexion</a>
+        <a class="btn btn-outline btn-logout" href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=auth&action=logout">Déconnexion</a>
         <button class="btn btn-outline" onclick="toggleEdit()">✏️ Modifier</button>
         <button class="btn btn-primary" onclick="saveProfile()">💾 Enregistrer</button>
       </div>
@@ -359,6 +359,6 @@ $sportifActivities = $viewData['sportifActivities'];
     <button class="btn-save" onclick="saveProfile()">Enregistrer</button>
   </div>
 
-  <script src="/Esprit-PW-2A19-2526-SportFuel/View/users/assets/profil.js"></script>
+  <script src="/Esprit-PW-2A19-2026-SportFuel/View/users/assets/profil.js"></script>
 </body>
 </html>

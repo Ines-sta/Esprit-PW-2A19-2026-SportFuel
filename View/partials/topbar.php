@@ -20,9 +20,9 @@ $currentUserPhoto = (string)($_SESSION['user_photo'] ?? '');
     <ul class="topbar-nav">
         <li><a href="index.php" class="<?= $page === 'home' ? 'active' : '' ?>">Dashboard</a></li>
         <li><a href="index.php?page=plans" class="<?= $page === 'plans' ? 'active' : '' ?>">Mon plan</a></li>
-        <li><a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=coach" class="<?= in_array($page, ['back', 'coach'], true) ? 'active' : '' ?>">BackOffice</a></li>
+        <li><a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=coach" class="<?= in_array($page, ['back', 'coach'], true) ? 'active' : '' ?>">BackOffice</a></li>
     </ul>
-    <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=profil" class="topbar-profile-link" title="Mon profil">
+    <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=profil" class="topbar-profile-link" title="Mon profil">
         <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'topbar-avatar'); ?>
         <span class="topbar-profile-name"><?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></span>
     </a>

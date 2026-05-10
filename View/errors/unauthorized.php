@@ -6,7 +6,7 @@ $message = trim((string)($_SESSION['unauthorized_message'] ?? 'Vous n\'avez pas 
 unset($_SESSION['unauthorized_message']);
 
 if (!$isAuthenticated) {
-    $targetPath = '/Esprit-PW-2A19-2526-SportFuel/View/auth/connexion.html';
+    $targetPath = '/Esprit-PW-2A19-2026-SportFuel/View/auth/connexion.html';
     $targetLabel = 'Aller a la connexion';
 } else {
     $targetPath = sportfuel_canonical_redirect_path($role);
@@ -21,7 +21,7 @@ if (!$isAuthenticated) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acces non autorise - SportFuel</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
 </head>
 <body class="unauthorized-page">
     <main class="unauthorized-shell">
@@ -46,7 +46,7 @@ if (!$isAuthenticated) {
             <div class="unauthorized-actions">
                 <a class="btn btn-primary" href="<?php echo htmlspecialchars($targetPath, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($targetLabel, ENT_QUOTES, 'UTF-8'); ?></a>
                 <?php if ($isAuthenticated): ?>
-                    <a class="btn btn-secondary" href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&action=logout">Se deconnecter</a>
+                    <a class="btn btn-secondary" href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=auth&action=logout">Se deconnecter</a>
                 <?php endif; ?>
             </div>
         </section>

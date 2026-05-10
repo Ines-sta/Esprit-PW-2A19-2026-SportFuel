@@ -10,9 +10,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SportFuel — Choix des séances</title>
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/style.css">
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/entrainement.css">
-    <link rel="stylesheet" href="/Esprit-PW-2A19-2526-SportFuel/public/css/copilote.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/style.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/entrainement.css">
+    <link rel="stylesheet" href="/Esprit-PW-2A19-2026-SportFuel/public/css/copilote.css">
 </head>
 
 <body>
@@ -234,7 +234,7 @@ include __DIR__ . '/../partials/navbar.php';
 
             <!-- Navigation button to historique -->
             <div class="search-bar training-actions section-spacing">
-                <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=training&view=history" class="btn btn-primary">📜 Voir l'historique</a>
+                <a href="/Esprit-PW-2A19-2026-SportFuel/index.php?page=training&view=history" class="btn btn-primary">📜 Voir l'historique</a>
             </div>
 
             <div class="card section-card">
@@ -250,13 +250,13 @@ include __DIR__ . '/../partials/navbar.php';
         &copy; 2026 SportFuel — Nutrition intelligente pour sportifs
     </div>
     <script>
-        window.SPORTFUEL_APP_BASE = `${window.location.origin}/Esprit-PW-2A19-2526-SportFuel`;
+        window.SPORTFUEL_APP_BASE = `${window.location.origin}/Esprit-PW-2A19-2026-SportFuel`;
         window.SPORTFUEL_USER_ID = <?php echo json_encode($_SESSION['user_id'] ?? null); ?>;
     </script>
-    <script src="/Esprit-PW-2A19-2526-SportFuel/public/js/api.js"></script>
-    <script src="/Esprit-PW-2A19-2526-SportFuel/public/js/copilote.js"></script>
+    <script src="/Esprit-PW-2A19-2026-SportFuel/public/js/api.js"></script>
+    <script src="/Esprit-PW-2A19-2026-SportFuel/public/js/copilote.js"></script>
     <script>
-        const APP_BASE_URL = `${window.location.protocol}//localhost/Esprit-PW-2A19-2526-SportFuel`;
+        const APP_BASE_URL = `${window.location.protocol}//localhost/Esprit-PW-2A19-2026-SportFuel`;
         const messageContainer = document.getElementById('messageContainer');
         const lastTrainingCard = document.getElementById('lastTrainingCard');
         const lastTrainingText = document.getElementById('lastTrainingText');
