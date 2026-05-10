@@ -1,0 +1,18 @@
+# Database configuration
+controller/config.php
+
+# PHP errors and logs
+*.log
+error_log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Folders not pushed to remote
+archive/
+database/
+
+# Setup files
+SETUP.md
+GUIDE.md

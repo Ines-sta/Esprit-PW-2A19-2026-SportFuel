@@ -1,4 +1,4 @@
-# SportFuel
+﻿# SportFuel
 
 Application web de nutrition intelligente pour sportifs, développée dans le cadre du module **Projet Technologies Web (2A)** à Esprit — Année universitaire 2025/2026.
 
@@ -10,7 +10,7 @@ Application web de nutrition intelligente pour sportifs, développée dans le ca
 - Un **catalogue d'aliments bio et locaux** tunisiens avec suivi des calories et de l'impact CO₂
 - La **génération automatique de listes de courses** à partir du plan alimentaire
 - Un **suivi des entraînements** avec calcul des dépenses énergétiques
-- Un **Back Office administrateur** pour la gestion complète des utilisateurs, plans, aliments et coachs
+- Un **Back Office** pour la gestion complète des utilisateurs, plans, aliments et coachs
 - Un **Front Office sportif** avec dashboard personnalisé
 
 ## Table des Matières
@@ -18,16 +18,16 @@ Application web de nutrition intelligente pour sportifs, développée dans le ca
 - [Technologies utilisées](#technologies-utilisées)
 - [Installation](#installation)
 - [Structure du projet](#structure-du-projet)
+- [Architecture MVC](#architecture-mvc)
 - [Fonctionnalités](#fonctionnalités)
-- [Guide d'intégration du template](#guide-dintégration-du-template-pour-les-autres-modules)
 - [Membres du groupe](#membres-du-groupe)
 - [Contributions](#contributions)
 - [Licence](#licence)
 
 ## Technologies utilisées
 
-- **HTML5 / CSS3** — Structure et design des pages (Front Office & Back Office)
-- **PHP (PDO)** — Logique serveur et accès à la base de données
+- **HTML5 / CSS3** — Structure et design des pages
+- **PHP 8.5 (PDO)** — Logique serveur et accès à la base de données
 - **MySQL** — Base de données relationnelle
 - **Architecture MVC** — Séparation Modèle / Vue / Contrôleur
 - **Git & GitHub** — Gestion de versions et collaboration
@@ -38,77 +38,145 @@ Application web de nutrition intelligente pour sportifs, développée dans le ca
 
 ```bash
 git clone https://github.com/Ines-sta/Esprit-PW-2A19-2526-SportFuel.git
+cd Esprit-PW-2A19-2526-SportFuel
 ```
 
 ### 2. Configurer WAMP
 
-1. **Installer WAMP** : Téléchargez et installez [WampServer](https://www.wampserver.com/) si ce n'est pas déjà fait.
-2. **Placer le projet dans WAMP** : Copiez le dossier `Esprit-PW-2A19-2526-SportFuel` dans `C:\wamp64\www\`.
-3. **Démarrer WAMP** : Lancez WampServer. L'icône dans la barre des tâches doit être **verte** (Apache + MySQL actifs).
-   - Si l'icône est **orange** ou **rouge**, faites clic gauche → *Redémarrer les services*.
+1. Téléchargez et installez [WampServer](https://www.wampserver.com/).
+2. Copiez le dossier `Esprit-PW-2A19-2526-SportFuel` dans `C:\wamp64\www\`.
+3. Lancez WampServer — l'icône doit être **verte** (Apache + MySQL actifs).
 
-### 3. Créer la base de données via phpMyAdmin
+### 3. Initialiser la base de données
 
-1. Ouvrez votre navigateur et accédez à **http://localhost/phpmyadmin** (ou `http://localhost/phpmyadmin5.2.3/` selon votre version).
-2. Connectez-vous avec :
-   - **Utilisateur** : `root`
-   - **Mot de passe** : *(laisser vide)*
-3. Cliquez sur **« Nouvelle base de données »** dans le panneau de gauche.
-4. Nommez la base **`sportfuel`** et cliquez sur **Créer**.
+Ouvrez dans votre navigateur :
 
-   ```
+```
+http://localhost/Esprit-PW-2A19-2526-SportFuel/init_db.php
+```
+
+La base de données, toutes les tables et un compte administrateur par défaut seront créés automatiquement.
+
+> **Compte admin par défaut :** `admin@sportfuel.tn` / `admin123`
+> Supprimez `init_db.php` après l'initialisation en production.
 
 ### 4. Accéder à l'application
 
-| Page | URL |
-|---|---|
-| **Back Office — Aliments** | http://localhost/Esprit-PW-2A19-2526-SportFuel/BackOffice/controllers/aliment_controller.php |
-| **Front Office — Catalogue** | http://localhost/Esprit-PW-2A19-2526-SportFuel/FrontOffice/controllers/aliment_controller.php |
+```
+http://localhost/Esprit-PW-2A19-2526-SportFuel/
+```
 
 ## Structure du projet
 
 ```
 Esprit-PW-2A19-2526-SportFuel/
-├── FrontOffice/
-│   ├── assets/
-│   │   └── css/
-│   │       └── style.css
-│   ├── controllers/
-│   │   └── aliment_controller.php
-│   ├── models/
-│   │   └── Aliment.php
-│   └── views/
-│       ├── aliments/
-│       │   └── aliments.php
-│       └── courses/
-│           └── courses.html
-├── BackOffice/
-│   ├── assets/
-│   │   ├── css/
-│   │   │   └── style.css
-│   │   └── js/
-│   │       └── validation.js
-│   ├── controllers/
-│   │   └── aliment_controller.php
-│   ├── models/
-│   │   └── Aliment.php
-│   └── views/
-│       ├── aliments/
-│       │   └── aliments.php
-│       └── courses/
-│           └── courses.html
+├── Controller/
+│   ├── core/
+│   │   └── role_context.php          # Contexte de rôle (Admin/Coach/Sportif)
+│   ├── shared/
+│   │   └── db_settings.php           # Paramètres de connexion DB
+│   ├── auth/
+│   │   └── AuthController.php
+│   ├── training/
+│   │   ├── EntrainementController.php
+│   │   └── ExerciceSeanceController.php
+│   ├── nutrition/
+│   │   ├── PlanAlimentaireController.php
+│   │   └── RepasController.php
+│   ├── users/
+│   │   ├── AdminController.php
+│   │   └── ProfilController.php
+│   ├── coach/
+│   ├── AdminDashboardController.php
+│   └── CoachDashboardController.php
+├── Model/
+│   ├── training/
+│   │   ├── Entrainement.php
+│   │   └── ExerciceSeance.php
+│   ├── nutrition/
+│   │   ├── Aliment.php
+│   │   ├── PlanAlimentaire.php
+│   │   ├── Repas.php
+│   │   ├── CourseAdmin.php
+│   │   └── CourseUser.php
+│   └── users/
+├── View/
+│   ├── partials/
+│   │   ├── backoffice_sidebar.php
+│   │   └── frontoffice_sidebar.php
+│   ├── auth/
+│   │   ├── index.html                # Landing page
+│   │   ├── connexion.html            # Connexion
+│   │   └── inscription.html          # Inscription
+│   ├── training/
+│   │   ├── admin_programs.php        # BO — Gestion des programmes
+│   │   ├── admin_sessions.php        # BO — Gestion des séances
+│   │   ├── user_planning.php         # FO — Planification sportif
+│   │   └── user_history.php          # FO — Historique sportif
+│   ├── dashboard/
+│   │   └── admin.php                 # Dashboard Admin
+│   ├── aliments/
+│   ├── courses/
+│   ├── coach/
+│   ├── plans/
+│   └── users/
+├── includes/                         # Endpoints API REST (JSON)
+│   ├── get_programmes.php
+│   ├── get_sportifs.php
+│   ├── get_coaches.php
+│   ├── add_entrainement.php
+│   ├── update_entrainement.php
+│   ├── delete_entrainement.php
+│   ├── list_entrainements.php
+│   ├── add_exercice_seance.php
+│   ├── update_exercice_seance.php
+│   ├── delete_exercice_seance.php
+│   └── list_exercices_seance.php
+├── public/
+│   ├── css/
+│   │   ├── style.css
+│   │   └── entrainement.css
+│   ├── js/
+│   │   ├── api.js
+│   │   └── validation.js
+│   └── images/
+├── config/
+│   └── database.php                  # Classe Database (PDO)
+├── index.php                         # Routeur principal
+├── init_db.php                       # Initialisation automatique DB
 └── README.md
 ```
+
+## Architecture MVC
+
+L'application suit une architecture MVC centralisée avec séparation stricte des responsabilités :
+
+### Modèle (`Model/`)
+Classes métier organisées par domaine fonctionnel. Chaque modèle encapsule l'accès PDO et la logique de données de son entité.
+
+### Vue (`View/`)
+Templates PHP/HTML organisés par domaine. Les partials (sidebars, headers) sont réutilisés pour séparer les espaces Back Office et Front Office sans duplication de code.
+
+### Contrôleur (`Controller/`)
+Orchestration des requêtes, logique métier et gestion des rôles. Le fichier `core/role_context.php` centralise la détection du rôle session et les gardes d'accès.
+
+### API (`includes/`)
+Endpoints REST légers retournant du JSON, consommés en AJAX par les vues. Chaque endpoint valide les entrées, délègue au contrôleur correspondant et retourne une réponse normalisée.
+
+### Routeur (`index.php`)
+Point d'entrée unique qui dispatche vers la vue appropriée selon les paramètres `page` et `view`, en appliquant les gardes de rôle.
 
 ## Fonctionnalités
 
 | Module | Description |
 |---|---|
-| Gestion des utilisateurs | Inscription, connexion, profils sportifs |
-| Plans alimentaires | Création et suivi de plans nutritionnels personnalisés |
-| Entraînements | Suivi des séances et calcul des calories brûlées |
-| **Aliments & Courses** | Catalogue d'aliments bio/locaux avec catégorie, calories, impact CO₂, génération de listes de courses |
-| Espace coach | Supervision des sportifs par les coachs |
+| **Authentification** | Inscription, connexion, gestion de session et redirection par rôle |
+| **Gestion des utilisateurs** | Profils sportifs, rôles (Admin / Coach / Sportif), statuts |
+| **Plans alimentaires** | Création et suivi de plans nutritionnels personnalisés par semaine |
+| **Aliments & Courses** | Catalogue bio/local tunisien avec calories, impact CO₂ et génération de listes de courses |
+| **Entraînements** | Programmes personnalisés, séances, exercices, suivi de progression |
+| **Espace coach** | Gestion des sportifs assignés, création de programmes personnalisés par sportif |
+| **Dashboard admin** | Métriques globales, gestion des utilisateurs, assignments coach-sportifs |
 
 ## Membres du groupe
 
@@ -122,178 +190,23 @@ Esprit-PW-2A19-2526-SportFuel/
 
 ## Contributions
 
-Nous remercions tous ceux qui ont contribué à ce projet !
-
-Si vous souhaitez contribuer, suivez les étapes ci-dessous pour faire un **fork**, créer une nouvelle branche et soumettre une **pull request** :
-
-1. **Fork le projet** : Cliquez sur le bouton **Fork** sur la page GitHub du projet.
-2. **Clonez votre fork** :
+1. **Fork** le projet sur GitHub
+2. **Clonez** votre fork :
    ```bash
    git clone https://github.com/votre-utilisateur/Esprit-PW-2A19-2526-SportFuel.git
    cd Esprit-PW-2A19-2526-SportFuel
    ```
-3. **Créez une branche** :
+3. **Créez** une branche :
    ```bash
    git checkout -b ma-fonctionnalite
    ```
-4. **Commitez vos modifications** :
+4. **Commitez** et poussez :
    ```bash
    git add .
    git commit -m "Ajout de ma fonctionnalité"
    git push origin ma-fonctionnalite
    ```
-5. **Ouvrez une Pull Request** sur GitHub.
-
-## Guide d'intégration du template pour les autres modules
-
-Pour intégrer le template SportFuel dans votre module, suivez ces étapes :
-
-### Front Office
-
-1. Créez vos pages dans `FrontOffice/views/votre-module/` :
-   ```
-   FrontOffice/views/votre-module/page.html
-   ```
-
-2. Utilisez ce squelette HTML :
-   ```html
-   <!DOCTYPE html>
-   <html lang="fr">
-   <head>
-       <meta charset="UTF-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>SportFuel — Votre Page</title>
-       <link rel="stylesheet" href="../../assets/css/style.css">
-   </head>
-   <body>
-
-   <!-- NAVBAR (copier tel quel) -->
-   <nav class="navbar">
-       <a href="#" class="navbar-brand">
-           <div class="navbar-logo">SF</div>
-           <span>Sport<em>Fuel</em></span>
-       </a>
-       <ul class="navbar-links">
-           <li><a href="#">Dashboard</a></li>
-           <li><a href="#">Mon plan</a></li>
-           <li><a href="#">Entraînements</a></li>
-           <li><a href="../courses/courses.html">Courses</a></li>
-           <li><a href="../aliments/aliments.html">Aliments</a></li>
-           <!-- Ajoutez votre lien ici avec class="active" -->
-       </ul>
-       <div class="navbar-user">IN</div>
-   </nav>
-
-   <!-- CONTENU -->
-   <div class="main-content">
-       <!-- Votre contenu ici -->
-   </div>
-
-   <div class="footer">
-       &copy; 2026 SportFuel — Nutrition intelligente pour sportifs
-   </div>
-
-   </body>
-   </html>
-   ```
-
-3. **Classes CSS disponibles** (pas besoin de modifier le CSS) :
-   - `.stat-cards` + `.stat-card` — Cartes de statistiques en grille
-   - `.card` + `.card-header` — Conteneur blanc avec ombre
-   - `.food-grid` + `.food-card` — Grille de cartes produit
-   - `.search-bar` — Barre de recherche + filtres
-   - `.badge .badge-bio` / `.badge-local` — Étiquettes colorées
-   - `.btn .btn-primary` / `.btn-success` / `.btn-danger` / `.btn-outline` — Boutons
-   - `.course-list` + `.course-item` — Liste à cocher
-   - `table` dans `.table-container` — Tableaux de données
-
-### Back Office
-
-1. Créez vos pages dans `BackOffice/views/votre-module/` :
-   ```
-   BackOffice/views/votre-module/page.html
-   ```
-
-2. Utilisez ce squelette HTML :
-   ```html
-   <!DOCTYPE html>
-   <html lang="fr">
-   <head>
-       <meta charset="UTF-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>SportFuel Admin — Votre Page</title>
-       <link rel="stylesheet" href="../../assets/css/style.css">
-   </head>
-   <body>
-
-   <!-- SIDEBAR (copier tel quel) -->
-   <aside class="sidebar">
-       <a href="#" class="sidebar-brand">
-           <div class="sidebar-logo">SF</div>
-           <span>Sport<em>Fuel</em></span>
-       </a>
-       <div class="sidebar-role">ADMIN</div>
-
-       <ul class="sidebar-menu">
-           <li><a href="#"><span class="icon">📊</span> Dashboard</a></li>
-       </ul>
-       <div class="sidebar-section">Modules</div>
-       <ul class="sidebar-menu">
-           <li><a href="#"><span class="icon">👥</span> Utilisateurs</a></li>
-           <li><a href="#"><span class="icon">🍽️</span> Plans alimentaires</a></li>
-           <li><a href="#"><span class="icon">🏋️</span> Entraînements</a></li>
-           <li><a href="../aliments/aliments.html"><span class="icon">🥗</span> Aliments & courses</a></li>
-           <li><a href="../courses/courses.html"><span class="icon">🛒</span> Listes de courses</a></li>
-           <li><a href="#"><span class="icon">🤝</span> Espace coach</a></li>
-           <!-- Ajoutez votre lien ici avec class="active" -->
-       </ul>
-       <div class="sidebar-section">Général</div>
-       <ul class="sidebar-menu">
-           <li><a href="#"><span class="icon">📈</span> Statistiques</a></li>
-           <li><a href="#"><span class="icon">⚙️</span> Paramètres</a></li>
-       </ul>
-   </aside>
-
-   <!-- CONTENU -->
-   <div class="main-area">
-       <div class="topbar">
-           <h1>Votre titre de page</h1>
-           <span class="date">Samedi 5 avril 2026</span>
-       </div>
-
-       <!-- Votre contenu ici -->
-   </div>
-
-   </body>
-   </html>
-   ```
-
-3. **Classes CSS disponibles** (en plus de celles du FO) :
-   - `.sidebar` — Menu latéral, mettre `class="active"` sur votre lien
-   - `.main-area` — Zone de contenu principale (à droite du sidebar)
-   - `.topbar` — En-tête avec titre + date
-   - `.search-inline` — Champ de recherche compact
-   - `.modal-overlay` + `.modal` — Popup modale (ajouter `.active` pour afficher)
-   - `.form-group` / `.form-row` / `.form-check` — Formulaires stylisés
-   - `.actions` — Groupe de boutons dans les tableaux
-   - `.badge-actif` / `.badge-inactif` — Badges de statut
-
-### Charte des couleurs
-
-| Variable | Couleur | Usage |
-|---|---|---|
-| `--vert-foret` | #2d6a4f | Couleur principale, navbar, sidebar |
-| `--vert-vif` | #52b788 | Accents, valeurs positives, boutons |
-| `--vert-clair` | #95d5b2 | Bordures, éléments secondaires |
-| `--vert-bg` | #d8f3dc (FO) / #f0fdf4 (BO) | Fond de page |
-| `--orange-energie` | #f4845f | Alertes, valeurs importantes |
-
-### Règles importantes
-
-- **Chemin CSS** : Depuis `views/votre-module/`, le chemin est toujours `../../assets/css/style.css`
-- **Liens entre pages** : Utilisez `../autre-module/page.html` pour naviguer entre modules
-- **Ne pas modifier** les fichiers `style.css` existants — ajoutez vos styles spécifiques dans un fichier séparé si nécessaire
-- **Respecter l'architecture MVC** : vues dans `views/`, logique dans `controllers/`, données dans `models/`
+5. **Ouvrez une Pull Request** sur GitHub
 
 ## Licence
 
