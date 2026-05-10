@@ -126,7 +126,7 @@ class CoachUserController {
                 if ($focus === 'nutrition' && $sections['nutrition'] === '') {
                     continue;
                 }
-                $stmt_c = $pdo->prepare("SELECT * FROM commentaire WHERE id_pub = ? ORDER BY date ASC");
+                $stmt_c = $pdo->prepare("SELECT c.*, ut.nom AS auteur_nom, ut.photo_profil_url AS photo_profil_url FROM commentaire c LEFT JOIN utilisateurs ut ON ut.id = c.id_utilisateur WHERE c.id_pub = ? ORDER BY c.date ASC");
                 $stmt_c->execute([$p['id_pub']]);
                 $publicationComments = $stmt_c->fetchAll();
                 foreach ($publicationComments as &$pubComment) {

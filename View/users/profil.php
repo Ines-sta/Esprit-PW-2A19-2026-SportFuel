@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../Model/users/Utilisateur.php';
+require_once __DIR__ . '/../partials/avatar.php';
 
 $pdo = Config::getConnexion();
 
@@ -17,6 +18,8 @@ if (!$user) {
     exit();
 }
 $imc = ($user->getTaille() > 0) ? round($user->getPoids() / (($user->getTaille() / 100) ** 2), 1) : 0;
+$photoProfilUrl = (string)($user->getPhotoProfilUrl() ?? '');
+$initial = sportfuel_avatar_initials($user->getNom());
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -38,8 +41,15 @@ $imc = ($user->getTaille() > 0) ? round($user->getPoids() / (($user->getTaille()
 
       <div class="profile-hero">
         <div class="avatar-wrap">
-          <div class="avatar"><?= strtoupper(substr($user->getNom(), 0, 1)) ?></div>
-          <div class="avatar-edit">📷</div>
+          <div class="avatar" id="profileAvatar" data-initial="<?= htmlspecialchars($initial, ENT_QUOTES, 'UTF-8') ?>">
+            <?php if ($photoProfilUrl !== ''): ?>
+              <img src="<?= htmlspecialchars($photoProfilUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Photo de profil de <?= htmlspecialchars($user->getNom(), ENT_QUOTES, 'UTF-8') ?>" id="profileAvatarImg">
+            <?php else: ?>
+              <span id="profileAvatarFallback"><?= htmlspecialchars($initial, ENT_QUOTES, 'UTF-8') ?></span>
+            <?php endif; ?>
+          </div>
+          <label class="avatar-edit" for="profilePhotoInput" title="Modifier la photo">📷</label>
+          <input type="file" id="profilePhotoInput" accept="image/*" class="profile-photo-input-hidden">
         </div>
         <div class="hero-info">
           <div class="hero-name"><?= htmlspecialchars($user->getNom()) ?></div>

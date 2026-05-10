@@ -134,7 +134,7 @@ class CoachDashboardController {
 
     private function getAthletesList() {
         $stmt = $this->pdo->prepare("
-              SELECT u.id, u.nom, u.email, u.sport_pratique, u.niveau, u.statut, c.assigned_at
+              SELECT u.id, u.nom, u.email, u.sport_pratique, u.niveau, u.statut, u.photo_profil_url, c.assigned_at
             FROM coach_sportif_assignments c
             JOIN utilisateurs u ON c.id_sportif = u.id
             WHERE c.id_coach = ?
@@ -147,7 +147,7 @@ class CoachDashboardController {
 
     private function getPendingPublicationsList() {
         $stmt = $this->pdo->prepare("
-            SELECT p.id_pub, u.nom, p.text, p.priorite, p.date, p.statut
+            SELECT p.id_pub, u.nom, u.photo_profil_url, p.text, p.priorite, p.date, p.statut
             FROM publication p
             JOIN utilisateurs u ON p.id_utilisateur = u.id
             JOIN coach_sportif_assignments c ON u.id = c.id_sportif
@@ -161,7 +161,7 @@ class CoachDashboardController {
 
     private function getRecentWorkoutsList() {
         $stmt = $this->pdo->prepare("
-            SELECT e.id_entrainement, u.nom, e.titre, e.date_entrainement, e.duree_totale, e.statut
+            SELECT e.id_entrainement, u.nom, u.photo_profil_url, e.titre, e.date_entrainement, e.duree_totale, e.statut
             FROM entrainements e
             JOIN utilisateurs u ON e.id_utilisateur = u.id
             JOIN coach_sportif_assignments c ON u.id = c.id_sportif

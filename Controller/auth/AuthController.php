@@ -41,6 +41,7 @@ class AuthController {
                 $_SESSION['user_id'] = (int)$utilisateur->getId();
                 $_SESSION['user_email'] = $utilisateur->getEmail();
                 $_SESSION['user_nom'] = $utilisateur->getNom();
+                $_SESSION['user_photo'] = $utilisateur->getPhotoProfilUrl();
                 $_SESSION['role'] = self::normalizeSessionRole($utilisateur->getRole());
                 return array('success' => true, 'message' => 'Inscription réussie', 'role' => $_SESSION['role']);
             }
@@ -67,6 +68,7 @@ class AuthController {
                 $_SESSION['user_id'] = (int)$user->getId();
                 $_SESSION['user_email'] = $user->getEmail();
                 $_SESSION['user_nom'] = $user->getNom();
+                $_SESSION['user_photo'] = $user->getPhotoProfilUrl();
                 $_SESSION['role'] = self::normalizeSessionRole($user->getRole());
                 return array('success' => true, 'message' => 'Connexion réussie', 'role' => $_SESSION['role']);
             } else {

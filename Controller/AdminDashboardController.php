@@ -126,7 +126,7 @@ class AdminDashboardController {
 
     private function getAssignmentManagementData() {
         $stmtCoaches = $this->pdo->prepare("
-            SELECT id, nom, email, statut
+            SELECT id, nom, email, statut, photo_profil_url
             FROM utilisateurs
             WHERE role = 'Coach'
             ORDER BY statut = 'Inactif', nom ASC
@@ -135,7 +135,7 @@ class AdminDashboardController {
         $coaches = $stmtCoaches->fetchAll(PDO::FETCH_ASSOC);
 
         $stmtSportifs = $this->pdo->prepare("
-            SELECT id, nom, email, sport_pratique, statut
+            SELECT id, nom, email, sport_pratique, statut, photo_profil_url
             FROM utilisateurs
             WHERE role = 'Sportif'
             ORDER BY statut = 'Inactif', nom ASC
@@ -145,8 +145,8 @@ class AdminDashboardController {
 
          $stmtAssignments = $this->pdo->prepare("
             SELECT a.id_assignment, a.assigned_at,
-                   c.id AS coach_id, c.nom AS coach_nom, c.email AS coach_email,
-                   s.id AS sportif_id, s.nom AS sportif_nom, s.email AS sportif_email, s.sport_pratique
+                     c.id AS coach_id, c.nom AS coach_nom, c.email AS coach_email, c.photo_profil_url AS coach_photo,
+                     s.id AS sportif_id, s.nom AS sportif_nom, s.email AS sportif_email, s.sport_pratique, s.photo_profil_url AS sportif_photo
             FROM coach_sportif_assignments a
             INNER JOIN utilisateurs c ON c.id = a.id_coach
             INNER JOIN utilisateurs s ON s.id = a.id_sportif
@@ -201,7 +201,7 @@ class AdminDashboardController {
 
     private function getRecentUsers() {
         $stmt = $this->pdo->prepare("
-            SELECT id, nom, email, role, sport_pratique, statut, date_inscription 
+            SELECT id, nom, email, role, sport_pratique, statut, date_inscription, photo_profil_url 
             FROM utilisateurs 
             WHERE date_inscription IS NOT NULL
             ORDER BY date_inscription DESC 
@@ -213,7 +213,7 @@ class AdminDashboardController {
 
     private function getPendingPublicationsList() {
         $stmt = $this->pdo->prepare("
-            SELECT p.id_pub, u.nom, p.text, p.priorite, p.date, p.statut 
+            SELECT p.id_pub, u.nom, u.photo_profil_url, p.text, p.priorite, p.date, p.statut 
             FROM publication p
             JOIN utilisateurs u ON p.id_utilisateur = u.id
             WHERE p.statut = 'En attente'

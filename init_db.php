@@ -23,6 +23,7 @@ try {
         nom VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         mot_de_passe VARCHAR(255) NOT NULL,
+        photo_profil_url VARCHAR(500) NULL,
         age INT DEFAULT 0,
         poids FLOAT DEFAULT 0,
         taille FLOAT DEFAULT 0,
@@ -34,6 +35,17 @@ try {
         statut VARCHAR(50) DEFAULT 'Actif',
         date_inscription TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    // Backward compatibility: ensure profile photo column exists on older databases
+    try {
+        $columnExistsStmt = $pdo->prepare("SHOW COLUMNS FROM utilisateurs LIKE 'photo_profil_url'");
+        $columnExistsStmt->execute();
+        if (!$columnExistsStmt->fetch(PDO::FETCH_ASSOC)) {
+            $pdo->exec("ALTER TABLE utilisateurs ADD COLUMN photo_profil_url VARCHAR(500) NULL AFTER mot_de_passe");
+        }
+    } catch (Exception $e) {
+        // Ignore and continue initialization flow
+    }
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS coach_sportif_assignments (
         id_assignment INT AUTO_INCREMENT PRIMARY KEY,

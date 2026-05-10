@@ -2,8 +2,16 @@
 /**
  * Sidebar BackOffice — SportFuel
  */
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/avatar.php';
 $page   = $_GET['page']   ?? 'home';
 $action = $_GET['action'] ?? '';
+$currentUserName = isset($_SESSION['user_nom'])
+    ? (string)$_SESSION['user_nom']
+    : (isset($_SESSION['user_email']) ? explode('@', (string)$_SESSION['user_email'])[0] : 'SportFuel');
+$currentUserPhoto = (string)($_SESSION['user_photo'] ?? '');
 ?>
 <aside class="sidebar">
     <div class="sidebar-logo">
@@ -12,6 +20,10 @@ $action = $_GET['action'] ?? '';
             <strong>SportFuel</strong>
             <small>Admin</small>
         </div>
+    </div>
+    <div class="sidebar-profile-chip" style="margin: 2px 16px 10px;">
+        <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'sidebar-profile-avatar'); ?>
+        <div class="sidebar-profile-name"><?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></div>
     </div>
     <nav class="sidebar-nav">
         <a href="index.php?page=back&action=listPlans"

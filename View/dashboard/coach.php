@@ -10,6 +10,7 @@ $mois_fr  = ['January'=>'janvier','February'=>'février','March'=>'mars','April'
 $today = date('l j F Y');
 foreach ($jours_fr as $en => $fr) $today = str_replace($en, $fr, $today);
 foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
+require_once __DIR__ . '/../partials/avatar.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -101,7 +102,12 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
                         <?php if (!empty($metrics['athletes'])): ?>
                             <?php foreach ($metrics['athletes'] as $athlete): ?>
                             <tr>
-                                <td><strong><?= htmlspecialchars((string)($athlete['nom'] ?? 'N/A')) ?></strong></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <?= sportfuel_avatar_markup($athlete['nom'] ?? 'Athlete', $athlete['photo_profil_url'] ?? '', 'user-avatar') ?>
+                                        <strong><?= htmlspecialchars((string)($athlete['nom'] ?? 'N/A')) ?></strong>
+                                    </div>
+                                </td>
                                 <td><?= htmlspecialchars((string)($athlete['email'] ?? 'N/A')) ?></td>
                                 <td><?= htmlspecialchars($athlete['sport_pratique'] ?? 'N/A') ?></td>
                                 <td><?= !empty($athlete['assigned_at']) ? date('d/m/Y', strtotime($athlete['assigned_at'])) : 'N/A' ?></td>
@@ -136,7 +142,12 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
                         <?php if (!empty($metrics['pendingPublications'])): ?>
                             <?php foreach ($metrics['pendingPublications'] as $pub): ?>
                             <tr>
-                                <td><strong><?= htmlspecialchars($pub['nom']) ?></strong></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <?= sportfuel_avatar_markup($pub['nom'] ?? 'Auteur', $pub['photo_profil_url'] ?? '', 'user-avatar') ?>
+                                        <strong><?= htmlspecialchars($pub['nom']) ?></strong>
+                                    </div>
+                                </td>
                                 <td><?= htmlspecialchars(substr((string)($pub['text'] ?? ''), 0, 100)) ?>...</td>
                                 <td>
                                     <span class="badge" style="background: #fef3c7; color: #b45309;">
@@ -177,7 +188,12 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
                         <?php if (!empty($metrics['recentWorkouts'])): ?>
                             <?php foreach ($metrics['recentWorkouts'] as $wo): ?>
                             <tr>
-                                <td><strong><?= htmlspecialchars($wo['nom']) ?></strong></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <?= sportfuel_avatar_markup($wo['nom'] ?? 'Athlete', $wo['photo_profil_url'] ?? '', 'user-avatar') ?>
+                                        <strong><?= htmlspecialchars($wo['nom']) ?></strong>
+                                    </div>
+                                </td>
                                 <td><?= htmlspecialchars($wo['titre'] ?? 'N/A') ?></td>
                                 <td><?= htmlspecialchars($wo['duree_totale'] ?? 'N/A') ?> min</td>
                                 <td><?= date('d/m/Y H:i', strtotime($wo['date_entrainement'])) ?></td>
@@ -198,6 +214,21 @@ foreach ($mois_fr  as $en => $fr) $today = str_replace($en, $fr, $today);
     </div>
 
     <style>
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar.sf-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #52b788, #2d6a4f);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
         .page-header {
             padding: 24px 32px;
             display: flex;

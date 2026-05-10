@@ -18,6 +18,7 @@ class User {
                 ut.nom AS nom,
                 '' AS prenom,
                 ut.email AS email,
+                ut.photo_profil_url AS photo_profil_url,
                 ut.role AS role,
                 ut.statut AS statut
              FROM utilisateurs ut"
@@ -35,6 +36,7 @@ class User {
                 ut.nom AS nom,
                 '' AS prenom,
                 ut.email AS email,
+                ut.photo_profil_url AS photo_profil_url,
                 ut.role AS role,
                 ut.statut AS statut
              FROM utilisateurs ut

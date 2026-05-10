@@ -19,6 +19,7 @@ $assignmentData = $metrics['assignmentManagement'] ?? ['coaches' => [], 'sportif
 $coaches = $assignmentData['coaches'] ?? [];
 $sportifs = $assignmentData['sportifs'] ?? [];
 $assignments = $assignmentData['assignments'] ?? [];
+require_once __DIR__ . '/../partials/avatar.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -160,8 +161,18 @@ $assignments = $assignmentData['assignments'] ?? [];
                         <?php if (!empty($assignments)): ?>
                             <?php foreach ($assignments as $assignment): ?>
                                 <tr>
-                                    <td><strong><?= htmlspecialchars($assignment['coach_nom'] ?? 'N/A') ?></strong><br><small><?= htmlspecialchars($assignment['coach_email'] ?? '') ?></small></td>
-                                    <td><strong><?= htmlspecialchars($assignment['sportif_nom'] ?? 'N/A') ?></strong><br><small><?= htmlspecialchars($assignment['sportif_email'] ?? '') ?></small></td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <?= sportfuel_avatar_markup($assignment['coach_nom'] ?? 'Coach', $assignment['coach_photo'] ?? '', 'user-avatar') ?>
+                                            <div><strong><?= htmlspecialchars($assignment['coach_nom'] ?? 'N/A') ?></strong><br><small><?= htmlspecialchars($assignment['coach_email'] ?? '') ?></small></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="user-cell">
+                                            <?= sportfuel_avatar_markup($assignment['sportif_nom'] ?? 'Sportif', $assignment['sportif_photo'] ?? '', 'user-avatar') ?>
+                                            <div><strong><?= htmlspecialchars($assignment['sportif_nom'] ?? 'N/A') ?></strong><br><small><?= htmlspecialchars($assignment['sportif_email'] ?? '') ?></small></div>
+                                        </div>
+                                    </td>
                                     <td><?= htmlspecialchars($assignment['sport_pratique'] ?? 'N/A') ?></td>
                                     <td><?= !empty($assignment['assigned_at']) ? date('d/m/Y H:i', strtotime($assignment['assigned_at'])) : 'N/A' ?></td>
                                     <td>
@@ -200,7 +211,12 @@ $assignments = $assignmentData['assignments'] ?? [];
                         <?php if (!empty($metrics['recentUsers'])): ?>
                             <?php foreach ($metrics['recentUsers'] as $user): ?>
                             <tr>
-                                <td><strong><?= htmlspecialchars($user['nom']) ?></strong></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <?= sportfuel_avatar_markup($user['nom'] ?? 'Utilisateur', $user['photo_profil_url'] ?? '', 'user-avatar') ?>
+                                        <strong><?= htmlspecialchars($user['nom']) ?></strong>
+                                    </div>
+                                </td>
                                 <td><?= htmlspecialchars($user['email']) ?></td>
                                 <td>
                                     <span class="badge badge-<?= strtolower($user['role']) ?>">
@@ -242,7 +258,12 @@ $assignments = $assignmentData['assignments'] ?? [];
                         <?php if (!empty($metrics['pendingPublicationsList'])): ?>
                             <?php foreach ($metrics['pendingPublicationsList'] as $pub): ?>
                             <tr>
-                                <td><strong><?= htmlspecialchars($pub['nom']) ?></strong></td>
+                                <td>
+                                    <div class="user-cell">
+                                        <?= sportfuel_avatar_markup($pub['nom'] ?? 'Auteur', $pub['photo_profil_url'] ?? '', 'user-avatar') ?>
+                                        <strong><?= htmlspecialchars($pub['nom']) ?></strong>
+                                    </div>
+                                </td>
                                 <td><?= htmlspecialchars(substr($pub['text'], 0, 100)) ?>...</td>
                                 <td>
                                     <span class="badge" style="background: #fef3c7; color: #b45309;">
@@ -267,6 +288,21 @@ $assignments = $assignmentData['assignments'] ?? [];
     </div>
 
     <style>
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar.sf-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #52b788, #2d6a4f);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
         .page-header {
             padding: 24px 32px;
             display: flex;

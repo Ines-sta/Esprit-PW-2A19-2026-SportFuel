@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../Controller/coach/CoachUserController.php';
+require_once __DIR__ . '/../partials/avatar.php';
 
 $controller = new CoachUserController();
 $controller->handlePost();
@@ -66,6 +67,8 @@ $pendingPublications = max(0, $totalPublications - $answeredPublications);
     <style>
         .pub-card { background: white; margin-bottom: 22px; padding: 22px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .pub-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .pub-author { display: flex; align-items: center; gap: 10px; }
+        .coach-inline-avatar.sf-avatar { width: 32px; height: 32px; background: linear-gradient(135deg, var(--vert-vif), var(--vert-foret)); color: #fff; font-size: 11px; font-weight: 700; }
         .pub-date { color: #888; font-size: 0.95em; font-weight: 500; letter-spacing: 0.2px; }
         .pub-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
         .pub-meta-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -416,7 +419,10 @@ include __DIR__ . '/../partials/navbar.php';
                         $displayType = trim($typeMatch[1]);
                     }
                     ?>
-                    <strong><?php echo htmlspecialchars(trim(($current_user['prenom'] ?? '') . ' ' . ($current_user['nom'] ?? '')) ?: 'Utilisateur'); ?></strong>
+                    <div class="pub-author">
+                        <?php echo sportfuel_avatar_markup(trim((string)(($current_user['prenom'] ?? '') . ' ' . ($current_user['nom'] ?? ''))) ?: 'Utilisateur', (string)($current_user['photo_profil_url'] ?? ''), 'coach-inline-avatar'); ?>
+                        <strong><?php echo htmlspecialchars(trim(($current_user['prenom'] ?? '') . ' ' . ($current_user['nom'] ?? '')) ?: 'Utilisateur'); ?></strong>
+                    </div>
                     <span class="pub-date"><?php echo isset($pub['date']) && $pub['date'] ? date('d/m/Y à H:i', strtotime($pub['date'])) : '-'; ?></span>
                 </div>
                 <?php
@@ -500,7 +506,10 @@ include __DIR__ . '/../partials/navbar.php';
                     <?php foreach($pub['commentaires'] as $cmt): ?>
                     <div class="comment-item">
                         <div class="comment-header">
-                            <span>Admin/Coach</span>
+                            <span class="pub-author">
+                                <?php echo sportfuel_avatar_markup($cmt['auteur_nom'] ?? 'Admin/Coach', (string)($cmt['photo_profil_url'] ?? ''), 'coach-inline-avatar'); ?>
+                                <span><?php echo htmlspecialchars($cmt['auteur_nom'] ?? 'Admin/Coach'); ?></span>
+                            </span>
                             <span><?php echo isset($cmt['date']) && $cmt['date'] ? date('d/m à H:i', strtotime($cmt['date'])) : '-'; ?></span>
                         </div>
                         <div><?php echo nl2br(htmlspecialchars($cmt['text'])); ?></div>

@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_email']) || !isset($_SESSION['role']) || $_SESSION['r
 
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../Model/users/Utilisateur.php';
+require_once __DIR__ . '/../partials/avatar.php';
 
 $pdo = Config::getConnexion();
 $stats = Utilisateur::getStats($pdo);
@@ -473,7 +474,7 @@ $utilisateurs = Utilisateur::getAll($pdo);
                             }
                             $statutBadge = $u->getStatut() === 'Actif' ? 'badge-actif' : 'badge-inactif';
                             $statutText = $u->getStatut() === 'Actif' ? '● Actif' : '● Inactif';
-                            $initial = strtoupper(substr($u->getNom(), 0, 1));
+                            $photoUrl = (string)($u->getPhotoProfilUrl() ?? '');
                             $dateStr = !empty($u->date_inscription) ? date('d M Y', strtotime($u->date_inscription)) : 'Inconnue';
                             ?>
                             <tr
@@ -484,10 +485,11 @@ $utilisateurs = Utilisateur::getAll($pdo);
                                 data-role="<?php echo htmlspecialchars($u->getRole(), ENT_QUOTES); ?>"
                                 data-age="<?php echo htmlspecialchars((string)$u->getAge(), ENT_QUOTES); ?>"
                                 data-statut="<?php echo htmlspecialchars($u->getStatut(), ENT_QUOTES); ?>"
+                                data-photo="<?php echo htmlspecialchars($photoUrl, ENT_QUOTES); ?>"
                             >
                                 <td>
                                     <div class="user-cell">
-                                        <div class="user-avatar" style="background:linear-gradient(135deg,#52b788,#2d6a4f)"><?php echo htmlspecialchars($initial, ENT_QUOTES); ?></div>
+                                        <?php echo sportfuel_avatar_markup($u->getNom(), $photoUrl, 'user-avatar'); ?>
                                         <div>
                                             <div class="user-name"><?php echo htmlspecialchars($u->getNom(), ENT_QUOTES); ?></div>
                                             <div class="user-email"><?php echo htmlspecialchars($u->getEmail(), ENT_QUOTES); ?></div>

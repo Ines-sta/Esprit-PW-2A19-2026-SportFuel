@@ -2,10 +2,13 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+require_once __DIR__ . '/avatar.php';
 
 // Get current user info
-$currentUserName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : (isset($_SESSION['user_email']) ? explode('@', $_SESSION['user_email'])[0] : 'SF');
-$userInitials = strtoupper(substr($currentUserName, 0, 2));
+$currentUserName = isset($_SESSION['user_nom'])
+    ? (string)$_SESSION['user_nom']
+    : (isset($_SESSION['user_name']) ? (string)$_SESSION['user_name'] : (isset($_SESSION['user_email']) ? explode('@', (string)$_SESSION['user_email'])[0] : 'SportFuel'));
+$currentUserPhoto = (string)($_SESSION['user_photo'] ?? '');
 
 // Active navbar item - set via $navbarActive variable in calling page
 $navbarActive = $navbarActive ?? '';
@@ -41,6 +44,6 @@ if ($navbarActive === '') {
     </ul>
     <div class="navbar-actions">
         <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=auth&amp;action=logout" class="navbar-logout">Logout</a>
-        <div class="navbar-user"><?php echo htmlspecialchars($userInitials); ?></div>
+        <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'navbar-user'); ?>
     </div>
 </nav>

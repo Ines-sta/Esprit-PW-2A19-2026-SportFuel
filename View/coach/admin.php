@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/../../Controller/coach/CoachAdminController.php';
+require_once __DIR__ . '/../partials/avatar.php';
 
 $controller = new CoachAdminController();
 $controller->handlePost();
@@ -145,7 +146,10 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                         <?php foreach($publications as $p): ?>
                         <tr>
                             <td>
-                                <strong><?php echo htmlspecialchars(($p['prenom'] ?? '') . ' ' . ($p['nom'] ?? '')); ?></strong>
+                                <div class="coach-inline-user">
+                                    <?php echo sportfuel_avatar_markup(trim((string)(($p['prenom'] ?? '') . ' ' . ($p['nom'] ?? ''))) ?: 'Utilisateur', (string)($p['photo_profil_url'] ?? ''), 'coach-inline-avatar'); ?>
+                                    <strong><?php echo htmlspecialchars(($p['prenom'] ?? '') . ' ' . ($p['nom'] ?? '')); ?></strong>
+                                </div>
                             </td>
                             <td><?php echo isset($p['date']) && $p['date'] ? date('d/m/Y H:i', strtotime($p['date'])) : '-'; ?></td>
                             <td>
@@ -255,7 +259,12 @@ include __DIR__ . '/../partials/backoffice_sidebar.php';
                         <tr>
                             <td><?php echo isset($c['date']) && $c['date'] ? date('d/m/Y H:i', strtotime($c['date'])) : '-'; ?></td>
                             <td><span class="badge badge-local">Pub #<?php echo $c['id_pub']; ?></span></td>
-                            <td><?php echo nl2br(htmlspecialchars(substr($c['text'], 0, 50))) . (strlen($c['text']) > 50 ? '...' : ''); ?></td>
+                            <td>
+                                <div class="coach-inline-user">
+                                    <?php echo sportfuel_avatar_markup($c['nom'] ?? 'Coach', (string)($c['photo_profil_url'] ?? ''), 'coach-inline-avatar'); ?>
+                                    <span><?php echo nl2br(htmlspecialchars(substr($c['text'], 0, 50))) . (strlen($c['text']) > 50 ? '...' : ''); ?></span>
+                                </div>
+                            </td>
                             <td>
                                 <div class="actions">
                                     <button class="btn btn-outline btn-sm" onclick="openCommentTextModalById(<?php echo (int)$c['id_cmmnt']; ?>)">Afficher texte</button>

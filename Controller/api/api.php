@@ -5,6 +5,7 @@
  */
 session_start();
 require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/../../config/cloudinary.php';
 require_once __DIR__ . '/../../Model/users/Utilisateur.php';
 require_once __DIR__ . '/../core/role_context.php';
 
@@ -126,7 +127,8 @@ if ($action === 'check_session') {
             'authenticated' => true,
             'role'  => $_SESSION['role'] ?? 'Sportif',
             'nom'   => $_SESSION['user_nom'] ?? '',
-            'email' => $_SESSION['user_email']
+            'email' => $_SESSION['user_email'],
+            'photo_profil_url' => $_SESSION['user_photo'] ?? ''
         ]);
     } else {
         echo json_encode(['authenticated' => false]);
@@ -311,6 +313,7 @@ if ($action === 'login_by_id' && $method === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_nom'] = $user['nom'];
+        $_SESSION['user_photo'] = $user['photo_profil_url'] ?? '';
         $_SESSION['role'] = $user['role'];
         
         echo json_encode([
@@ -348,6 +351,7 @@ if ($action === 'me' && $method === 'GET') {
             'id'        => $user->getId(),
             'nom'       => $user->getNom(),
             'email'     => $user->getEmail(),
+            'photo_profil_url' => $user->getPhotoProfilUrl(),
             'age'       => $user->getAge(),
             'poids'     => $user->getPoids(),
             'taille'    => $user->getTaille(),
@@ -386,6 +390,41 @@ if ($action === 'save_profil' && $method === 'POST') {
     } else {
         echo json_encode(['success' => false, 'message' => 'Erreur lors de la sauvegarde']);
     }
+    exit;
+}
+
+/* ── POST : upload photo profil ── */
+if ($action === 'upload_profile_photo' && $method === 'POST') {
+    $user = Utilisateur::findByEmail($pdo, $email);
+    if (!$user) {
+        echo json_encode(['success' => false, 'message' => 'Utilisateur introuvable']);
+        exit;
+    }
+
+    $uploadErr = '';
+    $photoUrl = cloudinary_handle_upload($_FILES['image'] ?? null, CLOUDINARY_FOLDER . '/profiles', $uploadErr);
+    if ($uploadErr !== '') {
+        echo json_encode(['success' => false, 'message' => $uploadErr]);
+        exit;
+    }
+    if (empty($photoUrl)) {
+        echo json_encode(['success' => false, 'message' => 'Aucune image reçue']);
+        exit;
+    }
+
+    $user->setPhotoProfilUrl($photoUrl);
+    if (!$user->update($pdo)) {
+        echo json_encode(['success' => false, 'message' => 'Erreur lors de la sauvegarde de la photo']);
+        exit;
+    }
+
+    $_SESSION['user_photo'] = $photoUrl;
+    echo json_encode([
+        'success' => true,
+        'message' => 'Photo de profil mise à jour',
+        'photo_profil_url' => $photoUrl,
+        'thumb_url' => cloudinary_thumb($photoUrl, 120, 120)
+    ]);
     exit;
 }
 
@@ -441,6 +480,7 @@ if ($action === 'users' && $method === 'GET') {
             'id'               => $u->getId(),
             'nom'              => $u->getNom(),
             'email'            => $u->getEmail(),
+            'photo_profil_url' => $u->getPhotoProfilUrl(),
             'age'              => $u->getAge(),
             'sport'            => $u->getSport(),
             'objectif'         => $u->getObjectif(),

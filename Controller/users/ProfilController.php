@@ -34,6 +34,7 @@ class ProfilController {
 
         if ($user->update($this->pdo)) {
             $_SESSION['user_nom'] = $user->getNom();
+            $_SESSION['user_photo'] = $user->getPhotoProfilUrl();
             return array('success' => true, 'message' => 'Profil enregistré avec succès', 'profil' => $user);
         }
 

@@ -2,16 +2,25 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+require_once __DIR__ . '/avatar.php';
 
 $roleLabel = strtoupper(trim((string)($_SESSION['role'] ?? 'ADMIN')));
 $isAdminRole = ($roleLabel === 'ADMIN');
 $sidebarActive = $sidebarActive ?? '';
+$currentUserName = isset($_SESSION['user_nom'])
+    ? (string)$_SESSION['user_nom']
+    : (isset($_SESSION['user_email']) ? explode('@', (string)$_SESSION['user_email'])[0] : 'SportFuel');
+$currentUserPhoto = (string)($_SESSION['user_photo'] ?? '');
 ?>
 <aside class="sidebar">
     <a href="/Esprit-PW-2A19-2526-SportFuel/index.php?page=dashboard" class="sidebar-brand">
         <div class="sidebar-logo">SF</div>
         <span>Sport<em>Fuel</em></span>
     </a>
+    <div class="sidebar-profile-chip">
+        <?php echo sportfuel_avatar_markup($currentUserName, $currentUserPhoto, 'sidebar-profile-avatar'); ?>
+        <div class="sidebar-profile-name"><?php echo htmlspecialchars($currentUserName, ENT_QUOTES, 'UTF-8'); ?></div>
+    </div>
     <div class="sidebar-role"><?php echo htmlspecialchars($roleLabel); ?></div>
 
     <ul class="sidebar-menu">

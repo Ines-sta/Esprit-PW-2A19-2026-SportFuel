@@ -140,6 +140,7 @@ class CoachAdminController {
                 $sql = "SELECT
                     p.*,
                     COALESCE(ut.nom, CONCAT('Utilisateur #', p.id_utilisateur)) AS nom,
+                    ut.photo_profil_url AS photo_profil_url,
                     '' AS prenom
                     FROM publication p
                     LEFT JOIN utilisateurs ut ON p.id_utilisateur = ut.id
@@ -165,7 +166,7 @@ class CoachAdminController {
                 if ($focus === 'nutrition' && $sections['nutrition'] === '') {
                     continue;
                 }
-                $stmt_c = $pdo->prepare("SELECT c.*, COALESCE(ut.nom, CONCAT('Utilisateur #', c.id_utilisateur)) AS nom, '' AS prenom FROM commentaire c LEFT JOIN utilisateurs ut ON c.id_utilisateur = ut.id WHERE c.id_pub = ? ORDER BY c.date ASC");
+                $stmt_c = $pdo->prepare("SELECT c.*, COALESCE(ut.nom, CONCAT('Utilisateur #', c.id_utilisateur)) AS nom, ut.photo_profil_url AS photo_profil_url, '' AS prenom FROM commentaire c LEFT JOIN utilisateurs ut ON c.id_utilisateur = ut.id WHERE c.id_pub = ? ORDER BY c.date ASC");
                 $stmt_c->execute([$p['id_pub']]);
                 $publicationComments = $stmt_c->fetchAll();
                 foreach ($publicationComments as &$pubComment) {
@@ -187,7 +188,7 @@ class CoachAdminController {
             $data['publications'] = $publications;
             // Fetch comments linked to displayed publications (all authors)
             if ($focus === '') {
-                $stmt_comments = $pdo->prepare("SELECT c.*, COALESCE(ut.nom, CONCAT('Utilisateur #', c.id_utilisateur)) AS nom, '' AS prenom FROM commentaire c LEFT JOIN utilisateurs ut ON c.id_utilisateur = ut.id ORDER BY c.date DESC");
+                $stmt_comments = $pdo->prepare("SELECT c.*, COALESCE(ut.nom, CONCAT('Utilisateur #', c.id_utilisateur)) AS nom, ut.photo_profil_url AS photo_profil_url, '' AS prenom FROM commentaire c LEFT JOIN utilisateurs ut ON c.id_utilisateur = ut.id ORDER BY c.date DESC");
                 $stmt_comments->execute();
                 $allComments = $stmt_comments->fetchAll();
 
@@ -208,7 +209,7 @@ class CoachAdminController {
                     $data['commentaires'] = [];
                 } else {
                     $placeholders = implode(',', array_fill(0, count($publicationIds), '?'));
-                        $sql = "SELECT c.*, COALESCE(ut.nom, CONCAT('Utilisateur #', c.id_utilisateur)) AS nom, '' AS prenom
+                        $sql = "SELECT c.*, COALESCE(ut.nom, CONCAT('Utilisateur #', c.id_utilisateur)) AS nom, ut.photo_profil_url AS photo_profil_url, '' AS prenom
                             FROM commentaire c
                             LEFT JOIN utilisateurs ut ON c.id_utilisateur = ut.id
                             WHERE c.id_pub IN ($placeholders)

@@ -219,6 +219,21 @@ table tbody tr:hover {
     transition: opacity 0.3s ease;
 }
 
+.coach-inline-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.coach-inline-avatar.sf-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--vert-vif), var(--vert-foret));
+    color: var(--blanc);
+    font-size: 11px;
+    font-weight: 700;
+}
+
 .modal {
     transform: scale(0.9);
     opacity: 0;

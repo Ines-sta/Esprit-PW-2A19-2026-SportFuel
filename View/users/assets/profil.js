@@ -4,11 +4,63 @@ window.addEventListener('DOMContentLoaded', () => {
   const inputs = document.querySelectorAll('.field-input, .field-select');
   const sportTags = document.querySelectorAll('.sport-tag');
   const sportInput = document.getElementById('sport');
+  const profilePhotoInput = document.getElementById('profilePhotoInput');
+  const profileAvatar = document.getElementById('profileAvatar');
 
   const nomInput = document.getElementById('nom');
   if (nomInput) {
     nomInput.addEventListener('input', function() {
       this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+    });
+  }
+
+  if (profilePhotoInput && profileAvatar) {
+    profilePhotoInput.addEventListener('change', function () {
+      const file = this.files && this.files[0] ? this.files[0] : null;
+      if (!file) return;
+
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('❌ Format non supporté (JPEG, PNG, WebP, GIF).');
+        this.value = '';
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('❌ Image trop volumineuse (max 5 Mo).');
+        this.value = '';
+        return;
+      }
+
+      const payload = new FormData();
+      payload.append('image', file);
+      profileAvatar.classList.add('uploading');
+
+      fetch('/Esprit-PW-2A19-2526-SportFuel/Controller/api/api.php?action=upload_profile_photo', {
+        method: 'POST',
+        body: payload
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (!result.success || !result.photo_profil_url) {
+          throw new Error(result.message || 'Upload impossible');
+        }
+
+        const img = document.createElement('img');
+        img.id = 'profileAvatarImg';
+        img.alt = 'Photo de profil';
+        img.src = result.photo_profil_url;
+
+        profileAvatar.innerHTML = '';
+        profileAvatar.appendChild(img);
+        alert('✅ Photo de profil mise à jour.');
+      })
+      .catch(error => {
+        alert('❌ ' + (error.message || 'Erreur lors de l\'upload'));
+      })
+      .finally(() => {
+        profileAvatar.classList.remove('uploading');
+        profilePhotoInput.value = '';
+      });
     });
   }
 
