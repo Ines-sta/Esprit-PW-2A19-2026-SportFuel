@@ -57,7 +57,7 @@ require_once __DIR__ . '/../partials/avatar.php';
                     <div class="stat-label">Utilisateurs au total</div>
                     <div class="stat-delta green">
                         Sportifs: <?= $metrics['usersByRole']['breakdown']['Sportif'] ?? 0 ?> | 
-                        Coachs: <?= $metrics['usersByRole']['breakdown']['Coach'] ?? 0 ?> | 
+                        Coaches: <?= $metrics['usersByRole']['breakdown']['Coach'] ?? 0 ?> | 
                         Admins: <?= $metrics['usersByRole']['breakdown']['Admin'] ?? 0 ?>
                     </div>
                 </div>
@@ -96,8 +96,8 @@ require_once __DIR__ . '/../partials/avatar.php';
                 <!-- Stat 6: Coach Assignments -->
                 <div class="stat-card">
                     <div class="stat-value"><?= $metrics['coachAssignments']['coaches_count'] ?? 0 ?></div>
-                    <div class="stat-label">Coachs actifs</div>
-                    <div class="stat-delta green">Avec <?= $metrics['coachAssignments']['athletes_count'] ?? 0 ?> athletes</div>
+                    <div class="stat-label">Coaches actifs</div>
+                    <div class="stat-delta green">Avec <?= $metrics['coachAssignments']['athletes_count'] ?? 0 ?> athlètes</div>
                 </div>
 
                 <!-- Stat 7: Plans Distribution -->

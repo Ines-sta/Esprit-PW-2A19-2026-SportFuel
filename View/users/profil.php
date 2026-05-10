@@ -93,7 +93,7 @@ $objectifPoidsProgress = $viewData['objectifPoidsProgress'] ?? 0;
         </div>
         <div class="hero-stats">
           <?php if ($isSportifRole): ?>
-            <div class="hero-stat">
+              <div class="hero-stat-label">adherence globale</div>
               <div class="hero-stat-val"><?= htmlspecialchars($user->getPoids()) ?></div>
               <div class="hero-stat-label">kg</div>
             </div>
@@ -116,7 +116,7 @@ $objectifPoidsProgress = $viewData['objectifPoidsProgress'] ?? 0;
             </div>
             <div class="hero-stat">
               <div class="hero-stat-val"><?= (int)$coachStats['completion_rate'] ?>%</div>
-              <div class="hero-stat-label">adherence</div>
+              <div class="hero-stat-label">adherence globale</div>
             </div>
           <?php else: ?>
             <div class="hero-stat">
@@ -125,7 +125,7 @@ $objectifPoidsProgress = $viewData['objectifPoidsProgress'] ?? 0;
             </div>
             <div class="hero-stat">
               <div class="hero-stat-val"><?= (int)$adminStats['coach_count'] ?></div>
-              <div class="hero-stat-label">coachs</div>
+              <div class="hero-stat-label">coaches</div>
             </div>
             <div class="hero-stat">
               <div class="hero-stat-val"><?= (int)$adminStats['sportif_count'] ?></div>
@@ -315,7 +315,7 @@ $objectifPoidsProgress = $viewData['objectifPoidsProgress'] ?? 0;
           <div class="card-body">
             <div class="metric-grid">
               <div class="metric-card"><strong><?= (int)$adminStats['total_users'] ?></strong><span>Utilisateurs</span></div>
-              <div class="metric-card"><strong><?= (int)$adminStats['coach_count'] ?></strong><span>Coachs</span></div>
+              <div class="metric-card"><strong><?= (int)$adminStats['coach_count'] ?></strong><span>Coaches</span></div>
               <div class="metric-card"><strong><?= (int)$adminStats['sportif_count'] ?></strong><span>Sportifs</span></div>
               <div class="metric-card"><strong><?= (int)$adminStats['active_this_month'] ?></strong><span>Actifs ce mois</span></div>
               <div class="metric-card"><strong><?= (int)$adminStats['pending_publications'] ?></strong><span>Publications en attente</span></div>

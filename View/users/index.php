@@ -419,7 +419,7 @@ $utilisateurs = Utilisateur::getAll($pdo);
                 <div class="stat-card">
                     <div class="stat-icon">🏋️</div>
                     <div class="stat-value"><?php echo (int)$stats['coachs']; ?></div>
-                    <div class="stat-label">Coachs inscrits</div>
+                    <div class="stat-label">Coaches inscrits</div>
                     <div class="stat-change up">Professionnels</div>
                 </div>
                 <div class="stat-card">

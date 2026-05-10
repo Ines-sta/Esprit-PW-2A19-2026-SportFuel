@@ -1,11 +1,11 @@
 <?php
 /**
- * SportFuel � Initialisation automatique de la base de donn�es.
+ * SportFuel - Initialisation automatique de la base de donnees.
  *
- * Cr�e la base de donn�es, toutes les tables et un compte administrateur par d�faut.
- * Acc�s unique : http://localhost/Esprit-PW-2A19-2026-SportFuel/init_db.php
+ * Cree la base de donnees, toutes les tables et un compte administrateur par defaut.
+ * Acces unique : http://localhost/Esprit-PW-2A19-2026-SportFuel/init_db.php
  *
- * Supprimez ce fichier apr�s l'initialisation en production.
+ * Supprimez ce fichier apres l'initialisation en production.
  */
 
 require_once __DIR__ . '/Controller/shared/db_settings.php';
@@ -17,7 +17,7 @@ try {
     $pdo->exec("CREATE DATABASE IF NOT EXISTS `$DB_NAME` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     $pdo->exec("USE `$DB_NAME`");
 
-    // -- Identit� --------------------------------------------------------------
+    // -- Identite --------------------------------------------------------------
     $pdo->exec("CREATE TABLE IF NOT EXISTS utilisateurs (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nom VARCHAR(255) NOT NULL,
@@ -145,7 +145,7 @@ try {
         FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs(id) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
-    // -- Entra�nements ---------------------------------------------------------
+    // -- Entrainements ---------------------------------------------------------
     $pdo->exec("CREATE TABLE IF NOT EXISTS entrainements (
         id_entrainement INT AUTO_INCREMENT PRIMARY KEY,
         id_utilisateur INT NOT NULL,
@@ -170,7 +170,7 @@ try {
         FOREIGN KEY (id_entrainement) REFERENCES entrainements(id_entrainement) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
-    // -- Compte Admin par d�faut -----------------------------------------------
+    // -- Compte Admin par defaut -----------------------------------------------
     $adminPass = password_hash('admin123', PASSWORD_BCRYPT);
     $stmt = $pdo->prepare("SELECT id FROM utilisateurs WHERE email = 'admin@sportfuel.tn'");
     $stmt->execute();
@@ -178,9 +178,9 @@ try {
         $pdo->prepare("INSERT INTO utilisateurs (nom, email, mot_de_passe, role, statut, age, poids, taille)
                        VALUES ('Admin SportFuel', 'admin@sportfuel.tn', ?, 'Admin', 'Actif', 30, 75, 175)")
             ->execute([$adminPass]);
-        $adminNotice = '<p>? Compte admin cr�� : <strong>admin@sportfuel.tn</strong> / <strong>admin123</strong></p>';
+        $adminNotice = '<p>Compte admin cree : <strong>admin@sportfuel.tn</strong> / <strong>admin123</strong></p>';
     } else {
-        $adminNotice = '<p>?? Le compte admin existe d�j�.</p>';
+        $adminNotice = '<p>Le compte admin existe deja.</p>';
     }
 
     echo "
@@ -201,12 +201,12 @@ try {
     </head>
     <body>
         <div class='box'>
-            <div class='ok'>?</div>
-            <h1>Base de donn�es initialis�e !</h1>
-            <p>La base <strong>sportfuel</strong> et toutes les tables ont �t� cr��es.</p>
+            <div class='ok'>OK</div>
+            <h1>Base de donnees initialisee !</h1>
+            <p>La base <strong>sportfuel</strong> et toutes les tables ont ete creees.</p>
             $adminNotice
-            <p class='warn'>?? Supprimez <code>init_db.php</code> apr�s l'initialisation en production.</p>
-            <a href='/Esprit-PW-2A19-2026-SportFuel/'>?? Acc�der � l'application</a>
+            <p class='warn'>Supprimez <code>init_db.php</code> apres l'initialisation en production.</p>
+            <a href='/Esprit-PW-2A19-2026-SportFuel/'>Acceder a l'application</a>
         </div>
     </body>
     </html>
@@ -219,9 +219,9 @@ try {
     <style>body{font-family:Arial;background:#1a3c2e;color:white;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;}
     .box{background:rgba(255,0,0,0.2);padding:40px;border-radius:20px;max-width:600px;text-align:center;}</style></head>
     <body><div class='box'>
-    <h1>? Erreur de connexion MySQL</h1>
+    <h1>Erreur de connexion MySQL</h1>
     <p>" . htmlspecialchars($e->getMessage()) . "</p>
-    <p>V�rifiez que MySQL est d�marr� dans WAMP.<br>
+    <p>Verifiez que MySQL est demarre dans WAMP.<br>
     Si vous avez un mot de passe root, modifiez <code>Controller/shared/db_settings.php</code>.</p>
     </div></body></html>
     ";
