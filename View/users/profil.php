@@ -19,6 +19,10 @@ $isSportifRole = $viewData['isSportifRole'];
 $coachStats = $viewData['coachStats'];
 $adminStats = $viewData['adminStats'];
 $sportifActivities = $viewData['sportifActivities'];
+$imcMax = $viewData['imcMax'] ?? 30;
+$imcProgress = $viewData['imcProgress'] ?? 0;
+$objectifPoidsLabel = $viewData['objectifPoidsLabel'] ?? 'Objectif non défini';
+$objectifPoidsProgress = $viewData['objectifPoidsProgress'] ?? 0;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -188,12 +192,12 @@ $sportifActivities = $viewData['sportifActivities'];
             </div>
             <div style="margin-top: 20px;">
               <div class="progress-wrap">
-                <div class="progress-label"><span>IMC</span><span>23.5 / 30</span></div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 65%"></div></div>
+                <div class="progress-label"><span>IMC</span><span><?= $imc > 0 ? htmlspecialchars((string)$imc) : '—' ?> / <?= htmlspecialchars((string)$imcMax) ?></span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width: <?= htmlspecialchars((string)$imcProgress) ?>%"></div></div>
               </div>
               <div class="progress-wrap" style="margin-top:12px">
-                <div class="progress-label"><span>Objectif poids</span><span>65 kg cible</span></div>
-                <div class="progress-bar"><div class="progress-fill orange" style="width: 78%"></div></div>
+                <div class="progress-label"><span>Objectif poids</span><span><?= htmlspecialchars((string)$objectifPoidsLabel, ENT_QUOTES, 'UTF-8') ?></span></div>
+                <div class="progress-bar"><div class="progress-fill orange" style="width: <?= htmlspecialchars((string)$objectifPoidsProgress) ?>%"></div></div>
               </div>
             </div>
           </div>

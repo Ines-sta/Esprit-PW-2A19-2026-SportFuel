@@ -63,9 +63,35 @@ class ProfilePageController {
             ? round($user->getPoids() / (($user->getTaille() / 100) ** 2), 1)
             : 0;
 
+        $imcMax = 30.0;
+        $imcProgress = ($imc > 0)
+            ? max(0, min(100, ($imc / $imcMax) * 100))
+            : 0;
+
+        $objectifPoids = $this->computeObjectifPoids(
+            (float)$user->getPoids(),
+            (float)$user->getTaille(),
+            (string)$user->getObjectif()
+        );
+
+        $objectifPoidsProgress = ($objectifPoids['target_weight'] > 0 && (float)$user->getPoids() > 0)
+            ? max(
+                0,
+                min(
+                    100,
+                    (1 - (abs((float)$user->getPoids() - $objectifPoids['target_weight']) / max((float)$user->getPoids(), $objectifPoids['target_weight']))) * 100
+                )
+            )
+            : 0;
+
         return [
             'user' => $user,
             'imc' => $imc,
+            'imcMax' => $imcMax,
+            'imcProgress' => round($imcProgress, 1),
+            'objectifPoidsCible' => $objectifPoids['target_weight'],
+            'objectifPoidsLabel' => $objectifPoids['label'],
+            'objectifPoidsProgress' => round($objectifPoidsProgress, 1),
             'photoProfilUrl' => (string)($user->getPhotoProfilUrl() ?? ''),
             'initial' => $this->buildInitials($user->getNom()),
             'roleLabel' => strtolower($role),
@@ -76,6 +102,33 @@ class ProfilePageController {
             'coachStats' => $coachStats,
             'adminStats' => $adminStats,
             'sportifActivities' => $isSportifRole ? $this->getSportifActivities((int)$user->getId()) : []
+        ];
+    }
+
+    private function computeObjectifPoids(float $poids, float $tailleCm, string $objectif): array {
+        if ($poids <= 0 || $tailleCm <= 0) {
+            return ['target_weight' => 0.0, 'label' => 'Objectif non défini'];
+        }
+
+        $tailleM = $tailleCm / 100;
+        $objectifNorm = mb_strtolower(trim($objectif), 'UTF-8');
+
+        // Approximation métier simple: IMC cible dépend de l'objectif sélectionné.
+        $bmiTarget = 22.5;
+        if ($objectifNorm === 'perte de poids' || $objectifNorm === 'légèreté') {
+            $bmiTarget = 21.5;
+        } elseif ($objectifNorm === 'prise de masse') {
+            $bmiTarget = 24.0;
+        } elseif ($objectifNorm === 'endurance') {
+            $bmiTarget = 22.0;
+        } elseif ($objectifNorm === 'performance') {
+            $bmiTarget = 23.0;
+        }
+
+        $targetWeight = round($bmiTarget * ($tailleM ** 2), 1);
+        return [
+            'target_weight' => $targetWeight,
+            'label' => $targetWeight > 0 ? ($targetWeight . ' kg cible') : 'Objectif non défini',
         ];
     }
 
