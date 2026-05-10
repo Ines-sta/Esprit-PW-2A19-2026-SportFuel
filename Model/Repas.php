@@ -9,18 +9,20 @@ class Repas {
     private $jour;
     private $type_repas;
     private $description;
+    private $ingredients;
     private $kcal;
 
     /**
      * Constructeur avec tous les paramètres
      */
-    public function __construct($id_repas, $id_plan, $jour, $type_repas, $description, $kcal) {
+    public function __construct($id_repas, $id_plan, $jour, $type_repas, $description, $kcal, $ingredients = null) {
         $this->id_repas = $id_repas;
         $this->id_plan = $id_plan;
         $this->jour = $jour;
         $this->type_repas = $type_repas;
         $this->description = $description;
         $this->kcal = $kcal;
+        $this->ingredients = $ingredients;
     }
 
     // Getters
@@ -29,6 +31,7 @@ class Repas {
     public function getJour() { return $this->jour; }
     public function getTypeRepas() { return $this->type_repas; }
     public function getDescription() { return $this->description; }
+    public function getIngredients() { return $this->ingredients; }
     public function getKcal() { return $this->kcal; }
 
     // Setters
@@ -37,6 +40,7 @@ class Repas {
     public function setJour($jour) { $this->jour = $jour; }
     public function setTypeRepas($type_repas) { $this->type_repas = $type_repas; }
     public function setDescription($description) { $this->description = $description; }
+    public function setIngredients($ingredients) { $this->ingredients = $ingredients; }
     public function setKcal($kcal) { $this->kcal = $kcal; }
 
     /**

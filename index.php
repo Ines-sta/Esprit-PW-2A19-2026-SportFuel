@@ -69,7 +69,8 @@ if ($page === 'home') {
                 $_POST['jour'],
                 $_POST['type_repas'],
                 $_POST['description'],
-                $_POST['kcal']
+                $_POST['kcal'],
+                $_POST['ingredients'] ?? null
             );
             $repasController->addRepas($repas);
         } else {
@@ -83,7 +84,8 @@ if ($page === 'home') {
                 $_POST['jour'],
                 $_POST['type_repas'],
                 $_POST['description'],
-                $_POST['kcal']
+                $_POST['kcal'],
+                $_POST['ingredients'] ?? null
             );
             $repasController->updateRepas($repas);
         } else {
@@ -91,6 +93,14 @@ if ($page === 'home') {
         }
     } elseif ($action === 'deleteRepas' && $id) {
         $repasController->deleteRepas($id);
+    }
+    // Advanced Features
+    elseif ($action === 'aiMealGenerator') {
+        include 'View/BackOffice/aiMealGenerator.php';
+    } elseif ($action === 'shoppingList') {
+        include 'View/BackOffice/shoppingList.php';
+    } elseif ($action === 'comparePlans') {
+        include 'View/BackOffice/comparePlans.php';
     }
 }
 ?>

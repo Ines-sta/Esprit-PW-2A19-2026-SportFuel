@@ -89,6 +89,12 @@ $jours = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
                             </div>
 
                             <div class="form-group">
+                                <label for="ingredients">Ingredients (optionnel)</label>
+                                <textarea id="ingredients" name="ingredients" placeholder="Ex: Poulet 200g, Riz 100g, Brocolis 150g" style="height:70px;"><?= htmlspecialchars($repas->getIngredients() ?? '') ?></textarea>
+                                <div class="form-hint">Separez par des virgules pour la liste de courses</div>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="kcal">Calories (kcal)</label>
                                 <input type="number" id="kcal" name="kcal" value="<?= htmlspecialchars($repas->getKcal()) ?>" required min="50" max="2000">
                                 <div class="field-msg" id="msg-kcal"></div>

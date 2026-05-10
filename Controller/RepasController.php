@@ -55,7 +55,8 @@ class RepasController {
                 $row['jour'],
                 $row['type_repas'],
                 $row['description'],
-                $row['kcal']
+                $row['kcal'],
+                $row['ingredients']
             );
         }
         return null;
@@ -66,14 +67,15 @@ class RepasController {
      * @param Repas $repas
      */
     public function addRepas($repas) {
-        $sql = "INSERT INTO Repas (id_plan, jour, type_repas, description, kcal) 
-                VALUES (:id_plan, :jour, :type_repas, :description, :kcal)";
+        $sql = "INSERT INTO Repas (id_plan, jour, type_repas, description, ingredients, kcal) 
+                VALUES (:id_plan, :jour, :type_repas, :description, :ingredients, :kcal)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'id_plan' => $repas->getIdPlan(),
             'jour' => $repas->getJour(),
             'type_repas' => $repas->getTypeRepas(),
             'description' => $repas->getDescription(),
+            'ingredients' => $repas->getIngredients(),
             'kcal' => $repas->getKcal()
         ]);
         header('Location: index.php?page=back&action=listRepas');
@@ -86,7 +88,7 @@ class RepasController {
      */
     public function updateRepas($repas) {
         $sql = "UPDATE Repas SET id_plan = :id_plan, jour = :jour, type_repas = :type_repas, 
-                description = :description, kcal = :kcal WHERE id_repas = :id_repas";
+                description = :description, ingredients = :ingredients, kcal = :kcal WHERE id_repas = :id_repas";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'id_repas' => $repas->getIdRepas(),
@@ -94,6 +96,7 @@ class RepasController {
             'jour' => $repas->getJour(),
             'type_repas' => $repas->getTypeRepas(),
             'description' => $repas->getDescription(),
+            'ingredients' => $repas->getIngredients(),
             'kcal' => $repas->getKcal()
         ]);
         header('Location: index.php?page=back&action=listRepas');
