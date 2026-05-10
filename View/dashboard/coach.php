@@ -55,13 +55,13 @@ require_once __DIR__ . '/../partials/avatar.php';
                 <div class="stat-card">
                     <div class="stat-value"><?= $metrics['thisWeekStats']['workouts_count'] ?></div>
                     <div class="stat-label">Entraînements cette semaine</div>
-                    <div class="stat-delta green">Durée moyenne: <?= $metrics['thisWeekStats']['average_duration'] ?>h</div>
+                    <div class="stat-delta green">Duree moyenne: <?= $metrics['thisWeekStats']['average_duration'] ?> min</div>
                 </div>
 
                 <!-- Stat 4: Completion Rate This Week -->
                 <div class="stat-card">
                     <div class="stat-value"><?= $metrics['workoutCompletionThisWeek']['rate'] ?>%</div>
-                    <div class="stat-label">Taux complétude semaine</div>
+                    <div class="stat-label">Taux de completion (semaine)</div>
                     <div class="stat-delta green"><?= $metrics['workoutCompletionThisWeek']['completed'] ?>/<?= $metrics['workoutCompletionThisWeek']['total'] ?> séances</div>
                 </div>
             </div>

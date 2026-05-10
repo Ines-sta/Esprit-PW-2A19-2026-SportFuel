@@ -48,7 +48,7 @@ class AdminDashboardController {
         if ($action === 'remove_assignment') {
             $assignmentId = (int)($payload['assignment_id'] ?? 0);
             if ($assignmentId <= 0) {
-                return ['ok' => false, 'message' => 'Assignment invalide.'];
+                return ['ok' => false, 'message' => 'Assignation invalide.'];
             }
 
             return $this->removeAssignment($assignmentId);
@@ -178,7 +178,7 @@ class AdminDashboardController {
             if ((string)$e->getCode() === '23000') {
                 return ['ok' => false, 'message' => 'Ce sportif est déjà assigné à ce coach.'];
             }
-            return ['ok' => false, 'message' => 'Erreur lors de la création de l\'assignment.'];
+            return ['ok' => false, 'message' => 'Erreur lors de la creation de l\'assignation.'];
         }
     }
 
@@ -187,10 +187,10 @@ class AdminDashboardController {
         $stmt->execute([$assignmentId]);
 
         if ($stmt->rowCount() < 1) {
-            return ['ok' => false, 'message' => 'Assignment introuvable ou déjà supprimé.'];
+            return ['ok' => false, 'message' => 'Assignation introuvable ou deja supprimee.'];
         }
 
-        return ['ok' => true, 'message' => 'Assignment supprimé avec succès.'];
+        return ['ok' => true, 'message' => 'Assignation supprimee avec succes.'];
     }
 
     private function isUserInRole($userId, $role) {
