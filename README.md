@@ -1,36 +1,36 @@
 # SportFuel
 
-Application web de nutrition intelligente pour sportifs, developpee dans le cadre du module **Projet Technologies Web (2A)** a Esprit - Annee universitaire 2025/2026.
+Application web de nutrition intelligente pour sportifs, développée dans le cadre du module **Projet Technologies Web (2A)** à Esprit - Année universitaire 2025/2026.
 
 ## Description
 
-**SportFuel** est une plateforme web qui permet aux sportifs de gerer leur alimentation de maniere personnalisee en fonction de leur activite physique. L'application propose :
+**SportFuel** est une plateforme web qui permet aux sportifs de gérer leur alimentation de manière personnalisée en fonction de leur activité physique. L'application propose :
 
-- Des **plans alimentaires** adaptes a chaque profil sportif (marathon, musculation, yoga, natation, cyclisme)
+- Des **plans alimentaires** adaptés à chaque profil sportif (marathon, musculation, yoga, natation, cyclisme)
 - Un **catalogue d'aliments bio et locaux** tunisiens avec suivi des calories et de l'impact CO2
-- La **generation automatique de listes de courses** a partir du plan alimentaire
-- Un **suivi des entrainements** avec calcul des depenses energetiques
-- Un **Back Office** pour la gestion complete des utilisateurs, plans, aliments et coaches
-- Un **Front Office sportif** avec dashboard personnalis�
+- La **génération automatique de listes de courses** à partir du plan alimentaire
+- Un **suivi des entraînements** avec calcul des dépenses énergétiques
+- Un **Back Office** pour la gestion complète des utilisateurs, plans, aliments et coaches
+- Un **Front Office sportif** avec dashboard personnalisé
 
-## Table des Mati�res
+## Table des Matières
 
-- [Technologies utilis�es](#technologies-utilis�es)
+- [Technologies utilisées](#technologies-utilisées)
 - [Installation](#installation)
 - [Structure du projet](#structure-du-projet)
 - [Architecture MVC](#architecture-mvc)
-- [Fonctionnalit�s](#fonctionnalit�s)
+- [Fonctionnalités](#fonctionnalités)
 - [Membres du groupe](#membres-du-groupe)
 - [Contributions](#contributions)
 - [Licence](#licence)
 
-## Technologies utilis�es
+## Technologies utilisées
 
-- **HTML5 / CSS3** � Structure et design des pages
-- **PHP 8.5 (PDO)** � Logique serveur et acc�s � la base de donn�es
-- **MySQL** � Base de donn�es relationnelle
-- **Architecture MVC** � S�paration Mod�le / Vue / Contr�leur
-- **Git & GitHub** � Gestion de versions et collaboration
+- **HTML5 / CSS3** – Structure et design des pages
+- **PHP 8.5 (PDO)** – Logique serveur et accès à la base de données
+- **MySQL** – Base de données relationnelle
+- **Architecture MVC** – Séparation Modèle / Vue / Contrôleur
+- **Git & GitHub** – Gestion de versions et collaboration
 
 ## Installation
 
@@ -43,11 +43,11 @@ cd Esprit-PW-2A19-2026-SportFuel
 
 ### 2. Configurer WAMP
 
-1. T�l�chargez et installez [WampServer](https://www.wampserver.com/).
+1. Téléchargez et installez [WampServer](https://www.wampserver.com/).
 2. Copiez le dossier `Esprit-PW-2A19-2026-SportFuel` dans `C:\wamp64\www\`.
-3. Lancez WampServer � l'ic�ne doit �tre **verte** (Apache + MySQL actifs).
+3. Lancez WampServer – l'icône doit être **verte** (Apache + MySQL actifs).
 
-### 3. Initialiser la base de donn�es
+### 3. Initialiser la base de données
 
 Ouvrez dans votre navigateur :
 
@@ -55,12 +55,12 @@ Ouvrez dans votre navigateur :
 http://localhost/Esprit-PW-2A19-2026-SportFuel/init_db.php
 ```
 
-La base de donn�es, toutes les tables et un compte administrateur par d�faut seront cr��s automatiquement.
+La base de données, toutes les tables et un compte administrateur par défaut seront créés automatiquement.
 
-> **Compte admin par d�faut :** `admin@sportfuel.tn` / `admin123`
-> Supprimez `init_db.php` apr�s l'initialisation en production.
+> **Compte admin par défaut :** `admin@sportfuel.tn` / `admin123`
+> Supprimez `init_db.php` après l'initialisation en production.
 
-### 4. Acc�der � l'application
+### 4. Accéder à l'application
 
 ```
 http://localhost/Esprit-PW-2A19-2026-SportFuel/
@@ -71,77 +71,77 @@ http://localhost/Esprit-PW-2A19-2026-SportFuel/
 ```
 Esprit-PW-2A19-2026-SportFuel/
 +-- Controller/
-�   +-- core/
-�   �   +-- role_context.php          # Contexte de r�le (Admin/Coach/Sportif)
-�   +-- shared/
-�   �   +-- db_settings.php           # Param�tres de connexion DB
-�   +-- auth/
-�   �   +-- AuthController.php
-�   +-- training/
-�   �   +-- EntrainementController.php
-�   �   +-- ExerciceSeanceController.php
-�   +-- nutrition/
-�   �   +-- PlanAlimentaireController.php
-�   �   +-- RepasController.php
-�   +-- users/
-�   �   +-- AdminController.php
-�   �   +-- ProfilController.php
-�   +-- coach/
-�   +-- AdminDashboardController.php
-�   +-- CoachDashboardController.php
+|   +-- core/
+|   |   +-- role_context.php          # Contexte de rôle (Admin/Coach/Sportif)
+|   +-- shared/
+|   |   +-- db_settings.php           # Paramètres de connexion DB
+|   +-- auth/
+|   |   +-- AuthController.php
+|   +-- training/
+|   |   +-- EntrainementController.php
+|   |   +-- ExerciceSeanceController.php
+|   +-- nutrition/
+|   |   +-- PlanAlimentaireController.php
+|   |   +-- RepasController.php
+|   +-- users/
+|   |   +-- AdminController.php
+|   |   +-- ProfilController.php
+|   +-- coach/
+|   +-- AdminDashboardController.php
+|   +-- CoachDashboardController.php
 +-- Model/
-�   +-- training/
-�   �   +-- Entrainement.php
-�   �   +-- ExerciceSeance.php
-�   +-- nutrition/
-�   �   +-- Aliment.php
-�   �   +-- PlanAlimentaire.php
-�   �   +-- Repas.php
-�   �   +-- CourseAdmin.php
-�   �   +-- CourseUser.php
-�   +-- users/
+|   +-- training/
+|   |   +-- Entrainement.php
+|   |   +-- ExerciceSeance.php
+|   +-- nutrition/
+|   |   +-- Aliment.php
+|   |   +-- PlanAlimentaire.php
+|   |   +-- Repas.php
+|   |   +-- CourseAdmin.php
+|   |   +-- CourseUser.php
+|   +-- users/
 +-- View/
-�   +-- partials/
-�   �   +-- backoffice_sidebar.php
-�   �   +-- frontoffice_sidebar.php
-�   +-- auth/
-�   �   +-- index.html                # Landing page
-�   �   +-- connexion.html            # Connexion
-�   �   +-- inscription.html          # Inscription
-�   +-- training/
-�   �   +-- admin_programs.php        # BO � Gestion des programmes
-�   �   +-- admin_sessions.php        # BO � Gestion des s�ances
-�   �   +-- user_planning.php         # FO � Planification sportif
-�   �   +-- user_history.php          # FO � Historique sportif
-�   +-- dashboard/
-�   �   +-- admin.php                 # Dashboard Admin
-�   +-- aliments/
-�   +-- courses/
-�   +-- coach/
-�   +-- plans/
-�   +-- users/
+|   +-- partials/
+|   |   +-- backoffice_sidebar.php
+|   |   +-- frontoffice_sidebar.php
+|   +-- auth/
+|   |   +-- index.html                # Landing page
+|   |   +-- connexion.html            # Connexion
+|   |   +-- inscription.html          # Inscription
+|   +-- training/
+|   |   +-- admin_programs.php        # BO – Gestion des programmes
+|   |   +-- admin_sessions.php        # BO – Gestion des séances
+|   |   +-- user_planning.php         # FO – Planification sportif
+|   |   +-- user_history.php          # FO – Historique sportif
+|   +-- dashboard/
+|   |   +-- admin.php                 # Dashboard Admin
+|   +-- aliments/
+|   +-- courses/
+|   +-- coach/
+|   +-- plans/
+|   +-- users/
 +-- includes/                         # Endpoints API REST (JSON)
-�   +-- get_programmes.php
-�   +-- get_sportifs.php
-�   +-- get_coaches.php
-�   +-- add_entrainement.php
-�   +-- update_entrainement.php
-�   +-- delete_entrainement.php
-�   +-- list_entrainements.php
-�   +-- add_exercice_seance.php
-�   +-- update_exercice_seance.php
-�   +-- delete_exercice_seance.php
-�   +-- list_exercices_seance.php
+|   +-- get_programmes.php
+|   +-- get_sportifs.php
+|   +-- get_coaches.php
+|   +-- add_entrainement.php
+|   +-- update_entrainement.php
+|   +-- delete_entrainement.php
+|   +-- list_entrainements.php
+|   +-- add_exercice_seance.php
+|   +-- update_exercice_seance.php
+|   +-- delete_exercice_seance.php
+|   +-- list_exercices_seance.php
 +-- public/
-�   +-- css/
-�   �   +-- style.css
-�   �   +-- entrainement.css
-�   +-- js/
-�   �   +-- api.js
-�   �   +-- validation.js
-�   +-- images/
+|   +-- css/
+|   |   +-- style.css
+|   |   +-- entrainement.css
+|   +-- js/
+|   |   +-- api.js
+|   |   +-- validation.js
+|   +-- images/
 +-- config/
-�   +-- database.php                  # Classe Database (PDO)
+|   +-- database.php                  # Classe Database (PDO)
 +-- index.php                         # Routeur principal
 +-- init_db.php                       # Initialisation automatique DB
 +-- README.md
@@ -149,34 +149,34 @@ Esprit-PW-2A19-2026-SportFuel/
 
 ## Architecture MVC
 
-L'application suit une architecture MVC centralis�e avec s�paration stricte des responsabilit�s :
+L'application suit une architecture MVC centralisée avec séparation stricte des responsabilités :
 
-### Mod�le (`Model/`)
-Classes m�tier organis�es par domaine fonctionnel. Chaque mod�le encapsule l'acc�s PDO et la logique de donn�es de son entit�.
+### Modèle (`Model/`)
+Classes métier organisées par domaine fonctionnel. Chaque modèle encapsule l'accès PDO et la logique de données de son entité.
 
 ### Vue (`View/`)
-Templates PHP/HTML organis�s par domaine. Les partials (sidebars, headers) sont r�utilis�s pour s�parer les espaces Back Office et Front Office sans duplication de code.
+Templates PHP/HTML organisés par domaine. Les partials (sidebars, headers) sont réutilisés pour séparer les espaces Back Office et Front Office sans duplication de code.
 
-### Contr�leur (`Controller/`)
-Orchestration des requ�tes, logique m�tier et gestion des r�les. Le fichier `core/role_context.php` centralise la d�tection du r�le session et les gardes d'acc�s.
+### Contrôleur (`Controller/`)
+Orchestration des requêtes, logique métier et gestion des rôles. Le fichier `core/role_context.php` centralise la détection du rôle session et les gardes d'accès.
 
 ### API (`includes/`)
-Endpoints REST l�gers retournant du JSON, consomm�s en AJAX par les vues. Chaque endpoint valide les entr�es, d�l�gue au contr�leur correspondant et retourne une r�ponse normalis�e.
+Endpoints REST légers retournant du JSON, consommés en AJAX par les vues. Chaque endpoint valide les entrées, délègue au contrôleur correspondant et retourne une réponse normalisée.
 
 ### Routeur (`index.php`)
-Point d'entr�e unique qui dispatche vers la vue appropri�e selon les param�tres `page` et `view`, en appliquant les gardes de r�le.
+Point d'entrée unique qui dispatche vers la vue appropriée selon les paramètres `page` et `view`, en appliquant les gardes de rôle.
 
-## Fonctionnalit�s
+## Fonctionnalités
 
 | Module | Description |
 |---|---|
-| **Authentification** | Inscription, connexion, gestion de session et redirection par r�le |
-| **Gestion des utilisateurs** | Profils sportifs, r�les (Admin / Coach / Sportif), statuts |
-| **Plans alimentaires** | Cr�ation et suivi de plans nutritionnels personnalis�s par semaine |
-| **Aliments & Courses** | Catalogue bio/local tunisien avec calories, impact CO2 et g�n�ration de listes de courses |
-| **Entra�nements** | Programmes personnalis�s, s�ances, exercices, suivi de progression |
-| **Espace coach** | Gestion des sportifs assign�s, cr�ation de programmes personnalis�s par sportif |
-| **Dashboard admin** | M�triques globales, gestion des utilisateurs, assignments coach-sportifs |
+| **Authentification** | Inscription, connexion, gestion de session et redirection par rôle |
+| **Gestion des utilisateurs** | Profils sportifs, rôles (Admin / Coach / Sportif), statuts |
+| **Plans alimentaires** | Création et suivi de plans nutritionnels personnalisés par semaine |
+| **Aliments & Courses** | Catalogue bio/local tunisien avec calories, impact CO2 et génération de listes de courses |
+| **Entraînements** | Programmes personnalisés, séances, exercices, suivi de progression |
+| **Espace coach** | Gestion des sportifs assignés, création de programmes personnalisés par sportif |
+| **Dashboard admin** | Métriques globales, gestion des utilisateurs, assignments coach-sportifs |
 
 ## Membres du groupe
 
@@ -196,18 +196,18 @@ Point d'entr�e unique qui dispatche vers la vue appropri�e selon les param�
    git clone https://github.com/votre-utilisateur/Esprit-PW-2A19-2026-SportFuel.git
    cd Esprit-PW-2A19-2026-SportFuel
    ```
-3. **Cr�ez** une branche :
+3. **Créez** une branche :
    ```bash
    git checkout -b ma-fonctionnalite
    ```
 4. **Commitez** et poussez :
    ```bash
    git add .
-   git commit -m "Ajout de ma fonctionnalit�"
+   git commit -m "Ajout de ma fonctionnalité"
    git push origin ma-fonctionnalite
    ```
 5. **Ouvrez une Pull Request** sur GitHub
 
 ## Licence
 
-Ce projet est r�alis� dans un cadre acad�mique � **Esprit** (�cole Sup�rieure Priv�e d'Ing�nierie et de Technologies). Il est destin� � des fins �ducatives.
+Ce projet est réalisé dans un cadre académique à **Esprit** (École Supérieure Privée d'Ingénierie et de Technologies). Il est destiné à des fins éducatives.
