@@ -1,0 +1,21 @@
+# Configuration Apache pour SportFuel
+Options +FollowSymLinks -Indexes
+RewriteEngine On
+
+# Autoriser l'accès aux fichiers statiques
+<FilesMatch "\.(html|css|js|png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot)$">
+    Require all granted
+</FilesMatch>
+
+# Autoriser l'accès aux fichiers PHP
+<FilesMatch "\.php$">
+    Require all granted
+</FilesMatch>
+
+# Redirection par défaut vers index.php si le fichier n'existe pas
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Désactiver l'affichage des erreurs PHP en production (optionnel)
+# php_flag display_errors Off
